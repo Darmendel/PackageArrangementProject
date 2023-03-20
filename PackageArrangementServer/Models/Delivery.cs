@@ -6,7 +6,6 @@ namespace PackageArrangementServer.Models
     {
         [Key]
         public string id { get; set; }
-
         public string userId { get; set; }
         public DateTime createdDate { get; set; }
         public DateTime deliveryDate { get; set; }

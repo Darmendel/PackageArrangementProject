@@ -49,7 +49,7 @@ namespace PackageArrangementServer.Services
             throw new NotImplementedException();
         }
 
-        public List<Package> GetPackages()
+        public List<Package> GetAllPackages(string id)
         {
             throw new NotImplementedException();
         }

@@ -4,22 +4,7 @@ namespace PackageArrangementServer.Services
 {
     public class DeliveryService : IDeliveryService
     {
-        public int AddPackage(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int DeletePackage(string id, string userId, string packageId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Edit(string id, string userId, List<Package>? packages, Container? container, int? cost, string? deliveryStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void EditPackage(string id, string userId, string packageId, string? type, int? amount, int? width, int? height, int? depth, bool? isFragile, int? cost, string? adress)
+        public List<Package> GetAllPackages(string id)
         {
             throw new NotImplementedException();
         }
@@ -30,6 +15,21 @@ namespace PackageArrangementServer.Services
         }
 
         public bool Exists(string id, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PackageExists(string id, string userId, string packageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Edit(string id, string userId, List<Package>? packages, Container? container, int? cost, string? deliveryStatus)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EditPackage(string id, string userId, string packageId, string? type, int? amount, int? width, int? height, int? depth, bool? isFragile, int? cost, string? adress)
         {
             throw new NotImplementedException();
         }
@@ -49,12 +49,12 @@ namespace PackageArrangementServer.Services
             throw new NotImplementedException();
         }
 
-        public List<Package> GetAllPackages(string id)
+        public int AddPackage(string id)
         {
             throw new NotImplementedException();
         }
 
-        public bool PackageExists(string id, string userId, string packageId)
+        public int DeletePackage(string id, string userId, string packageId)
         {
             throw new NotImplementedException();
         }

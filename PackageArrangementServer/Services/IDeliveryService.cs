@@ -4,7 +4,7 @@ namespace PackageArrangementServer.Services
 {
     public interface IDeliveryService
     {
-        public List<Package> GetPackages();
+        public List<Package> GetAllPackages(string id);
         public bool Exists(string id);
         public bool Exists(string id, string userId); // maybe drop the userId
 

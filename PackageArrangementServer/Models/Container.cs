@@ -2,9 +2,9 @@
 {
     public class Container
     {
-        public int width { get; }
-        public int height { get; }
-        public int depth { get; }
-        public int cost { get; }
+        public int Width { get; }
+        public int Height { get; }
+        public int Depth { get; }
+        public int Cost { get; }
     }
 }

@@ -8,7 +8,7 @@
         public PackageList(List<Package> packages)
         {
             this._packages = packages.ConvertAll(p => new Package(
-                p.id, p.type, p.amount, p.width, p.height, p.depth, p.weight, p.isFragile, p.cost, p.address));
+                p.Id, p.Type, p.Amount, p.Width, p.Height, p.Depth, p.Weight, p.IsFragile, p.Cost, p.Address));
         }
 
         public List<Package> Packages { get { return _packages; } }
@@ -29,15 +29,15 @@
                 int index = _packages.IndexOf(package);
                 if (index != -1)
                 {
-                    if (type != null) _packages[index].type = type;
-                    if (amount != null) _packages[index].amount = (int) amount;
-                    if (width != null) _packages[index].width = (int) width;
-                    if (height != null) _packages[index].height = (int) height;
-                    if (depth != null) _packages[index].depth = (int) depth;
-                    if (weight != null) _packages[index].weight = (int) weight;
-                    if (isFragile != null) _packages[index].isFragile = (bool) isFragile;
-                    if (cost != null) _packages[index].cost = (int) cost;
-                    if (address != null) _packages[index].address = address;
+                    if (type != null) _packages[index].Type = type;
+                    if (amount != null) _packages[index].Amount = (int) amount;
+                    if (width != null) _packages[index].Width = (int) width;
+                    if (height != null) _packages[index].Height = (int) height;
+                    if (depth != null) _packages[index].Depth = (int) depth;
+                    if (weight != null) _packages[index].Weight = (int) weight;
+                    if (isFragile != null) _packages[index].IsFragile = (bool) isFragile;
+                    if (cost != null) _packages[index].Cost = (int) cost;
+                    if (address != null) _packages[index].Address = address;
                 }
             }
         }

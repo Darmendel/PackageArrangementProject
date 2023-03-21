@@ -10,8 +10,8 @@ namespace PackageArrangementServer.Services
         public bool PackageExists(string id, string userId, string packageId); // maybe drop the userId
 
         //public int CreateDelivery();
-        public void Edit(string id, string userId, List<Package>? packages, Container? container, int? cost, string? deliveryStatus); // maybe drop the userId
-        public void EditPackage(string id, string userId, string packageId, string? type, int? amount, int? width, int? height, int? depth, bool? isFragile, int? cost, string? adress); // maybe drop the userId
+        public void Edit(string id, string userId, List<Package>? packages = null, Container? container = null, int? cost = null, string? deliveryStatus = null); // maybe drop the userId
+        public void EditPackage(string id, string userId, string packageId, string? type = null, int? amount = null, int? width = null, int? height = null, int? depth = null, bool? isFragile = null, int? cost = null, string? adress = null); // maybe drop the userId
         public Package GetPackage(string id, string userId, string packageId); // maybe drop the userId
         public int GetPackageCount(string id);
         public int GetPackageCount(string id, string userId); // maybe drop the userId

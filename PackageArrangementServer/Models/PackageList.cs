@@ -3,7 +3,8 @@
     public class PackageList
     {
         private List<Package> _packages;
-        public string id { get; set; }
+        private readonly List<Package> packages;
+        //public string id { get; set; }
 
         public PackageList(List<Package> packages)
         {
@@ -11,7 +12,7 @@
                 p.Id, p.Type, p.Amount, p.Width, p.Height, p.Depth, p.Weight, p.IsFragile, p.Cost, p.Address));
         }
 
-        public List<Package> Packages { get { return _packages; } }
+        public List<Package> Packages { get { return packages; } } // need to fix - return a copy
 
         public void Add(Package package)
         {

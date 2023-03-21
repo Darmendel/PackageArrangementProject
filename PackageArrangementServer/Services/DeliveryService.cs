@@ -24,7 +24,7 @@ namespace PackageArrangementServer.Services
             throw new NotImplementedException();
         }
 
-        public void Edit(string id, string userId, List<Package>? packages, Container? container, int? cost, string? deliveryStatus)
+        public void Edit(string id, string userId, List<Package>? packages = null, Container? container = null)
         {
             throw new NotImplementedException();
         }
@@ -49,7 +49,7 @@ namespace PackageArrangementServer.Services
             throw new NotImplementedException();
         }
 
-        public int AddPackage(string id)
+        public int AddPackage(string id, Package package)
         {
             throw new NotImplementedException();
         }

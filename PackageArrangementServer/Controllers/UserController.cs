@@ -12,6 +12,12 @@ namespace PackageArrangementServer.Controllers
 
         public UserController(IUserService us) { userService = us; }
 
+        /// <summary>
+        /// Checks if a user entered a valid id and a valid password.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="password"></param>
+        /// <returns>bool</returns>
         private bool Validate(string id, string password)
         {
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(password)) return false;

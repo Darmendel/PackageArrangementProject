@@ -28,18 +28,16 @@
             if (_packages.Contains(package))
             {
                 int index = _packages.IndexOf(package);
-                if (index != -1)
-                {
-                    if (type != null) _packages[index].Type = type;
-                    if (amount != null) _packages[index].Amount = (int) amount;
-                    if (width != null) _packages[index].Width = (int) width;
-                    if (height != null) _packages[index].Height = (int) height;
-                    if (depth != null) _packages[index].Depth = (int) depth;
-                    if (weight != null) _packages[index].Weight = (int) weight;
-                    if (isFragile != null) _packages[index].IsFragile = (bool) isFragile;
-                    if (cost != null) _packages[index].Cost = (int) cost;
-                    if (address != null) _packages[index].Address = address;
-                }
+
+                if (type != null) _packages[index].Type = type;
+                if (amount != null) _packages[index].Amount = (int)amount;
+                if (width != null) _packages[index].Width = (int)width;
+                if (height != null) _packages[index].Height = (int)height;
+                if (depth != null) _packages[index].Depth = (int)depth;
+                if (weight != null) _packages[index].Weight = (int)weight;
+                if (isFragile != null) _packages[index].IsFragile = (bool)isFragile;
+                if (cost != null) _packages[index].Cost = (int)cost;
+                if (address != null) _packages[index].Address = address;
             }
         }
 

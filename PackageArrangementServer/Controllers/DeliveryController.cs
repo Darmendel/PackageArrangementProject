@@ -26,7 +26,7 @@ namespace PackageArrangementServer.Controllers
         }
 
         /// <summary>
-        /// Returns the package with given id.
+        /// Returns the package by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Package</returns>

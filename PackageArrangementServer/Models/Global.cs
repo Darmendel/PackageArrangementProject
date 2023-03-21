@@ -2,7 +2,8 @@
 {
     public class Global
     {
-        public static string Id { get; set; }
+        public static string UserId { get; set; }
+        public static string DeliveryId { get; set; }
         public static string Server { get; set; }
     }
 }

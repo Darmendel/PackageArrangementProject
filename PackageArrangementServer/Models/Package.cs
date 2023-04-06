@@ -5,18 +5,20 @@ namespace PackageArrangementServer.Models
     public class Package
     {
         [Key]
-        internal string Id { get; set; }
-        internal string Type { get; set; }
-        internal int Amount { get; set; }
-        internal int Width { get; set; }
-        internal int Height { get; set; }
-        internal int Depth { get; set; }
-        internal int Weight { get; set; }
-        internal bool IsFragile { get; set; }
-        internal int Cost { get; set; }
-        internal string Address { get; set; }
+        public string Id { get; set; }
+        public string Type { get; set; }
+        public string Amount { get; set; } // add type check (number of packages)
+        public string Width { get; set; } // add type check
+        public string Height { get; set; } // add type check
+        public string Depth { get; set; } // add type check
+        public string Weight { get; set; } // add type check
+        //public bool IsFragile { get; set; }
+        public string Cost { get; set; } // add type check
+        public string Address { get; set; }
+        //public string Server { get; set; }
 
-        public Package(string id, string type, int amount, int width, int height, int depth, int weight, bool isFragile, int cost, string address)
+        public Package(string id, string type, string amount, string width, string height, string depth,
+            string weight, string cost, string address)
         {
             this.Id = id;
             this.Type = type;
@@ -25,7 +27,7 @@ namespace PackageArrangementServer.Models
             this.Height = height;
             this.Depth = depth;
             this.Weight = weight;
-            this.IsFragile = isFragile;
+            //this.IsFragile = isFragile;
             this.Cost = cost;
             this.Address = address;
         }

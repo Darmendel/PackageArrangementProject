@@ -5,7 +5,7 @@
         public DateTime DeliveryDate { get; set; }
         //public List<Package> Packages { get; set; }
         public Container? SelectedContainer { get; set; }
-        public int Cost { get; set; }
+        public string Cost { get; set; } // add type check
         public string DeliveryStatus { get; set; }
     }
 }

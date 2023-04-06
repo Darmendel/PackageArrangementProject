@@ -12,6 +12,14 @@
             }
         }
 
+        public UserList()
+        {
+            this.Add(new User { Id =  "1", Name = "A" , Password = "12345"});
+            this.Add(new User { Id =  "2", Name = "B" , Password = "12345"});
+            this.Add(new User { Id =  "3", Name = "C" , Password = "12345"});
+            this.Add(new User { Id =  "4", Name = "D" , Password = "12345"});
+        }
+
         public List<User> Users { get { return _users; } } // need to fix - return a copy
 
         public int Count { get { return _users.Count; } }
@@ -22,7 +30,7 @@
             _users.Add(user);
         }
 
-        public void Edit(User user, string? name = null, string? password = null)
+        public void Edit(User user, string name = null, string password = null)
         {
             if (user == null) return;
             if (_users.Contains(user))
@@ -32,6 +40,21 @@
                 if (name != null) _users[index].Name = name;
                 if (password != null) _users[index].Password = password;
             }
+        }
+
+        private List<Delivery> GetDeliveryList(string id)
+        {
+            List<Delivery> lst = new List<Delivery>();
+            //DateTime now = DateTime.Now;
+            DateTime tomorrow = DateTime.Now.AddDays(1);
+
+            for (int i = 0; i < 4; i++)
+            {
+                string ind = "" + i;
+                if (id != ind) lst.Add(new Delivery(id, ind, tomorrow, new PackageList().Packages));
+            }
+
+            return lst;
         }
     }
 }

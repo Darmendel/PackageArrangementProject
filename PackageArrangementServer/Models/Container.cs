@@ -2,9 +2,9 @@
 {
     public class Container
     {
-        public int Width { get; }
-        public int Height { get; }
-        public int Depth { get; }
-        public int Cost { get; }
+        public string Width { get; } // add type check
+        public string Height { get; } // add type check
+        public string Depth { get; } // add type check
+        public string Cost { get; } // add type check
     }
 }

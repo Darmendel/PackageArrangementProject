@@ -5,7 +5,7 @@ namespace PackageArrangementServer.Services
     public class UserService : IUserService
     {
         private IDeliveryService deliveryService;
-        private static UserList users = new UserList();
+        private static UserList userList = new UserList();
 
         public UserService(IDeliveryService ds)
         {
@@ -14,14 +14,15 @@ namespace PackageArrangementServer.Services
 
         public List<User> GetAllUsers()
         {
-            return users.Users;
+            if (userList.Count == 0) return null;
+            return userList.Users;
         }
 
         public bool Exists(string id)
         {
             if (string.IsNullOrEmpty(id)) return false;
 
-            foreach (var user in users.Users)
+            foreach (User user in userList.Users)
             {
                 if (user.Id == id) return true;
             }
@@ -36,7 +37,7 @@ namespace PackageArrangementServer.Services
 
         public void Edit(string id, string? name = null, string? password = null)
         {
-            if (Exists(id)) users.Edit(Get(id), name, password);
+            if (Exists(id)) userList.Edit(Get(id), name, password);
         }
 
         public void Delete(string id)
@@ -49,55 +50,56 @@ namespace PackageArrangementServer.Services
         public int CreateUser(string id, string name, string password)
         {
             if (Exists(id)) return 1;
-            users.Add(new User { Id = id, Name = name, Password = password , Deliveries = new List<Delivery>() });
+            userList.Add(new User { Id = id, Name = name, Password = password , Deliveries = new List<Delivery>() });
             return 0;
         }
 
         public List<Delivery> GetAllDeliveries(string id)
         {
-            User user = Get(id);
-            if (user == null || user.Deliveries == null) return null;
-            return user.Deliveries;
+            if (!Exists(id)) return null;
+            return deliveryService.GetAllDeliveries(id);
         }
 
-        public Delivery GetDelivery(string id, string deliveryId)
+        public Delivery GetDelivery(string userId, string deliveryId)
         {
-            //if (!DeliveryExists(id, deliveryId)) return null;
-            //return GetAllDeliveries(id).Find(x => x.Id == deliveryId);
+            if (!DeliveryExists(userId, deliveryId)) return null; // redundant
+            return deliveryService.Get(deliveryId, userId);
+        }
+
+        public bool DeliveryExists(string userId, string deliveryId)
+        {
+            if (!Exists(userId)) return false;
+            return deliveryService.Exists(deliveryId, userId);
+        }
+
+        public int DeliveryCost(string userId, string deliveryId)
+        {
             throw new NotImplementedException();
         }
 
-        public bool DeliveryExists(string id, string deliveryId)
+        public string DeliveryStatus(string userId, string deliveryId)
         {
-            List<Delivery> deliveries = GetAllDeliveries(id);
-            if (deliveries == null) return false;
-
-            foreach (Delivery delivery in deliveries)
-            {
-                if (delivery.Id == deliveryId) return true;
-            }
-
-            return false;
+            throw new NotImplementedException();
         }
 
         // cost and deliveryStatus might be needed to reavluate and changed.
-        public int EditDelivery(string id, string deliveryId, DateTime? deliveryDate = null,
+        public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
             List<Package>? packages = null, Container? selectedContainer = null)
         {
-            User user = Get(id);
+            User user = Get(userId);
             if (user == null) return 1;
             return 0;
             
         }
 
-        public int DeleteDelivery(string id, string deliveryId)
+        public int DeleteDelivery(string userId, string deliveryId)
         {
             throw new NotImplementedException();
         }
 
         // cost and deliveryStatus might be needed to reavluate and changed.
         // maybe return a delivery instead of an int...
-        public int CreateDelivery(string id, string deliveryId, DateTime? deliveryDate = null,
+        public int CreateDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
             List<Package>? packages = null, Container? selectedContainer = null)
         {
             throw new NotImplementedException();

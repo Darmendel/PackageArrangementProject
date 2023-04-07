@@ -57,49 +57,65 @@ namespace PackageArrangementServer.Services
         /// <summary>
         /// Returns a user's delivery by id.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <returns>Delivery</returns>
-        public Delivery GetDelivery(string id, string deliveryId);
+        public Delivery GetDelivery(string userId, string deliveryId);
 
         /// <summary>
         /// Checks if a user have made a certain delivery before.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <returns>bool</returns>
-        public bool DeliveryExists(string id, string deliveryId);
+        public bool DeliveryExists(string userId, string deliveryId);
+
+        /// <summary>
+        /// Calculates a user's delivery cost.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <returns>int</returns>
+        public int DeliveryCost(string userId, string deliveryId);
+
+        /// <summary>
+        /// Evaluates a user's delivery status.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <returns>string</returns>
+        public string DeliveryStatus(string userId, string deliveryId);
 
         /// <summary>
         /// Updates a user's delivery. Returns 1 if succeeded and 0 otherwise.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
         /// <param name="selectedContainer"></param>
         /// <returns>int</returns>
-        public int EditDelivery(string id, string deliveryId, DateTime? deliveryDate = null,
+        public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
             List<Package>? packages = null, Container? selectedContainer = null);
 
         /// <summary>
         /// Deletes a user's delivery. Returns 1 if succeeded and 0 otherwise.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <returns>int</returns>
-        public int DeleteDelivery(string id, string deliveryId);
+        public int DeleteDelivery(string userId, string deliveryId);
 
         /// <summary>
         /// Creates a new delivery for a user. Returns 1 if succeeded and 0 otherwise.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
         /// <param name="selectedContainer"></param>
         /// <returns>int</returns>
-        public int CreateDelivery(string id, string deliveryId, DateTime? deliveryDate = null,
+        public int CreateDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
             List<Package>? packages = null, Container? selectedContainer = null);
     }
 }

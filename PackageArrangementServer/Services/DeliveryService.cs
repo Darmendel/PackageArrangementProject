@@ -49,18 +49,60 @@ namespace PackageArrangementServer.Services
 
         public int Cost(string deliveryId, string userId)
         {
-            throw new NotImplementedException();
+            Delivery delivery = Get(deliveryId, userId);
+            if (delivery == null) return -1;
+
+            if (delivery.Packages == null && delivery.Container == null) return -1;
+
+            int cost = 0;
+
+            if (delivery.Packages != null)
+            {
+                foreach (Package package in delivery.Packages)
+                {
+                    if (package.Cost == null) continue;
+
+                    try
+                    {
+                        int pc = Int32.Parse(package.Cost);
+                        cost += pc;
+                    }
+                    catch (FormatException) { }
+                }
+            }
+
+            if (delivery.Container != null)
+            {
+                try
+                {
+                    int c = Int32.Parse(delivery.Container.Cost);
+                    cost += c;
+                }
+                catch (FormatException) { }
+            }
+
+            return cost;
         }
 
-        public string Status(string deliveryId, string userId)
+        public DeliveryStatus Status(string deliveryId, string userId)
         {
-            throw new NotImplementedException();
+            Delivery delivery = Get(deliveryId, userId);
+            if (delivery == null) return DeliveryStatus.NonExisting;
+            return delivery.Status;
         }
 
         public int Add(string userId, DateTime? deliveryDate = null, List<Package> packages = null,
             Container container = null, string cost = null)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(userId)) return 0;
+
+            var random = new Random();
+            string id = random.Next(0, 999).ToString();
+
+            while (Exists(id, userId)) id = random.Next(0, 999).ToString() + id;
+
+            DeliveryService.deliveryList.Add(new Delivery(id, userId, deliveryDate, packages, container, cost));
+            return 1;
         }
 
         // cost and deliveryStatus might be needed to reavluate and changed.
@@ -70,7 +112,7 @@ namespace PackageArrangementServer.Services
             if (delivery == null) return 0;
 
             string cost = Cost(deliveryId, userId).ToString();
-            string status = Status(deliveryId, userId);
+            DeliveryStatus status = Status(deliveryId, userId);
 
             DeliveryService.deliveryList.Edit(delivery, deliveryDate, packages, container, cost, status);
             return 1;

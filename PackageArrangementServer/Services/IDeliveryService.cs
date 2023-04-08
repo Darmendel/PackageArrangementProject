@@ -31,6 +31,7 @@ namespace PackageArrangementServer.Services
 
         /// <summary>
         /// Given a delivery id and a user id, calculates the cost of a delivery.
+        /// Returns -1 if there's no such delivery or user.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
@@ -39,11 +40,12 @@ namespace PackageArrangementServer.Services
 
         /// <summary>
         /// Given a delivery id and a user id, evaluates the delivery's shipping status.
+        /// Returns null if there's no such delivery or user.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
-        /// <returns>string</returns>
-        public string Status(string deliveryId, string userId);
+        /// <returns>DeliveryStatus</returns>
+        public DeliveryStatus Status(string deliveryId, string userId);
 
         /// <summary>
         /// Given a user id, adds a new delivery.

@@ -50,19 +50,35 @@ namespace PackageArrangementServer.Services
             return GetAllPackages(deliveryId).Find(x => x.Id == packageId);
         }
 
-        public void Edit(string packageId, string deliveryId, string? type = null, string? amount = null, string? width = null,
-            string? height = null, string? depth = null, string? cost = null, string? address = null)
+        public int Add(string deliveryId, string type = null, string amount = null, string width = null, string height = null,
+            string depth = null, string weight = null, string cost = null, string address = null)
         {
-            Package package = Get(packageId, deliveryId);
-            if (package == null) return;
-            PackageService.packageList.Edit(package, type, amount, width, height, depth, cost, address);
+            if (string.IsNullOrEmpty(deliveryId)) return 0;
+
+            var random = new Random();
+            string id = random.Next(0, 999).ToString();
+
+            while (Exists(deliveryId, id)) id = random.Next(0, 999).ToString() + id;
+
+            PackageService.packageList.Add(new Package(id, deliveryId, type, amount, width, height, depth, weight, cost, address));
+            return 1;
         }
 
-        public void Delete(string packageId, string deliveryId)
+        public int Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
+            string height = null, string depth = null, string weight = null, string cost = null, string address = null)
         {
             Package package = Get(packageId, deliveryId);
-            if (package == null) return;
+            if (package == null) return 0;
+            PackageService.packageList.Edit(package, type, amount, width, height, depth, weight, cost, address);
+            return 1;
+        }
+
+        public int Delete(string packageId, string deliveryId)
+        {
+            Package package = Get(packageId, deliveryId);
+            if (package == null) return 0;
             PackageService.packageList.Remove(package);
+            return 1;
         }
     }
 }

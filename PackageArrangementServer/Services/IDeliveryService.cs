@@ -46,21 +46,38 @@ namespace PackageArrangementServer.Services
         public string Status(string deliveryId, string userId);
 
         /// <summary>
+        /// Given a user id, adds a new delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryDate"></param>
+        /// <param name="packages"></param>
+        /// <param name="container"></param>
+        /// <param name="cost"></param>
+        /// <returns>int</returns>
+        public int Add(string userId, DateTime? deliveryDate = null, List<Package> packages = null,
+            Container container = null, string cost = null);
+
+        /// <summary>
         /// Updates a delivery (changes it's list of packages or it's selected container and calculates it's new cost and status).
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
         /// <param name="container"></param>
-        public void Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, Container? container = null); // maybe drop the userId + [int? cost = null, string? deliveryStatus = null]
+        /// <returns>int</returns>
+        public int Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, Container? container = null); // [int? cost = null, string? deliveryStatus = null]
 
         /// <summary>
         /// Deletes a delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
-        public void Delete(string deliveryId, string userId);
+        /// <returns>int</returns>
+        public int Delete(string deliveryId, string userId);
 
         /// <summary>
         /// Given a delivery id and a user id, returns all of the packages of the delivery.
@@ -77,7 +94,7 @@ namespace PackageArrangementServer.Services
         /// <param name="userId"></param>
         /// <param name="packageId"></param>
         /// <returns>bool</returns>
-        public bool PackageExists(string deliveryId, string userId, string packageId); // maybe drop the userId
+        public bool PackageExists(string deliveryId, string userId, string packageId);
 
         /// <summary>
         /// Returns a package in a delivery.
@@ -86,7 +103,7 @@ namespace PackageArrangementServer.Services
         /// <param name="userId"></param>
         /// <param name="packageId"></param>
         /// <returns>Package</returns>
-        public Package GetPackage(string deliveryId, string userId, string packageId); // maybe drop the userId
+        public Package GetPackage(string deliveryId, string userId, string packageId);
 
         /// <summary>
         /// Returns number of packages in the delivery.
@@ -94,18 +111,29 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <returns>int</returns>
-        public int GetPackageCount(string deliveryId, string userId); // maybe drop the userId
+        public int GetPackageCount(string deliveryId, string userId);
 
         /// <summary>
-        /// Adds a new package to the delivery. Returns 1 if succeeded and 0 otherwise.
+        /// Adds a new package to the delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>
-        /// <param name="package"></param>
+        /// <param name="userId"></param>
+        /// <param name="type"></param>
+        /// <param name="amount"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="depth"></param>
+        /// <param name="weight"></param>
+        /// <param name="cost"></param>
+        /// <param name="address"></param>
         /// <returns>int</returns>
-        public int AddPackage(string deliveryId, Package package);
+        public int AddPackage(string deliveryId, string userId, string type = null, string amount = null,string width = null,
+            string height = null, string depth = null, string weight = null, string cost = null, string address = null);
 
         /// <summary>
         /// Updates a package in a delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
@@ -115,17 +143,22 @@ namespace PackageArrangementServer.Services
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
+        /// <param name="weight"></param>
         /// <param name="cost"></param>
-        /// <param name="adress"></param>
-        public void EditPackage(string deliveryId, string userId, string packageId, string? type = null, string? amount = null, string? width = null, string? height = null, string? depth = null, string? cost = null, string? adress = null);
+        /// <param name="address"></param>
+        /// <returns>int</returns>
+        public int EditPackage(string deliveryId, string userId, string packageId, string type = null,
+            string amount = null, string width = null, string height = null, string depth = null, string weight = null,
+            string cost = null, string address = null);
 
         /// <summary>
-        /// Deletes a package from a delivery. Returns 1 if succeeded and 0 otherwise.
+        /// Deletes a package from a delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <param name="packageId"></param>
         /// <returns>int</returns>
-        public int DeletePackage(string deliveryId, string userId, string packageId); // maybe drop the userId
+        public int DeletePackage(string deliveryId, string userId, string packageId);
     }
 }

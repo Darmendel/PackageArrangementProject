@@ -57,23 +57,31 @@ namespace PackageArrangementServer.Services
             throw new NotImplementedException();
         }
 
+        public int Add(string userId, DateTime? deliveryDate = null, List<Package> packages = null,
+            Container container = null, string cost = null)
+        {
+            throw new NotImplementedException();
+        }
+
         // cost and deliveryStatus might be needed to reavluate and changed.
-        public void Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, Container? container = null)
+        public int Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, Container? container = null)
         {
             Delivery delivery = Get(deliveryId, userId);
-            if (delivery == null) return;
+            if (delivery == null) return 0;
 
             string cost = Cost(deliveryId, userId).ToString();
             string status = Status(deliveryId, userId);
 
             DeliveryService.deliveryList.Edit(delivery, deliveryDate, packages, container, cost, status);
+            return 1;
         }
 
-        public void Delete(string deliveryId, string userId)
+        public int Delete(string deliveryId, string userId)
         {
             Delivery delivery = Get(deliveryId, userId);
-            if (delivery == null) return;
+            if (delivery == null) return 0;
             DeliveryService.deliveryList.Remove(delivery);
+            return 1;
         }
 
         public List<Package> GetAllPackages(string deliveryId, string userId)
@@ -100,19 +108,25 @@ namespace PackageArrangementServer.Services
             return packageService.Count(deliveryId);
         }
 
-        public int AddPackage(string deliveryId, Package package)
+        public int AddPackage(string deliveryId, string userId, string type = null, string amount = null, string width = null,
+            string height = null, string depth = null, string weight = null, string cost = null, string address = null)
         {
-            throw new NotImplementedException();
+            if (!Exists(deliveryId, userId)) return 0;
+            return packageService.Add(deliveryId, type, amount, width, height, depth, weight, cost, address);
         }
 
-        public void EditPackage(string deliveryId, string userId, string packageId, string? type, int? amount, int? width, int? height, int? depth, bool? isFragile, int? cost, string? adress)
+        public int EditPackage(string deliveryId, string userId, string packageId, string type = null,
+            string amount = null, string width = null, string height = null, string depth = null, string weight = null,
+            string cost = null, string address = null)
         {
-            throw new NotImplementedException();
+            if (!Exists(deliveryId, userId)) return 0;
+            return packageService.Edit(deliveryId, packageId, type, amount, width, height, depth, weight, cost, address);
         }
 
         public int DeletePackage(string deliveryId, string userId, string packageId)
         {
-            throw new NotImplementedException();
+            if (!Exists(deliveryId, userId)) return 0;
+            return packageService.Delete(packageId, deliveryId);
         }
     }
 }

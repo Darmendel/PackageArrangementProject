@@ -25,27 +25,32 @@ namespace PackageArrangementServer.Services
         public User Get(string id);
 
         /// <summary>
-        /// Updates a user.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <param name="password"></param>
-        public void Edit(string id, string? name = null, string? password = null);
-
-        /// <summary>
-        /// Deletes a user.
-        /// </summary>
-        /// <param name="id"></param>
-        public void Delete(string id);
-
-        /// <summary>
-        /// Creates a new user. Returns 1 if succeeded and 0 otherwise.
+        /// Creates a new user.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <param name="password"></param>
         /// <returns>int</returns>
-        public int CreateUser(string id, string name, string password);
+        public int Add(string id, string name, string password);
+
+        /// <summary>
+        /// Updates a user.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <returns>int</returns>
+        public int Edit(string id, string? name = null, string? password = null);
+
+        /// <summary>
+        /// Deletes a user.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>int</returns>
+        public int Delete(string id);
 
         /// <summary>
         /// Returns a list of a user's past (and current) deliveries.
@@ -60,7 +65,7 @@ namespace PackageArrangementServer.Services
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <returns>bool</returns>
-        public bool DeliveryExists(string userId, string deliveryId);
+        //public bool DeliveryExists(string userId, string deliveryId);
 
         /// <summary>
         /// Returns a user's delivery by id.
@@ -71,16 +76,15 @@ namespace PackageArrangementServer.Services
         public Delivery GetDelivery(string userId, string deliveryId);
 
         /// <summary>
-        /// Creates a new delivery for a user. Returns 1 if succeeded and 0 otherwise.
+        /// Creates a new delivery for a user.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="deliveryId"></param>
         /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
-        /// <param name="selectedContainer"></param>
+        /// <param name="container"></param>
         /// <returns>int</returns>
-        public int CreateDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, Container? selectedContainer = null);
+        public int AddDelivery(string userId, DateTime? deliveryDate = null, List<Package>? packages = null, Container? container = null);
 
         /// <summary>
         /// Calculates a user's delivery cost.
@@ -99,7 +103,8 @@ namespace PackageArrangementServer.Services
         public string DeliveryStatus(string userId, string deliveryId);
 
         /// <summary>
-        /// Updates a user's delivery. Returns 1 if succeeded and 0 otherwise.
+        /// Updates a user's delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
@@ -111,7 +116,8 @@ namespace PackageArrangementServer.Services
             List<Package>? packages = null, Container? selectedContainer = null);
 
         /// <summary>
-        /// Deletes a user's delivery. Returns 1 if succeeded and 0 otherwise.
+        /// Deletes a user's delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>

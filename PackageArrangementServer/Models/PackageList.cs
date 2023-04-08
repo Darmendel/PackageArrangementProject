@@ -35,9 +35,8 @@
             _packages.Add(package);
         }
 
-        public void Edit(Package package, string type = null, string amount = null,
-            string width = null, string height = null, string depth = null, string weight = null,
-            string cost = null, string address = null)
+        public void Edit(Package package, string type = null, string amount = null, string width = null, string height = null,
+            string depth = null, string weight = null, string cost = null, string address = null)
         {
             if (package == null) return;
 

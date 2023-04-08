@@ -35,7 +35,25 @@ namespace PackageArrangementServer.Services
         public Package Get(string packageId, string deliveryId);
 
         /// <summary>
+        /// Given a delivery id, adds a new package.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="type"></param>
+        /// <param name="amount"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="depth"></param>
+        /// <param name="weight"></param>
+        /// <param name="cost"></param>
+        /// <param name="address"></param>
+        /// <returns>int</returns>
+        public int Add(string deliveryId, string type = null, string amount = null, string width = null, string height = null,
+            string depth = null, string weight = null, string cost = null, string address = null);
+
+        /// <summary>
         /// Updates a package.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="packageId"></param>
         /// <param name="deliveryId"></param>
@@ -44,16 +62,20 @@ namespace PackageArrangementServer.Services
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
+        /// <param name="weight"></param>
         /// <param name="cost"></param>
         /// <param name="address"></param>
-        public void Edit(string packageId, string deliveryId, string? type = null, string? amount = null, string? width = null,
-            string? height = null, string? depth = null, string? cost = null, string? address = null);
+        /// <returns>int</returns>
+        public int Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
+            string height = null, string depth = null, string weight = null, string cost = null, string address = null);
 
         /// <summary>
         /// Deletes a package.
+        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="packageId"></param>
         /// <param name="deliveryId"></param>
-        public void Delete(string packageId, string deliveryId);
+        /// <returns>int</returns>
+        public int Delete(string packageId, string deliveryId);
     }
 }

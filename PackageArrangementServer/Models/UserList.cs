@@ -2,7 +2,7 @@
 {
     public class UserList
     {
-        private List<User> _users;
+        private List<User> _users = new List<User>();
 
         public UserList(List<User> users)
         {

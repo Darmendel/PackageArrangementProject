@@ -3,6 +3,7 @@
     public class RequestCreationOfNewPackage
     {
         public string PackageId { get; set; }
+        public string DeliveryId { get; set; }
         public string Type { get; set; }
         public string Amount { get; set; } // add type check
         public string Width { get; set; } // add type check

@@ -12,28 +12,12 @@ namespace PackageArrangementServer.Services
         public List<Delivery> GetAllDeliveries(string userId);
 
         /// <summary>
-        /// Given a delivey's id, returns a list of packages of the delivery.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>List<Package></returns>
-        public List<Package> GetAllPackages(string id);
-
-        /// <summary>
         /// Checks if a certain delivery exists.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <returns>bool</returns>
         public bool Exists(string deliveryId, string userId);
-
-        /// <summary>
-        /// Checks if a certain package exists in a delivery.
-        /// </summary>
-        /// <param name="deliveryId"></param>
-        /// <param name="userId"></param>
-        /// <param name="packageId"></param>
-        /// <returns>bool</returns>
-        public bool PackageExists(string deliveryId, string userId, string packageId); // maybe drop the userId
 
         /// <summary>
         /// Returns a delivery by delivery id and user id.
@@ -51,7 +35,7 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <returns>int</returns>
-        public int Price(string deliveryId, string userId);
+        public int Cost(string deliveryId, string userId);
 
         /// <summary>
         /// Given a delivery id and a user id, evaluates the delivery's shipping status.
@@ -66,25 +50,34 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
+        /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
         /// <param name="container"></param>
-        public void Edit(string deliveryId, string userId, List<Package>? packages = null, Container? container = null); // maybe drop the userId + [int? cost = null, string? deliveryStatus = null]
+        public void Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, Container? container = null); // maybe drop the userId + [int? cost = null, string? deliveryStatus = null]
 
         /// <summary>
-        /// Updates a package in a delivery.
+        /// Deletes a delivery.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        public void Delete(string deliveryId, string userId);
+
+        /// <summary>
+        /// Given a delivery id and a user id, returns all of the packages of the delivery.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<Package> GetAllPackages(string deliveryId, string userId);
+
+        /// <summary>
+        /// Checks if a certain package exists in a delivery.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <param name="packageId"></param>
-        /// <param name="type"></param>
-        /// <param name="amount"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="depth"></param>
-        /// <param name="isFragile"></param>
-        /// <param name="cost"></param>
-        /// <param name="adress"></param>
-        public void EditPackage(string deliveryId, string userId, string packageId, string? type = null, int? amount = null, int? width = null, int? height = null, int? depth = null, bool? isFragile = null, int? cost = null, string? adress = null); // maybe drop the userId
+        /// <returns>bool</returns>
+        public bool PackageExists(string deliveryId, string userId, string packageId); // maybe drop the userId
 
         /// <summary>
         /// Returns a package in a delivery.
@@ -94,13 +87,6 @@ namespace PackageArrangementServer.Services
         /// <param name="packageId"></param>
         /// <returns>Package</returns>
         public Package GetPackage(string deliveryId, string userId, string packageId); // maybe drop the userId
-
-        /// <summary>
-        /// Returns number of packages in the delivery.
-        /// </summary>
-        /// <param name="deliveryId"></param>
-        /// <returns>int</returns>
-        public int GetPackageCount(string deliveryId);
 
         /// <summary>
         /// Returns number of packages in the delivery.
@@ -117,6 +103,21 @@ namespace PackageArrangementServer.Services
         /// <param name="package"></param>
         /// <returns>int</returns>
         public int AddPackage(string deliveryId, Package package);
+
+        /// <summary>
+        /// Updates a package in a delivery.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="packageId"></param>
+        /// <param name="type"></param>
+        /// <param name="amount"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="depth"></param>
+        /// <param name="cost"></param>
+        /// <param name="adress"></param>
+        public void EditPackage(string deliveryId, string userId, string packageId, string? type = null, string? amount = null, string? width = null, string? height = null, string? depth = null, string? cost = null, string? adress = null);
 
         /// <summary>
         /// Deletes a package from a delivery. Returns 1 if succeeded and 0 otherwise.

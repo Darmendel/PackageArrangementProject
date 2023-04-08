@@ -9,17 +9,25 @@
         public PackageList(List<Package> packages)
         {
             this._packages = packages.ConvertAll(p => new Package(
-                p.Id, p.Type, p.Amount, p.Width, p.Height, p.Depth, p.Weight, p.Cost, p.Address));
+                p.Id, p.DeliveryId, p.Type, p.Amount, p.Width, p.Height, p.Depth, p.Weight, p.Cost, p.Address));
         }
 
         public PackageList()
         {
-            this.Add(new Package("1", "Clothing", "2", "100", "50", "70", "5", "200", "Fifth avn."));
-            this.Add(new Package("2", "Lamps", "1", "300", "150", "200", "100", "700", "Fifth avn."));
-            this.Add(new Package("3", "Books", "3", "50", "50", "50", "400", "500", "Fifth avn."));
+            for (int i = 0; i < 4; i++)
+            {
+                int one = 1 + i, two = 2 + i, three = 3 + i;
+                this.Add(new Package(one.ToString(), i.ToString(), "Clothing", "2", "100", "50", "70", "5", "200", "Fifth avn."));
+                this.Add(new Package(two.ToString(), i.ToString(), "Lamps", "1", "300", "150", "200", "100", "700", "Fifth avn."));
+                this.Add(new Package(three.ToString(), i.ToString(), "Books", "3", "50", "50", "50", "400", "500", "Fifth avn."));
+            }
         }
 
         public List<Package> Packages { get { return packages; } } // need to fix - return a copy
+
+        //public bool IsEmpty { get { return packages.Count == 0; } }
+
+        public int Count { get { return packages.Count; } }
 
         public void Add(Package package)
         {
@@ -32,6 +40,7 @@
             string cost = null, string address = null)
         {
             if (package == null) return;
+
             if (_packages.Contains(package))
             {
                 int index = _packages.IndexOf(package);
@@ -50,8 +59,8 @@
 
         public void Remove(Package package)
         {
-            if (package == null || !_packages.Contains(package)) return;
-            _packages.Remove(package);
+            if (package == null) return;
+            if (_packages.Contains(package)) _packages.Remove(package);
         }
 
         public static implicit operator List<object>(PackageList v)

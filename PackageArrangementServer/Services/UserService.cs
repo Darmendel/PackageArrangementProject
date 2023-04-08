@@ -15,14 +15,14 @@ namespace PackageArrangementServer.Services
         public List<User> GetAllUsers()
         {
             if (userList.Count == 0) return null;
-            return userList.Users;
+            return UserService.userList.Users;
         }
 
         public bool Exists(string id)
         {
             if (string.IsNullOrEmpty(id)) return false;
 
-            foreach (User user in userList.Users)
+            foreach (User user in UserService.userList.Users)
             {
                 if (user.Id == id) return true;
             }
@@ -37,12 +37,12 @@ namespace PackageArrangementServer.Services
 
         public void Edit(string id, string? name = null, string? password = null)
         {
-            if (Exists(id)) userList.Edit(Get(id), name, password);
+            if (Exists(id)) UserService.userList.Edit(Get(id), name, password);
         }
 
         public void Delete(string id)
         {
-            if (Exists(id)) GetAllUsers().Remove(Get(id));
+            if (Exists(id)) UserService.userList.Remove(Get(id));
         }
 
         //public bool Update(string id, User user) { throw new NotImplementedException(); }
@@ -60,16 +60,24 @@ namespace PackageArrangementServer.Services
             return deliveryService.GetAllDeliveries(id);
         }
 
+        public bool DeliveryExists(string userId, string deliveryId)
+        {
+            if (!Exists(userId)) return false;
+            return deliveryService.Exists(deliveryId, userId);
+        }
+
         public Delivery GetDelivery(string userId, string deliveryId)
         {
             if (!DeliveryExists(userId, deliveryId)) return null; // redundant
             return deliveryService.Get(deliveryId, userId);
         }
 
-        public bool DeliveryExists(string userId, string deliveryId)
+        // cost and deliveryStatus need to be eavluated.
+        // maybe return the delivery (or delivery status) instead of an int...
+        public int CreateDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
+            List<Package>? packages = null, Container? selectedContainer = null)
         {
-            if (!Exists(userId)) return false;
-            return deliveryService.Exists(deliveryId, userId);
+            throw new NotImplementedException();
         }
 
         public int DeliveryCost(string userId, string deliveryId)
@@ -86,26 +94,18 @@ namespace PackageArrangementServer.Services
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
             List<Package>? packages = null, Container? selectedContainer = null)
         {
-            User user = Get(userId);
+            /**User user = Get(userId);
             if (user == null) return 1;
-            return 0;
-            
+            return 0;*/
+
+            throw new NotImplementedException();
+
         }
 
         public int DeleteDelivery(string userId, string deliveryId)
         {
             throw new NotImplementedException();
         }
-
-        // cost and deliveryStatus might be needed to reavluate and changed.
-        // maybe return a delivery instead of an int...
-        public int CreateDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, Container? selectedContainer = null)
-        {
-            throw new NotImplementedException();
-        }
-
-
 
     }
 }

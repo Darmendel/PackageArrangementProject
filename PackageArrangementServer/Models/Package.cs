@@ -6,6 +6,7 @@ namespace PackageArrangementServer.Models
     {
         [Key]
         public string Id { get; set; }
+        public string DeliveryId { get; set; }
         public string Type { get; set; }
         public string Amount { get; set; } // add type check (number of packages)
         public string Width { get; set; } // add type check
@@ -17,10 +18,11 @@ namespace PackageArrangementServer.Models
         public string Address { get; set; }
         //public string Server { get; set; }
 
-        public Package(string id, string type, string amount, string width, string height, string depth,
-            string weight, string cost, string address)
+        public Package(string id, string deliveryId, string type, string amount, string width, string height,
+            string depth, string weight, string cost, string address)
         {
             this.Id = id;
+            this.DeliveryId = deliveryId;
             this.Type = type;
             this.Amount = amount;
             this.Width = width;

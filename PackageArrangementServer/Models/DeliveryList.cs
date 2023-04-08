@@ -2,15 +2,15 @@
 {
     public class DeliveryList
     {
-        private List<Delivery> _deliveries;
-        private readonly List<Delivery> deliveries;
+        private List<Delivery> _deliveries = new List<Delivery>();
+        //private readonly List<Delivery> deliveries;
 
         public DeliveryList()
         {
 
         }
 
-        public List<Delivery> Deliveries { get { return deliveries; } }
+        public List<Delivery> Deliveries { get { return _deliveries; } } // need to fix - return a copy
 
         //public bool IsEmpty { get { return _deliveries.Count == 0; } }
 
@@ -39,7 +39,7 @@
 
         public void Remove(Delivery delivery)
         {
-            if (deliveries == null) return;
+            if (_deliveries == null) return;
             if (_deliveries.Contains(delivery)) _deliveries.Remove(delivery);
         }
     }

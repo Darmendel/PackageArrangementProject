@@ -2,8 +2,8 @@
 {
     public class PackageList
     {
-        private List<Package> _packages;
-        private readonly List<Package> packages;
+        private List<Package> _packages = new List<Package>();
+        //private readonly List<Package> packages;
         //public string id { get; set; }
 
         public PackageList(List<Package> packages)
@@ -23,11 +23,11 @@
             }
         }
 
-        public List<Package> Packages { get { return packages; } } // need to fix - return a copy
+        public List<Package> Packages { get { return _packages; } } // need to fix - return a copy
 
         //public bool IsEmpty { get { return packages.Count == 0; } }
 
-        public int Count { get { return packages.Count; } }
+        public int Count { get { return _packages.Count; } }
 
         public void Add(Package package)
         {

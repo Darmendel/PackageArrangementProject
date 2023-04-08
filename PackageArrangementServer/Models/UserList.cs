@@ -56,5 +56,10 @@
 
             return lst;
         }
+
+        public void Remove(User user)
+        {
+            if (_users.Contains(user)) _users.Remove(user);
+        }
     }
 }

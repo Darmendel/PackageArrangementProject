@@ -55,6 +55,14 @@ namespace PackageArrangementServer.Services
         public List<Delivery> GetAllDeliveries(string id);
 
         /// <summary>
+        /// Checks if a user have made a certain delivery before.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <returns>bool</returns>
+        public bool DeliveryExists(string userId, string deliveryId);
+
+        /// <summary>
         /// Returns a user's delivery by id.
         /// </summary>
         /// <param name="userId"></param>
@@ -63,12 +71,16 @@ namespace PackageArrangementServer.Services
         public Delivery GetDelivery(string userId, string deliveryId);
 
         /// <summary>
-        /// Checks if a user have made a certain delivery before.
+        /// Creates a new delivery for a user. Returns 1 if succeeded and 0 otherwise.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
-        /// <returns>bool</returns>
-        public bool DeliveryExists(string userId, string deliveryId);
+        /// <param name="deliveryDate"></param>
+        /// <param name="packages"></param>
+        /// <param name="selectedContainer"></param>
+        /// <returns>int</returns>
+        public int CreateDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
+            List<Package>? packages = null, Container? selectedContainer = null);
 
         /// <summary>
         /// Calculates a user's delivery cost.
@@ -105,17 +117,5 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryId"></param>
         /// <returns>int</returns>
         public int DeleteDelivery(string userId, string deliveryId);
-
-        /// <summary>
-        /// Creates a new delivery for a user. Returns 1 if succeeded and 0 otherwise.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="deliveryId"></param>
-        /// <param name="deliveryDate"></param>
-        /// <param name="packages"></param>
-        /// <param name="selectedContainer"></param>
-        /// <returns>int</returns>
-        public int CreateDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, Container? selectedContainer = null);
     }
 }

@@ -58,7 +58,7 @@ namespace PackageArrangementServer.Services
             var random = new Random();
             string id = random.Next(0, 999).ToString();
 
-            while (Exists(deliveryId, id)) id = random.Next(0, 999).ToString() + id;
+            while (Exists(id, deliveryId)) id = random.Next(0, 999).ToString() + id;
 
             PackageService.packageList.Add(new Package(id, deliveryId, type, amount, width, height, depth, weight, cost, address));
             return 1;

@@ -88,19 +88,21 @@ namespace PackageArrangementServer.Services
 
         /// <summary>
         /// Calculates a user's delivery cost.
+        /// Returns -1 if there's no such delivery or user.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <returns>int</returns>
-        public int DeliveryCost(string userId, string deliveryId);
+        public int GetDeliveryCost(string userId, string deliveryId);
 
         /// <summary>
         /// Evaluates a user's delivery status.
+        /// Returns null if there's no such delivery or user.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
-        /// <returns>string</returns>
-        public string DeliveryStatus(string userId, string deliveryId);
+        /// <returns>DeliveryStatus</returns>
+        public DeliveryStatus GetDeliveryStatus(string userId, string deliveryId);
 
         /// <summary>
         /// Updates a user's delivery.

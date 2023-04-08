@@ -21,7 +21,7 @@
         }
 
         public void Edit(Delivery delivery, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container container = null, string cost = null, string deliveryStatus = null)
+            Container container = null, string cost = null, DeliveryStatus? status = null)
         {
             if (delivery == null) return;
 
@@ -31,9 +31,9 @@
 
                 if (deliveryDate != null) _deliveries[index].DeliveryDate = (DateTime) deliveryDate;
                 if (packages != null) _deliveries[index].Packages = packages;
-                if (container != null) _deliveries[index].SelectedContainer = container;
+                if (container != null) _deliveries[index].Container = container;
                 if (cost != null) _deliveries[index].Cost = cost;
-                if (deliveryStatus != null) _deliveries[index].DeliveryStatus = deliveryStatus;
+                if (status != null) _deliveries[index].Status = (DeliveryStatus) status;
             }
         }
 

@@ -56,23 +56,14 @@ namespace PackageArrangementServer.Services
             return 1;
         }
 
-        //public bool Update(string id, User user) { throw new NotImplementedException(); }
-
         public List<Delivery> GetAllDeliveries(string id)
         {
             if (!Exists(id)) return null;
             return deliveryService.GetAllDeliveries(id);
         }
 
-        /**public bool DeliveryExists(string userId, string deliveryId)
-        {
-            if (!Exists(userId)) return false;
-            return deliveryService.Exists(deliveryId, userId);
-        }*/
-
         public Delivery GetDelivery(string userId, string deliveryId)
         {
-            //if (!DeliveryExists(userId, deliveryId)) return null; // redundant
             if (!Exists(userId)) return null;
             return deliveryService.Get(deliveryId, userId);
         }
@@ -83,34 +74,34 @@ namespace PackageArrangementServer.Services
             Container? container = null)
         {
             if (!Exists(userId)) return 0;
-            throw new NotImplementedException();
+            return deliveryService.Add(userId, deliveryDate, packages, container);
         }
 
-        public int DeliveryCost(string userId, string deliveryId)
+        public int GetDeliveryCost(string userId, string deliveryId)
         {
-            throw new NotImplementedException();
+            if (!Exists(userId)) return -1;
+            return deliveryService.Cost(deliveryId, userId);
         }
 
-        public string DeliveryStatus(string userId, string deliveryId)
+        public DeliveryStatus GetDeliveryStatus(string userId, string deliveryId)
         {
-            throw new NotImplementedException();
+            if (!Exists(userId)) return DeliveryStatus.NonExisting;
+            return deliveryService.Status(deliveryId, userId);
         }
 
         // cost and deliveryStatus might be needed to reavluate and changed.
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
             List<Package>? packages = null, Container? selectedContainer = null)
         {
-            /**User user = Get(userId);
-            if (user == null) return 0;
-            return 1;*/
-
-            throw new NotImplementedException();
+            if (!Exists(userId)) return 0;
+            return deliveryService.Edit(deliveryId, userId, deliveryDate, packages, selectedContainer);
 
         }
 
         public int DeleteDelivery(string userId, string deliveryId)
         {
-            throw new NotImplementedException();
+            if (!Exists(userId)) return 0;
+            return deliveryService.Delete(deliveryId, userId);
         }
 
     }

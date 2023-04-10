@@ -116,10 +116,10 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryId"></param>
         /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
-        /// <param name="selectedContainer"></param>
+        /// <param name="container"></param>
         /// <returns>int</returns>
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, Container? selectedContainer = null);
+            List<Package>? packages = null, Container? container = null);
 
         /// <summary>
         /// Deletes a user's delivery.

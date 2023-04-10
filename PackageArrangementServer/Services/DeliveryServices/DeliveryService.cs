@@ -110,7 +110,7 @@ namespace PackageArrangementServer.Services
         }
 
         public int Add(string userId, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container container = null)
+            Container? container = null)
         {
             if (string.IsNullOrEmpty(userId)) return 0;
 
@@ -125,7 +125,8 @@ namespace PackageArrangementServer.Services
         }
 
         // cost and deliveryStatus might be needed to reavluate and changed.
-        public int Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, Container? container = null)
+        public int Edit(string deliveryId, string userId, DateTime? deliveryDate = null,
+            List<Package>? packages = null, Container? container = null)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return 0;

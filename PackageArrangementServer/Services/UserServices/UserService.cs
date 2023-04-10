@@ -94,10 +94,10 @@ namespace PackageArrangementServer.Services
 
         // cost and deliveryStatus might be needed to reavluate and changed.
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, Container? selectedContainer = null)
+            List<Package>? packages = null, Container? container = null)
         {
             if (!Exists(userId)) return 0;
-            return deliveryService.Edit(deliveryId, userId, deliveryDate, packages, selectedContainer);
+            return deliveryService.Edit(deliveryId, userId, deliveryDate, packages, container);
 
         }
 

@@ -7,7 +7,7 @@ namespace PackageArrangementServer.Services
         /// <summary>
         /// Given a user's id, returns a list of deliveries.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <returns>List<Delivery></returns>
         public List<Delivery> GetAllDeliveries(string userId);
 
@@ -73,7 +73,7 @@ namespace PackageArrangementServer.Services
         /// <param name="container"></param>
         /// <returns>int</returns>
         public int Add(string userId, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container container = null);
+            Container? container = null);
 
         /// <summary>
         /// Updates a delivery (changes it's list of packages or it's selected container and calculates it's new cost and status).

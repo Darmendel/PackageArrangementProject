@@ -29,7 +29,7 @@
         }
 
         public void Edit(Delivery delivery, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container container = null, string cost = null, DeliveryStatus? status = null)
+            Container? container = null, string cost = null, DeliveryStatus? status = null)
         {
             if (delivery == null) return;
 

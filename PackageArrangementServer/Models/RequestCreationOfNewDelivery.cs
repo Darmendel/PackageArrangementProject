@@ -2,8 +2,8 @@
 {
     public class RequestCreationOfNewDelivery
     {
-        public string DeliveryId { get; set; }
-        public string UserId { get; set; }
-        //public string Server { get; set; }
+        public DateTime DeliveryDate { get; set; }
+        public List<Package> Packages { get; set; }
+        public Container? Container { get; set; }
     }
 }

@@ -33,10 +33,26 @@ namespace PackageArrangementServer.Services
         /// Given a delivery id and a user id, calculates the cost of a delivery.
         /// Returns -1 if there's no such delivery or user.
         /// </summary>
+        /// <param name="delivery"></param>
+        /// <returns>int</returns>
+        public int Cost(Delivery delivery);
+
+        /// <summary>
+        /// Given a delivery id and a user id, calculates the cost of a delivery.
+        /// Returns -1 if there's no such delivery or user.
+        /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <returns>int</returns>
         public int Cost(string deliveryId, string userId);
+
+        /// <summary>
+        /// Given a delivery id and a user id, evaluates the delivery's shipping status.
+        /// Returns null if there's no such delivery or user.
+        /// </summary>
+        /// <param name="delivery"></param>
+        /// <returns>DeliveryStatus</returns>
+        public DeliveryStatus Status(Delivery delivery);
 
         /// <summary>
         /// Given a delivery id and a user id, evaluates the delivery's shipping status.
@@ -55,10 +71,9 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
         /// <param name="container"></param>
-        /// <param name="cost"></param>
         /// <returns>int</returns>
         public int Add(string userId, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container container = null, string cost = null);
+            Container container = null);
 
         /// <summary>
         /// Updates a delivery (changes it's list of packages or it's selected container and calculates it's new cost and status).

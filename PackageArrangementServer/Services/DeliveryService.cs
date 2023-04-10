@@ -48,9 +48,8 @@ namespace PackageArrangementServer.Services
             return GetAllDeliveries(userId).Find(x => x.Id == deliveryId);
         }
 
-        public int Cost(string deliveryId, string userId)
+        public int Cost(Delivery delivery)
         {
-            Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return -1;
 
             if (delivery.Packages == null && delivery.Container == null) return -1;
@@ -85,15 +84,33 @@ namespace PackageArrangementServer.Services
             return cost;
         }
 
-        public DeliveryStatus Status(string deliveryId, string userId)
+        public int Cost(string deliveryId, string userId)
         {
             Delivery delivery = Get(deliveryId, userId);
+            return Cost(delivery);
+        }
+
+        public DeliveryStatus Status(Delivery delivery)
+        {
             if (delivery == null) return DeliveryStatus.NonExisting;
             return delivery.Status;
         }
 
+        public DeliveryStatus Status(string deliveryId, string userId)
+        {
+            Delivery delivery = Get(deliveryId, userId);
+            return Status(delivery);
+        }
+
+        private void Update(string deliveryId, string userId)
+        {
+            Delivery delivery = Get(deliveryId, userId);
+            if (delivery == null) return;
+            DeliveryService.deliveryList.Edit(delivery, cost: Cost(delivery).ToString(), status: Status(delivery));
+        }
+
         public int Add(string userId, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container container = null, string cost = null)
+            Container container = null)
         {
             if (string.IsNullOrEmpty(userId)) return 0;
 
@@ -102,7 +119,8 @@ namespace PackageArrangementServer.Services
 
             while (Exists(id, userId)) id = random.Next(0, 999).ToString() + id;
 
-            DeliveryService.deliveryList.Add(new Delivery(id, userId, deliveryDate, packages, container, cost));
+            DeliveryService.deliveryList.Add(new Delivery(id, userId, deliveryDate, packages, container));
+            Update(userId, userId);
             return 1;
         }
 

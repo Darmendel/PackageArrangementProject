@@ -52,13 +52,15 @@
 
             for (int i = 1; i < 6; i++)
             {
-                //int one = 0 + i, two = 1 + i, three = 2 + i;
+                string id1 = i.ToString() + 1.ToString();
+                string id2 = i.ToString() + 2.ToString();
+                string id3 = i.ToString() + 3.ToString();
                 string deliveryId = i.ToString();
                 PackageList p = new PackageList();
 
-                p.Add(new Package(1.ToString(), deliveryId, "Clothing", "2", "100", "50", "70", "5", "200", "Fifth avn."));
-                p.Add(new Package(2.ToString(), deliveryId, "Lamps", "1", "300", "150", "200", "100", "700", "Fifth avn."));
-                p.Add(new Package(3.ToString(), deliveryId, "Books", "3", "50", "50", "50", "400", "500", "Fifth avn."));
+                p.Add(new Package(id1, deliveryId, "Clothing", "2", "100", "50", "70", "5", "200", "Fifth avn."));
+                p.Add(new Package(id2, deliveryId, "Lamps", "1", "300", "150", "200", "100", "700", "Fifth avn."));
+                p.Add(new Package(id3, deliveryId, "Books", "3", "50", "50", "50", "400", "500", "Fifth avn."));
 
                 EditDelivery(deliveries, deliveryId, p);
                 packageList.Extend(p);

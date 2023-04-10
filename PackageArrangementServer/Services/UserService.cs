@@ -42,10 +42,10 @@ namespace PackageArrangementServer.Services
             return 1;
         }
 
-        public int Edit(string id, string? name = null, string? password = null)
+        public int Edit(string id, string name = null, string password = null, List<Delivery> deliveries = null)
         {
             if (!Exists(id)) return 0;
-            UserService.userList.Edit(Get(id), name, password);
+            UserService.userList.Edit(Get(id), name, password, deliveries);
             return 1;
         }
 

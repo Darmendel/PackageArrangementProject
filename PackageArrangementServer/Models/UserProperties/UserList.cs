@@ -6,9 +6,10 @@
 
         public UserList(List<User> users)
         {
+            _users = new List<User>();
             foreach (User user in users)
             {
-                users.Add(user);
+                _users.Add(user);
             }
         }
 

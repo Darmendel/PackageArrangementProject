@@ -2,7 +2,7 @@
 {
     public class UserList
     {
-        private List<User> _users = new List<User>();
+        private List<User> _users;
 
         public UserList(List<User> users)
         {
@@ -14,10 +14,7 @@
 
         public UserList()
         {
-            this.Add(new User { Id =  "1", Name = "A" , Password = "12345"});
-            this.Add(new User { Id =  "2", Name = "B" , Password = "12345"});
-            this.Add(new User { Id =  "3", Name = "C" , Password = "12345"});
-            this.Add(new User { Id =  "4", Name = "D" , Password = "12345"});
+            _users = new List<User>();
         }
 
         public List<User> Users { get { return _users; } } // need to fix - return a copy
@@ -30,7 +27,7 @@
             _users.Add(user);
         }
 
-        public void Edit(User user, string name = null, string password = null)
+        public void Edit(User user, string name = null, string password = null, List<Delivery> Deliveries = null)
         {
             if (user == null) return;
             if (_users.Contains(user))

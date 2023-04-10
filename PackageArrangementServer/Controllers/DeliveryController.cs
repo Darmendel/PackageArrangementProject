@@ -22,8 +22,7 @@ namespace PackageArrangementServer.Controllers
             // Global.deliveryId = Package.Claims.FirstOrDefault(claim => claim.Type == "deliveryId")?.Value;
             //
             //Response.StatusCode = 200;
-            //return deliveryService.GetAllPackages(Global.DeliveryId);
-            return null;
+            return deliveryService.GetAllPackages("2", "1");
         }
 
         /// <summary>

@@ -2,7 +2,7 @@
 {
     public class PackageList
     {
-        private List<Package> _packages = new List<Package>();
+        private List<Package> _packages;
         //private readonly List<Package> packages;
         //public string id { get; set; }
 
@@ -14,13 +14,7 @@
 
         public PackageList()
         {
-            for (int i = 0; i < 4; i++)
-            {
-                int one = 1 + i, two = 2 + i, three = 3 + i;
-                this.Add(new Package(one.ToString(), i.ToString(), "Clothing", "2", "100", "50", "70", "5", "200", "Fifth avn."));
-                this.Add(new Package(two.ToString(), i.ToString(), "Lamps", "1", "300", "150", "200", "100", "700", "Fifth avn."));
-                this.Add(new Package(three.ToString(), i.ToString(), "Books", "3", "50", "50", "50", "400", "500", "Fifth avn."));
-            }
+            _packages = new List<Package>();
         }
 
         public List<Package> Packages { get { return _packages; } } // need to fix - return a copy

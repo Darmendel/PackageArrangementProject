@@ -41,8 +41,9 @@ namespace PackageArrangementServer.Services
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <param name="password"></param>
+        /// <param name="deliveries"></param>
         /// <returns>int</returns>
-        public int Edit(string id, string? name = null, string? password = null);
+        public int Edit(string id, string? name = null, string? password = null, List<Delivery> deliveries = null);
 
         /// <summary>
         /// Deletes a user.

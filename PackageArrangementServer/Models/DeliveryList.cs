@@ -2,12 +2,12 @@
 {
     public class DeliveryList
     {
-        private List<Delivery> _deliveries = new List<Delivery>();
+        private List<Delivery> _deliveries;
         //private readonly List<Delivery> deliveries;
 
         public DeliveryList()
         {
-
+            _deliveries = new List<Delivery>();
         }
 
         public List<Delivery> Deliveries { get { return _deliveries; } } // need to fix - return a copy
@@ -18,6 +18,14 @@
         {
             if (delivery == null || _deliveries.Contains(delivery)) return;
             _deliveries.Add(delivery);
+        }
+
+        public void Extend(DeliveryList list)
+        {
+            foreach (Delivery delivery in list.Deliveries)
+            {
+                _deliveries.Add(delivery);
+            }
         }
 
         public void Edit(Delivery delivery, DateTime? deliveryDate = null, List<Package> packages = null,

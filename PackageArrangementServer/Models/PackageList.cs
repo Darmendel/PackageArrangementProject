@@ -29,6 +29,14 @@
             _packages.Add(package);
         }
 
+        public void Extend(PackageList packages)
+        {
+            foreach (Package package in packages.Packages)
+            {
+                _packages.Add(package);
+            }
+        }
+
         public void Edit(Package package, string type = null, string amount = null, string width = null, string height = null,
             string depth = null, string weight = null, string cost = null, string address = null)
         {

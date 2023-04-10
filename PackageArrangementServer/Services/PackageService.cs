@@ -4,7 +4,13 @@ namespace PackageArrangementServer.Services
 {
     public class PackageService : IPackageService
     {
-        private static PackageList packageList = new PackageList();
+        private static PackageList packageList;
+
+        public PackageService()
+        {
+            //packageList = new PackageList();
+            packageList = StaticData.GetPackages();
+        }
 
         public List<Package> GetAllPackages(string deliveryId)
         {

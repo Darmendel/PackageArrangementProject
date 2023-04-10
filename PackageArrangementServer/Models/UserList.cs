@@ -27,7 +27,7 @@
             _users.Add(user);
         }
 
-        public void Edit(User user, string name = null, string password = null, List<Delivery> deliveries = null)
+        public void Edit(User user, string name = null, string email = null, string password = null, List<Delivery> deliveries = null)
         {
             if (user == null) return;
             if (_users.Contains(user))
@@ -35,6 +35,7 @@
                 int index = _users.IndexOf(user);
 
                 if (name != null) _users[index].Name = name;
+                if (email != null) _users[index].Email = email;
                 if (password != null) _users[index].Password = password;
                 if (deliveries != null) _users[index].Deliveries = deliveries;
             }

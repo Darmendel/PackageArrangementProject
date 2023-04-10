@@ -30,9 +30,10 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
+        /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns>int</returns>
-        public int Add(string id, string name, string password);
+        public int Add(string id, string name, string email, string password);
 
         /// <summary>
         /// Updates a user.
@@ -40,10 +41,12 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
+        /// <param name="email"></param>
         /// <param name="password"></param>
         /// <param name="deliveries"></param>
         /// <returns>int</returns>
-        public int Edit(string id, string? name = null, string? password = null, List<Delivery> deliveries = null);
+        public int Edit(string id, string name = null, string email = null, string password = null,
+            List<Delivery> deliveries = null);
 
         /// <summary>
         /// Deletes a user.
@@ -126,5 +129,70 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryId"></param>
         /// <returns>int</returns>
         public int DeleteDelivery(string userId, string deliveryId);
+
+        /// <summary>
+        /// Returns a list of all packages in a user's delivery.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <returns>List<Package></returns>
+        public List<Package> GetAllPackages(string userId, string deliveryId);
+
+        /// <summary>
+        /// Returns a user's package in a delivery.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="packageId"></param>
+        /// <returns>Package</returns>
+        public Package GetPackage(string userId, string deliveryId, string packageId);
+
+        /// <summary>
+        /// Adds a new package to a user's delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="type"></param>
+        /// <param name="amount"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="depth"></param>
+        /// <param name="weight"></param>
+        /// <param name="cost"></param>
+        /// <param name="address"></param>
+        /// <returns>int</returns>
+        public int AddPackage(string userId, string deliveryId, string type = null, string amount = null, string width = null,
+            string height = null, string depth = null, string weight = null, string cost = null, string address = null);
+
+        /// <summary>
+        /// Updates a package in a user's delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="packageId"></param>
+        /// <param name="type"></param>
+        /// <param name="amount"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="depth"></param>
+        /// <param name="weight"></param>
+        /// <param name="cost"></param>
+        /// <param name="address"></param>
+        /// <returns>int</returns>
+        public int EditPackage(string userId, string deliveryId, string packageId, string type = null,
+            string amount = null, string width = null, string height = null, string depth = null, string weight = null,
+            string cost = null, string address = null);
+
+        /// <summary>
+        /// Deletes a package from a user's delivery.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="packageId"></param>
+        /// <returns></returns>
+        public int DeletePackage(string userId, string deliveryId, string packageId);
     }
 }

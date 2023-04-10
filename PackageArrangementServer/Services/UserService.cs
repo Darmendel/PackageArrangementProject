@@ -37,17 +37,18 @@ namespace PackageArrangementServer.Services
             return GetAllUsers().Find(x => x.Id == id);
         }
 
-        public int Add(string id, string name, string password)
+        public int Add(string id, string name, string email, string password)
         {
             if (Exists(id)) return 0;
-            userList.Add(new User { Id = id, Name = name, Password = password, Deliveries = new List<Delivery>() });
+            userList.Add(new User { Id = id, Name = name, Email = email, Password = password, Deliveries = new List<Delivery>() });
             return 1;
         }
 
-        public int Edit(string id, string name = null, string password = null, List<Delivery> deliveries = null)
+        public int Edit(string id, string name = null, string email = null, string password = null,
+            List<Delivery> deliveries = null)
         {
             if (!Exists(id)) return 0;
-            UserService.userList.Edit(Get(id), name, password, deliveries);
+            UserService.userList.Edit(Get(id), name, email, password, deliveries);
             return 1;
         }
 
@@ -104,6 +105,40 @@ namespace PackageArrangementServer.Services
         {
             if (!Exists(userId)) return 0;
             return deliveryService.Delete(deliveryId, userId);
+        }
+
+        public List<Package> GetAllPackages(string userId, string deliveryId)
+        {
+            if (!Exists(userId)) return null;
+            return deliveryService.GetAllPackages(deliveryId, userId);
+        }
+
+        public Package GetPackage(string userId, string deliveryId, string packageId)
+        {
+            if (!Exists(userId)) return null;
+            return deliveryService.GetPackage(deliveryId, userId, packageId);
+        }
+
+        public int AddPackage(string userId, string deliveryId, string type = null, string amount = null,
+            string width = null, string height = null, string depth = null, string weight = null,
+            string cost = null, string address = null)
+        {
+            if (!Exists(userId)) return 0;
+            return deliveryService.AddPackage(deliveryId, userId, type, amount, width, height, depth, weight, cost, address);
+        }
+
+        public int EditPackage(string userId, string deliveryId, string packageId, string type = null,
+            string amount = null, string width = null, string height = null, string depth = null, string weight = null,
+            string cost = null, string address = null)
+        {
+            if (!Exists(userId)) return 0;
+            return deliveryService.EditPackage(deliveryId, userId, packageId, type, amount, width, height, depth, weight, cost, address);
+        }
+
+        public int DeletePackage(string userId, string deliveryId, string packageId)
+        {
+            if (!Exists(userId)) return 0;
+            return deliveryService.DeletePackage(deliveryId, userId, packageId);
         }
 
     }

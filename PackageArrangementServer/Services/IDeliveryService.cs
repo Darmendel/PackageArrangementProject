@@ -131,7 +131,7 @@ namespace PackageArrangementServer.Services
         public int GetPackageCount(string deliveryId, string userId);
 
         /// <summary>
-        /// Adds a new package to the delivery.
+        /// Adds a new package to a delivery.
         /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>

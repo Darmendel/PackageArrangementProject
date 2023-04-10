@@ -20,9 +20,9 @@
             _deliveries.Add(delivery);
         }
 
-        public void Extend(DeliveryList list)
+        public void Extend(DeliveryList deliveries)
         {
-            foreach (Delivery delivery in list.Deliveries)
+            foreach (Delivery delivery in deliveries.Deliveries)
             {
                 _deliveries.Add(delivery);
             }

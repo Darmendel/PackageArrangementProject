@@ -5,12 +5,13 @@ namespace PackageArrangementServer.Services
     public class DeliveryService : IDeliveryService
     {
         private IPackageService packageService;
-        private static DeliveryList deliveryList = new DeliveryList();
-        //private static List<DeliveryList> deliveryList = new List<DeliveryList>();
+        private static DeliveryList deliveryList;
 
         public DeliveryService(IPackageService ps)
         {
             this.packageService = ps;
+            //deliveryList = new DeliveryList();
+            deliveryList = StaticData.GetDeliveries();
         }
 
         public List<Delivery> GetAllDeliveries(string userId)

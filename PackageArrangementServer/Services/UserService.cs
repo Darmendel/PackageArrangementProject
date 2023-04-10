@@ -5,11 +5,13 @@ namespace PackageArrangementServer.Services
     public class UserService : IUserService
     {
         private IDeliveryService deliveryService;
-        private static UserList userList = new UserList();
+        private static UserList userList;
 
         public UserService(IDeliveryService ds)
         {
             this.deliveryService = ds;
+            //userList = new UserList();
+            userList = StaticData.GetUsers();
         }
 
         public List<User> GetAllUsers()

@@ -1,10 +1,17 @@
 ﻿namespace PackageArrangementServer.Models
 {
-    public class Container
+    public struct Container
     {
-        public string Width { get; } // add type check
-        public string Height { get; } // add type check
-        public string Depth { get; } // add type check
-        public string Cost { get; } // add type check
+        public SmallContainer? Small { get; }
+        public MediumContainer? Medium { get; }
+        public BigContainer? Big { get; }
+
+        public Container(SmallContainer? s = null, MediumContainer? m = null, BigContainer? b = null)
+        {
+            Small = s;
+            Medium = m;
+            Big = b;
+        }
+
     }
 }

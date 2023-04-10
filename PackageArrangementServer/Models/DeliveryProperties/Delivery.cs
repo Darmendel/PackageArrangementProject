@@ -16,7 +16,7 @@ namespace PackageArrangementServer.Models
 
 
         public Delivery(string id, string userId, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container container = null, string cost = null)
+            Container? container = null, string cost = null)
         {
             this.Id = id;
             this.UserId = userId;

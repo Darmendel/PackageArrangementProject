@@ -100,6 +100,46 @@ namespace PackageArrangementServer.Controllers
         }
 
         /// <summary>
+        /// Returns the cost of a user's delivery.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <returns>string</returns>
+        [HttpGet("{userId}/deliveries/{deliveryId}/cost")]
+        public string GetDeliveryCost(string userId, string deliveryId)
+        {
+            int cost = userService.GetDeliveryCost(userId, deliveryId);
+            if (cost == -1)
+            {
+                Response.StatusCode = 404;
+                return null;
+            }
+
+            Response.StatusCode = 200;
+            return cost.ToString();
+        }
+
+        /// <summary>
+        /// Returns a user's delivery status.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <returns>DeliveryStatus</returns>
+        [HttpGet("{userId}/deliveries/{deliveryId}/status")]
+        public DeliveryStatus? GetDeliveryStatus(string userId, string deliveryId)
+        {
+            DeliveryStatus status = userService.GetDeliveryStatus(userId, deliveryId);
+            if (status == DeliveryStatus.NonExisting)
+            {
+                Response.StatusCode = 404;
+                return null;
+            }
+
+            Response.StatusCode = 200;
+            return status;
+        }
+
+        /// <summary>
         /// Returns a list of all packages in a user's delivery.
         /// </summary>
         /// <param name="userId"></param>
@@ -161,6 +201,33 @@ namespace PackageArrangementServer.Controllers
         public void Post([FromBody] RegisterRequest req)
         {
             if (userService.Add(req.Id, req.Name, req.Email, req.Password) > 0) Response.StatusCode = 204;
+            else Response.StatusCode = 400;
+            return;
+        }
+
+        /// <summary>
+        /// Creates a new delivery.
+        /// </summary>
+        /// <param name="req"></param>
+        [HttpPost("{userId}/deliveries")]
+        public void Post([FromBody] RequestCreationOfNewDelivery req)
+        {
+            if (userService.AddDelivery(req.UserId, req.DeliveryDate, req.Packages, req.Container) > 0)
+                Response.StatusCode = 204;
+            else Response.StatusCode = 400;
+            return;
+        }
+
+        /// <summary>
+        /// Adds a new package.
+        /// </summary>
+        /// <param name="req"></param>
+        [HttpPost("{userId}/deliveries/{deliveryId}/packages")]
+        public void Post([FromBody] RequestCreationOfNewPackage req)
+        {
+            if (userService.AddPackage(req.UserId, req.DeliveryId, req.Type, req.Amount, req.Width,
+                req.Height, req.Depth, req.Weight, req.Cost, req.Address) > 0)
+                Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;
         }

@@ -1,6 +1,8 @@
-﻿namespace PackageArrangementServer.Models
+﻿using PackageArrangementServer.Models.Containers;
+
+namespace PackageArrangementServer.Models
 {
-    public struct MediumContainer
+    public struct MediumContainer : IContainer
     {
         public string Height { get; }
         public string Width { get; }
@@ -13,6 +15,13 @@
             this.Width = 800.ToString();
             this.Depth = 1600.ToString();
             this.Cost = 850.ToString();
+        }
+
+        public bool IsMedium(IContainer container)
+        {
+            if (container == null) return false;
+            if (container.GetType() == typeof(MediumContainer)) return true;
+            return false;
         }
     }
 }

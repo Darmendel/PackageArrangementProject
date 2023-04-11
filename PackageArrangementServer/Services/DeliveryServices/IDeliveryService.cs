@@ -1,4 +1,5 @@
 ﻿using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.Containers;
 
 namespace PackageArrangementServer.Services
 {
@@ -72,8 +73,8 @@ namespace PackageArrangementServer.Services
         /// <param name="packages"></param>
         /// <param name="container"></param>
         /// <returns>int</returns>
-        public int Add(string userId, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container? container = null);
+        public int Add(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage> packages = null,
+            IContainer container = null);
 
         /// <summary>
         /// Updates a delivery (changes it's list of packages or it's selected container and calculates it's new cost and status).
@@ -85,7 +86,7 @@ namespace PackageArrangementServer.Services
         /// <param name="packages"></param>
         /// <param name="container"></param>
         /// <returns>int</returns>
-        public int Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, Container? container = null); // [int? cost = null, string? deliveryStatus = null]
+        public int Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, IContainer container = null); // [int? cost = null, string? deliveryStatus = null]
 
         /// <summary>
         /// Deletes a delivery.

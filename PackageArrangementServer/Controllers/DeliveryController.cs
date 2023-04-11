@@ -75,13 +75,14 @@ namespace PackageArrangementServer.Controllers
         public void Post([FromBody] RequestCreationOfNewDelivery request)
         {
             // Global.userId = Package.Claims.FirstOrDefault(claim => claim.Type == "userId")?.Value;
-            int res = deliveryService.Add(Global.UserId, request.DeliveryDate, request.Packages, request.Container);
+            /*int res = deliveryService.Add(Global.UserId, request.DeliveryDate, request.Packages, request.Container);
             if (res > 0)
             {
                 Response.StatusCode = 404;
                 return;
             }
-            Response.StatusCode = 201; // user needs update as well!
+            Response.StatusCode = 201; // user needs update as well!*/
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.Containers;
 
 namespace PackageArrangementServer.Services
 {
@@ -71,10 +72,17 @@ namespace PackageArrangementServer.Services
             return deliveryService.Get(deliveryId, userId);
         }
 
+        private void Update(string userId)
+        {
+            User user = Get(userId);
+            if (user == null) return;
+            //UserService.userList.Edit(user, )
+        }
+
         // cost and deliveryStatus need to be eavluated.
         // maybe return the delivery (or delivery status) instead of an int...
-        public int AddDelivery(string userId, DateTime? deliveryDate = null, List<Package>? packages = null,
-            Container? container = null)
+        public int AddDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage>? packages = null,
+            IContainer container = null)
         {
             if (!Exists(userId)) return 0;
             return deliveryService.Add(userId, deliveryDate, packages, container);
@@ -94,7 +102,7 @@ namespace PackageArrangementServer.Services
 
         // cost and deliveryStatus might be needed to reavluate and changed.
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, Container? container = null)
+            List<Package>? packages = null, IContainer container = null)
         {
             if (!Exists(userId)) return 0;
             return deliveryService.Edit(deliveryId, userId, deliveryDate, packages, container);

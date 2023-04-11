@@ -1,4 +1,6 @@
-﻿namespace PackageArrangementServer.Models
+﻿using PackageArrangementServer.Models.Containers;
+
+namespace PackageArrangementServer.Models
 {
     public class DeliveryList
     {
@@ -29,7 +31,7 @@
         }
 
         public void Edit(Delivery delivery, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container? container = null, string cost = null, DeliveryStatus? status = null)
+            IContainer container = null, string cost = null, DeliveryStatus? status = null)
         {
             if (delivery == null) return;
 

@@ -8,7 +8,7 @@ namespace PackageArrangementServer.Models
         public string Id { get; set; }
         public string DeliveryId { get; set; }
         public string Type { get; set; }
-        public string Amount { get; set; } // add type check (number of packages)
+        public string Amount { get; set; }
         public string Width { get; set; } // add type check
         public string Height { get; set; } // add type check
         public string Depth { get; set; } // add type check
@@ -16,7 +16,6 @@ namespace PackageArrangementServer.Models
         //public bool IsFragile { get; set; }
         public string Cost { get; set; } // add type check
         public string Address { get; set; }
-        //public string Server { get; set; }
 
         public Package(string id, string deliveryId, string type, string amount, string width, string height,
             string depth, string weight, string cost, string address)

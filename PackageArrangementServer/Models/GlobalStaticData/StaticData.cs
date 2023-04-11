@@ -1,4 +1,6 @@
-﻿namespace PackageArrangementServer.Models
+﻿using PackageArrangementServer.Models.Containers;
+
+namespace PackageArrangementServer.Models
 {
     public class StaticData
     {
@@ -9,9 +11,9 @@
         private static UserList SetUsers()
         {
             UserList userList = new UserList();
-            userList.Add(new User { Id = "1", Name = "A", Password = "12345", Deliveries = new List<Delivery>() });
-            userList.Add(new User { Id = "2", Name = "B", Password = "12345", Deliveries = new List<Delivery>() });
-            userList.Add(new User { Id = "3", Name = "C", Password = "12345", Deliveries = new List<Delivery>() });
+            userList.Add(new User { Id = "1", Name = "A", Email = "u1@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
+            //userList.Add(new User { Id = "2", Name = "B", Email = "u2@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
+            //userList.Add(new User { Id = "3", Name = "C", Email = "u3@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
             return userList;
         }
 
@@ -28,20 +30,24 @@
             DateTime t3 = tomorrow.AddDays(3);
             DateTime t4 = tomorrow.AddDays(4);
 
-            d1.Add(new Delivery("1", "1", tomorrow, new List<Package>()));
-            d1.Add(new Delivery("2", "1", t1, new List<Package>()));
+            IContainer small = new SmallContainer();
+            IContainer medium = new MediumContainer();
+            IContainer big = new BigContainer();
+
+            d1.Add(new Delivery("1", "1", tomorrow, new List<Package>(), small));
+            d1.Add(new Delivery("2", "1", t1, new List<Package>(), medium));
             EditUser(users, "1", d1);
 
-            d2.Add(new Delivery("3", "2", t4, new List<Package>()));
+            /*d2.Add(new Delivery("3", "2", t4, new List<Package>(), small));
             EditUser(users, "2", d2);
 
-            d3.Add(new Delivery("4", "2", t2, new List<Package>()));
-            d3.Add(new Delivery("5", "3", t3, new List<Package>()));
-            EditUser(users, "3", d3);
+            d3.Add(new Delivery("4", "2", t2, new List<Package>(), big));
+            d3.Add(new Delivery("5", "3", t3, new List<Package>(), medium));
+            EditUser(users, "3", d3);*/
 
             deliveryList.Extend(d1);
-            deliveryList.Extend(d2);
-            deliveryList.Extend(d3);
+            //deliveryList.Extend(d2);
+            //deliveryList.Extend(d3);
 
             return deliveryList;
         }
@@ -50,7 +56,7 @@
         {
             PackageList packageList = new PackageList();
 
-            for (int i = 1; i < 6; i++)
+            for (int i = 1; i < 3; i++)
             {
                 string id1 = i.ToString() + 1.ToString();
                 string id2 = i.ToString() + 2.ToString();

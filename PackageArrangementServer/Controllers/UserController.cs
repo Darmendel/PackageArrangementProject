@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.RequestEdit;
 using PackageArrangementServer.Services;
 
 namespace PackageArrangementServer.Controllers
@@ -210,9 +211,9 @@ namespace PackageArrangementServer.Controllers
         /// </summary>
         /// <param name="req"></param>
         [HttpPost("{userId}/deliveries")]
-        public void Post([FromBody] RequestCreationOfNewDelivery req)
+        public void Post(string userId, [FromBody] RequestCreationOfNewDelivery req)
         {
-            if (userService.AddDelivery(req.UserId, req.DeliveryDate, req.Packages, req.Container) > 0)
+            if (userService.AddDelivery(userId, req.DeliveryDate, req.Packages) > 0)
                 Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;
@@ -223,9 +224,61 @@ namespace PackageArrangementServer.Controllers
         /// </summary>
         /// <param name="req"></param>
         [HttpPost("{userId}/deliveries/{deliveryId}/packages")]
-        public void Post([FromBody] RequestCreationOfNewPackage req)
+        public void Post(string userId, [FromBody] RequestCreationOfNewPackage req)
         {
-            if (userService.AddPackage(req.UserId, req.DeliveryId, req.Type, req.Amount, req.Width,
+            if (userService.AddPackage(userId, req.DeliveryId, req.Type, req.Amount, req.Width,
+                req.Height, req.Depth, req.Weight, req.Cost, req.Address) > 0)
+                Response.StatusCode = 204;
+            else Response.StatusCode = 400;
+            return;
+        }
+
+        /*[HttpPut("{userId}")]
+        public async Task Put([FromBody] RegisterRequest req)
+        {
+
+        }*/
+
+        /// <summary>
+        /// Updates a user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="req"></param>
+        [HttpPut("{userId}")]
+        public void Put(string userId, [FromBody] RequestEditUser req)
+        {
+            if (userService.Edit(userId, req.Name, req.Email, req.Password, req.Deliveries) > 0)
+                Response.StatusCode = 204;
+            else Response.StatusCode = 400;
+            return;
+        }
+
+        /// <summary>
+        /// Updates a user's delivery.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="req"></param>
+        [HttpPut("{userId}/deliveries/{deliveryId}")]
+        public void Put(string userId, string deliveryId, [FromBody] RequestEditDelivery req)
+        {
+            if (userService.EditDelivery(userId, deliveryId, req.DeliveryDate, req.Packages,
+                req.Container) > 0) Response.StatusCode = 204;
+            else Response.StatusCode = 400;
+            return;
+        }
+
+        /// <summary>
+        /// Updates a package in a user's delivery.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="packageId"></param>
+        /// <param name="req"></param>
+        [HttpPut("{userId}/deliveries/{deliveryId}/packages/{packageId}")]
+        public void Put(string userId, string deliveryId, string packageId, [FromBody] RequestEditPackage req)
+        {
+            if (userService.EditPackage(userId, deliveryId, packageId, req.Type, req.Amount, req.Width,
                 req.Height, req.Depth, req.Weight, req.Cost, req.Address) > 0)
                 Response.StatusCode = 204;
             else Response.StatusCode = 400;

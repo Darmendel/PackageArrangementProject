@@ -1,6 +1,8 @@
-﻿namespace PackageArrangementServer.Models
+﻿using PackageArrangementServer.Models.Containers;
+
+namespace PackageArrangementServer.Models
 {
-    public struct SmallContainer
+    public struct SmallContainer : IContainer
     {
         public string Height { get; }
         public string Width { get; }
@@ -13,6 +15,13 @@
             this.Width = 600.ToString();
             this.Depth = 1400.ToString();
             this.Cost = 700.ToString();
+        }
+
+        public bool IsSmall(IContainer container)
+        {
+            if (container == null) return false;
+            if (container.GetType() == typeof(SmallContainer)) return true;
+            return false;
         }
     }
 }

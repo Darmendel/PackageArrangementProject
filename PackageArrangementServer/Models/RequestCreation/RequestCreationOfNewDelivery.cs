@@ -1,10 +1,11 @@
-﻿namespace PackageArrangementServer.Models
+﻿using PackageArrangementServer.Models.Containers;
+
+namespace PackageArrangementServer.Models
 {
     public class RequestCreationOfNewDelivery
     {
-        public string UserId { get; set; }
         public DateTime DeliveryDate { get; set; }
-        public List<Package> Packages { get; set; }
-        public Container? Container { get; set; }
+        public List<RequestCreationOfNewPackage> Packages { get; set; }
+        //public IContainer? Container { get; set; }
     }
 }

@@ -56,17 +56,36 @@ namespace PackageArrangementServer.Services
             return GetAllPackages(deliveryId).Find(x => x.Id == packageId);
         }
 
+        private string CreatePackageId(string deliveryId)
+        {
+            if (string.IsNullOrEmpty(deliveryId)) return null;
+
+            var random = new Random();
+            string packageId = random.Next(0, 999).ToString();
+
+            while (Exists(packageId, deliveryId)) packageId = random.Next(0, 999).ToString() + packageId;
+            return packageId;
+        }
+
+        public Package ConvertToPackage(RequestCreationOfNewPackage request)
+        {
+            if (request == null) return null;
+
+            string packageId = CreatePackageId(request.DeliveryId);
+            if (packageId == null) return null;
+
+            return new Package(packageId, request.Type, request.DeliveryId, request.Amount, request.Width,
+                request.Height, request.Depth, request.Weight, request.Cost, request.Address);
+        }
+
         public int Add(string deliveryId, string type = null, string amount = null, string width = null, string height = null,
             string depth = null, string weight = null, string cost = null, string address = null)
         {
-            if (string.IsNullOrEmpty(deliveryId)) return 0;
+            string packageId = CreatePackageId(deliveryId);
+            if (packageId == null) return 0;
 
-            var random = new Random();
-            string id = random.Next(0, 999).ToString();
-
-            while (Exists(id, deliveryId)) id = random.Next(0, 999).ToString() + id;
-
-            PackageService.packageList.Add(new Package(id, deliveryId, type, amount, width, height, depth, weight, cost, address));
+            PackageService.packageList.Add(new Package(packageId, deliveryId, type, amount, width, height,
+                depth, weight, cost, address));
             return 1;
         }
 

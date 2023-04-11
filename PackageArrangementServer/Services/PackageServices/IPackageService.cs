@@ -35,6 +35,13 @@ namespace PackageArrangementServer.Services
         public Package Get(string packageId, string deliveryId);
 
         /// <summary>
+        /// Converts a request to create a package to a package.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Package</returns>
+        public Package ConvertToPackage(RequestCreationOfNewPackage request);
+
+        /// <summary>
         /// Given a delivery id, adds a new package.
         /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>

@@ -1,4 +1,5 @@
 ﻿using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.Containers;
 
 namespace PackageArrangementServer.Services
 {
@@ -109,24 +110,43 @@ namespace PackageArrangementServer.Services
             DeliveryService.deliveryList.Edit(delivery, cost: Cost(delivery).ToString(), status: Status(delivery));
         }
 
-        public int Add(string userId, DateTime? deliveryDate = null, List<Package> packages = null,
-            Container? container = null)
+        private Package ConvertToPackage(RequestCreationOfNewPackage request)
+        {
+            return packageService.ConvertToPackage(request);
+        }
+
+        private List<Package> GetPackageList(List<RequestCreationOfNewPackage> packages)
+        {
+            if (packages == null) return null;
+            List<Package> packageList = new List<Package>();
+
+            foreach (RequestCreationOfNewPackage package in packages)
+            {
+                Package p = ConvertToPackage(package);
+                if (p != null) packageList.Add(p);
+            }
+            return packageList;
+        }
+
+        public int Add(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage> packages = null,
+            IContainer container = null)
         {
             if (string.IsNullOrEmpty(userId)) return 0;
 
             var random = new Random();
-            string id = random.Next(0, 999).ToString();
+            string deliveryId = random.Next(0, 999).ToString();
 
-            while (Exists(id, userId)) id = random.Next(0, 999).ToString() + id;
+            while (Exists(deliveryId, userId)) deliveryId = random.Next(0, 999).ToString() + deliveryId;
 
-            DeliveryService.deliveryList.Add(new Delivery(id, userId, deliveryDate, packages, container));
-            Update(userId, userId);
+            List<Package> packageList = GetPackageList(packages);
+            DeliveryService.deliveryList.Add(new Delivery(deliveryId, userId, deliveryDate, packageList, container));
+            Update(deliveryId, userId);
             return 1;
         }
 
         // cost and deliveryStatus might be needed to reavluate and changed.
         public int Edit(string deliveryId, string userId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, Container? container = null)
+            List<Package>? packages = null, IContainer container = null)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return 0;

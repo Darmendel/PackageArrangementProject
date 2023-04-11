@@ -25,7 +25,7 @@ namespace PackageArrangementServer.Services
         /// <returns>User</returns>
         public User Get(string id);
 
-        /// <summary>
+        /*/// <summary>
         /// Creates a new user.
         /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
@@ -34,7 +34,28 @@ namespace PackageArrangementServer.Services
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns>int</returns>
-        public int Add(string id, string name, string email, string password);
+        public int Add(string id, string name, string email, string password);*/
+
+        /// <summary>
+        /// Creates a new user.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns>User</returns>
+        public User Create(string id, string name, string email, string password);
+
+        /// <summary>
+        /// Creates a new user.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="deliveries"></param>
+        /// <returns>User</returns>
+        public User Create(string id, string name, string email, string password, List<Delivery> deliveries = null);
 
         /// <summary>
         /// Updates a user.
@@ -80,7 +101,7 @@ namespace PackageArrangementServer.Services
         /// <returns>Delivery</returns>
         public Delivery GetDelivery(string userId, string deliveryId);
 
-        /// <summary>
+        /*/// <summary>
         /// Creates a new delivery for a user.
         /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
@@ -90,6 +111,18 @@ namespace PackageArrangementServer.Services
         /// <param name="container"></param>
         /// <returns>int</returns>
         public int AddDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage>? packages = null,
+            IContainer container = null);*/
+
+        /// <summary>
+        /// Creates a new delivery for a user.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryDate"></param>
+        /// <param name="packages"></param>
+        /// <param name="container"></param>
+        /// <returns>int</returns>
+        public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage>? packages = null,
             IContainer container = null);
 
         /// <summary>

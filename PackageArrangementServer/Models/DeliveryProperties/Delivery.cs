@@ -24,11 +24,18 @@ namespace PackageArrangementServer.Models
             this.CreatedDate = DateTime.Now;
             this.DeliveryDate = (DateTime) deliveryDate;
             this.Packages = packages;
-            this.Container = container;
 
             //if (container != null) this.Cost = CalculateCost(this).ToString();
-            if (container != null) this.Cost = this.Container.Cost;
-            else this.Cost = 0.ToString();
+
+            if (container != null)
+            {
+                this.Container = container;
+                this.Cost = this.Container.Cost;
+            } else
+            {
+                this.Container = new MediumContainer();
+                this.Cost = 0.ToString();
+            }
 
             this.Status = DeliveryStatus.Pending;
         }

@@ -38,11 +38,24 @@ namespace PackageArrangementServer.Services
             return GetAllUsers().Find(x => x.Id == id);
         }
 
-        public int Add(string id, string name, string email, string password)
+        public User Create(string id, string name, string email, string password)
         {
-            if (Exists(id)) return 0;
-            userList.Add(new User { Id = id, Name = name, Email = email, Password = password, Deliveries = new List<Delivery>() });
-            return 1;
+            if (Exists(id)) return null;
+            User user = new User { Id = id, Name = name, Email = email, Password = password, Deliveries = new List<Delivery>() };
+            userList.Add(user);
+            return user;
+        }
+
+        public User Create(string id, string name, string email, string password, List<Delivery> deliveries = null)
+        {
+            if (Exists(id)) return null;
+            User user = null;
+
+            if (deliveries == null) user = new User {Id = id, Name = name, Email = email, Password = password, Deliveries = new List<Delivery>() };
+            else user = new User { Id = id, Name = name, Email = email, Password = password, Deliveries = deliveries };
+
+            userList.Add(user);
+            return user;
         }
 
         public int Edit(string id, string name = null, string email = null, string password = null,
@@ -72,20 +85,32 @@ namespace PackageArrangementServer.Services
             return deliveryService.Get(deliveryId, userId);
         }
 
-        private void Update(string userId)
+        private int Update(string userId, Delivery delivery, string op)
         {
             User user = Get(userId);
-            if (user == null) return;
-            //UserService.userList.Edit(user, )
+            if (user == null) return 0;
+            
+            List<Delivery> dList = GetAllDeliveries(userId);
+            if (dList == null) return 0;
+
+            if (op.Equals("add")) dList.Add(delivery);
+            else if (op.Equals("edit")) dList = deliveryService.Edit(dList, delivery);
+            else if (op.Equals("delete")) dList.Remove(delivery);
+            else return 0;
+
+            UserService.userList.Edit(user, deliveries: dList);
+            return 1;
         }
 
-        // cost and deliveryStatus need to be eavluated.
-        // maybe return the delivery (or delivery status) instead of an int...
-        public int AddDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage>? packages = null,
+        public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage>? packages = null,
             IContainer container = null)
         {
             if (!Exists(userId)) return 0;
-            return deliveryService.Add(userId, deliveryDate, packages, container);
+
+            Delivery delivery = deliveryService.Create(userId, deliveryDate, packages, container);
+            if (delivery == null) return 0;
+
+            return Update(userId, delivery, "add");
         }
 
         public int GetDeliveryCost(string userId, string deliveryId)
@@ -105,14 +130,21 @@ namespace PackageArrangementServer.Services
             List<Package>? packages = null, IContainer container = null)
         {
             if (!Exists(userId)) return 0;
-            return deliveryService.Edit(deliveryId, userId, deliveryDate, packages, container);
 
+            Delivery delivery = deliveryService.Edit(deliveryId, userId, deliveryDate, packages, container);
+            if (delivery == null) return 0;
+
+            return Update(userId, delivery, "edit");
         }
 
         public int DeleteDelivery(string userId, string deliveryId)
         {
             if (!Exists(userId)) return 0;
-            return deliveryService.Delete(deliveryId, userId);
+
+            Delivery delivery = deliveryService.Delete(deliveryId, userId);
+            if (delivery == null) return 0;
+
+            return Update(userId, delivery, "delete");
         }
 
         public List<Package> GetAllPackages(string userId, string deliveryId)

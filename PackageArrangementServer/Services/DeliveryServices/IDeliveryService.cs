@@ -65,37 +65,42 @@ namespace PackageArrangementServer.Services
         public DeliveryStatus Status(string deliveryId, string userId);
 
         /// <summary>
-        /// Given a user id, adds a new delivery.
-        /// Returns 1 if succeeded, and 0 otherwise.
+        /// Creates a new delivery.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
         /// <param name="container"></param>
-        /// <returns>int</returns>
-        public int Add(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage> packages = null,
+        /// <returns>Delivery</returns>
+        public Delivery Create(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage> packages = null,
             IContainer container = null);
 
         /// <summary>
         /// Updates a delivery (changes it's list of packages or it's selected container and calculates it's new cost and status).
-        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
         /// <param name="container"></param>
-        /// <returns>int</returns>
-        public int Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, IContainer container = null); // [int? cost = null, string? deliveryStatus = null]
+        /// <returns>Delivery</returns>
+        public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, IContainer container = null);
+
+        /// <summary>
+        /// Updates a delivery.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="delivery"></param>
+        /// <returns>List<Delivery></returns>
+        public List<Delivery> Edit(List<Delivery> list, Delivery delivery);
 
         /// <summary>
         /// Deletes a delivery.
-        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
-        /// <returns>int</returns>
-        public int Delete(string deliveryId, string userId);
+        /// <returns>Delivery</returns>
+        public Delivery Delete(string deliveryId, string userId);
 
         /// <summary>
         /// Given a delivery id and a user id, returns all of the packages of the delivery.

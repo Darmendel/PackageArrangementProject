@@ -1,6 +1,4 @@
-﻿using PackageArrangementServer.Models.Containers;
-
-namespace PackageArrangementServer.Models
+﻿namespace PackageArrangementServer.Models
 {
     public struct BigContainer : IContainer
     {

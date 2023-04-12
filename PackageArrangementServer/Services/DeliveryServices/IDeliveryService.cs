@@ -1,5 +1,4 @@
 ﻿using PackageArrangementServer.Models;
-using PackageArrangementServer.Models.Containers;
 
 namespace PackageArrangementServer.Services
 {
@@ -28,8 +27,6 @@ namespace PackageArrangementServer.Services
         /// <returns>Delivery</returns>
         public Delivery Get(string deliveryId, string userId);
 
-        //public int CreateDelivery();
-
         /// <summary>
         /// Given a delivery id and a user id, calculates the cost of a delivery.
         /// Returns -1 if there's no such delivery or user.
@@ -42,8 +39,7 @@ namespace PackageArrangementServer.Services
         /// Given a delivery id and a user id, calculates the cost of a delivery.
         /// Returns -1 if there's no such delivery or user.
         /// </summary>
-        /// <param name="deliveryId"></param>
-        /// <param name="userId"></param>
+        /// <param name="delivery"></param>
         /// <returns>int</returns>
         public int Cost(string deliveryId, string userId);
 

@@ -9,6 +9,7 @@ builder.Services.AddDbContext<APIContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+builder.Services.AddScoped<IDeliveryServiceHelper, DeliveryServiceHelper>();
 builder.Services.AddScoped<IPackageService, PackageService>();
 
 // Add services to the container.

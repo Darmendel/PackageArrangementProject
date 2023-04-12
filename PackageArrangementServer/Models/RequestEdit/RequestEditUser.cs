@@ -1,4 +1,4 @@
-﻿namespace PackageArrangementServer.Models.RequestEdit
+﻿namespace PackageArrangementServer.Models
 {
     public class RequestEditUser
     {

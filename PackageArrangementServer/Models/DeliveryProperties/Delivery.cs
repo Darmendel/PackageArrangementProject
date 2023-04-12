@@ -1,4 +1,4 @@
-﻿using PackageArrangementServer.Models.Containers;
+﻿using PackageArrangementServer.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace PackageArrangementServer.Models
@@ -25,55 +25,21 @@ namespace PackageArrangementServer.Models
             this.DeliveryDate = (DateTime) deliveryDate;
             this.Packages = packages;
 
-            //if (container != null) this.Cost = CalculateCost(this).ToString();
+            int cost = CalculateCost(packages, container);
+            if (cost > 0) this.Cost = cost.ToString();
+            else this.Cost = 0.ToString();
 
-            if (container != null)
-            {
-                this.Container = container;
-                this.Cost = this.Container.Cost;
-            } else
-            {
-                this.Container = new MediumContainer();
-                this.Cost = 0.ToString();
-            }
+            if (container != null) this.Container = container;
+            else this.Container = new MediumContainer();
 
             this.Status = DeliveryStatus.Pending;
         }
 
-        /*public int CalculateCost(Delivery delivery)
+        private int CalculateCost(List<Package> packages = null, IContainer? container = null)
         {
-            if (delivery == null) return -1;
+            IDeliveryServiceHelper helper = new DeliveryServiceHelper();
+            return helper.Cost(packages, container);
+        }
 
-            if (delivery.Packages == null && delivery.Container == null) return -1;
-
-            int cost = 0;
-
-            if (delivery.Packages != null)
-            {
-                foreach (Package package in delivery.Packages)
-                {
-                    if (package.Cost == null) continue;
-
-                    try
-                    {
-                        int pc = Int32.Parse(package.Cost);
-                        cost += pc;
-                    }
-                    catch (FormatException) { }
-                }
-            }
-
-            if (delivery.Container != null)
-            {
-                try
-                {
-                    int c = Int32.Parse(delivery.Container.Cost);
-                    cost += c;
-                }
-                catch (FormatException) { }
-            }
-
-            return cost;
-        }*/
     }
 }

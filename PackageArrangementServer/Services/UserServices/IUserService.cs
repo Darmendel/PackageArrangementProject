@@ -197,7 +197,7 @@ namespace PackageArrangementServer.Services
         /// <param name="cost"></param>
         /// <param name="address"></param>
         /// <returns>int</returns>
-        public int AddPackage(string userId, string deliveryId, string type = null, string amount = null, string width = null,
+        public int CreatePackage(string userId, string deliveryId, string type = null, string amount = null, string width = null,
             string height = null, string depth = null, string weight = null, string cost = null, string address = null);
 
         /// <summary>

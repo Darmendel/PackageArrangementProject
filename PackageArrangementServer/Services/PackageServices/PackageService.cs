@@ -78,15 +78,17 @@ namespace PackageArrangementServer.Services
                 request.Height, request.Depth, request.Weight, request.Cost, request.Address);
         }
 
-        public int Add(string deliveryId, string type = null, string amount = null, string width = null, string height = null,
+        public Package Create(string deliveryId, string type = null, string amount = null, string width = null, string height = null,
             string depth = null, string weight = null, string cost = null, string address = null)
         {
             string packageId = CreatePackageId(deliveryId);
-            if (packageId == null) return 0;
+            if (packageId == null) return null;
 
-            PackageService.packageList.Add(new Package(packageId, deliveryId, type, amount, width, height,
-                depth, weight, cost, address));
-            return 1;
+            Package package = new Package(packageId, deliveryId, type, amount, width, height,
+                depth, weight, cost, address);
+
+            PackageService.packageList.Add(package);
+            return package;
         }
 
         public int Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
@@ -96,6 +98,23 @@ namespace PackageArrangementServer.Services
             if (package == null) return 0;
             PackageService.packageList.Edit(package, type, amount, width, height, depth, weight, cost, address);
             return 1;
+        }
+
+        public List<Package> EditPackageList(List<Package> list, Package package)
+        {
+            int index = list.IndexOf(package);
+            if (index == -1) return null;
+
+            list[index].Type = package.Type;
+            list[index].Amount = package.Amount;
+            list[index].Width = package.Width;
+            list[index].Height = package.Height;
+            list[index].Depth = package.Depth;
+            list[index].Weight = package.Weight;
+            list[index].Cost = package.Cost;
+            list[index].Address = package.Address;
+
+            return list;
         }
 
         public int Delete(string packageId, string deliveryId)

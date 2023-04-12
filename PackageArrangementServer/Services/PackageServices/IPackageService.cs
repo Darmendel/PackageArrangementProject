@@ -43,7 +43,6 @@ namespace PackageArrangementServer.Services
 
         /// <summary>
         /// Given a delivery id, adds a new package.
-        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="type"></param>
@@ -54,8 +53,8 @@ namespace PackageArrangementServer.Services
         /// <param name="weight"></param>
         /// <param name="cost"></param>
         /// <param name="address"></param>
-        /// <returns>int</returns>
-        public int Add(string deliveryId, string type = null, string amount = null, string width = null, string height = null,
+        /// <returns>Package</returns>
+        public Package Create(string deliveryId, string type = null, string amount = null, string width = null, string height = null,
             string depth = null, string weight = null, string cost = null, string address = null);
 
         /// <summary>
@@ -75,6 +74,14 @@ namespace PackageArrangementServer.Services
         /// <returns>int</returns>
         public int Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
             string height = null, string depth = null, string weight = null, string cost = null, string address = null);
+
+        /// <summary>
+        /// Updates a package list.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="package"></param>
+        /// <returns>List<Package></returns>
+        public List<Package> EditPackageList(List<Package> list, Package package);
 
         /// <summary>
         /// Deletes a package.

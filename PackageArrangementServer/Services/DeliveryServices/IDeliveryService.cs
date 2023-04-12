@@ -87,12 +87,12 @@ namespace PackageArrangementServer.Services
         public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, IContainer container = null);
 
         /// <summary>
-        /// Updates a delivery.
+        /// Updates a delivery list.
         /// </summary>
         /// <param name="list"></param>
         /// <param name="delivery"></param>
         /// <returns>List<Delivery></returns>
-        public List<Delivery> Edit(List<Delivery> list, Delivery delivery);
+        public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery);
 
         /// <summary>
         /// Deletes a delivery.
@@ -138,7 +138,6 @@ namespace PackageArrangementServer.Services
 
         /// <summary>
         /// Adds a new package to a delivery.
-        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
@@ -150,8 +149,8 @@ namespace PackageArrangementServer.Services
         /// <param name="weight"></param>
         /// <param name="cost"></param>
         /// <param name="address"></param>
-        /// <returns>int</returns>
-        public int AddPackage(string deliveryId, string userId, string type = null, string amount = null,string width = null,
+        /// <returns>Package</returns>
+        public Package CreatePackage(string deliveryId, string userId, string type = null, string amount = null,string width = null,
             string height = null, string depth = null, string weight = null, string cost = null, string address = null);
 
         /// <summary>

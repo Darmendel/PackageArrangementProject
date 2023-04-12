@@ -188,7 +188,7 @@ namespace PackageArrangementServer.Services
             return Get(deliveryId, userId);
         }
 
-        public List<Delivery> Edit(List<Delivery> list, Delivery delivery)
+        public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery)
         {
             int index = list.IndexOf(delivery);
             if (index == -1) return null;
@@ -234,11 +234,32 @@ namespace PackageArrangementServer.Services
             return packageService.Count(deliveryId);
         }
 
-        public int AddPackage(string deliveryId, string userId, string type = null, string amount = null, string width = null,
+        private int Update(string deliveryId, string userId, Package package, string op)
+        {
+            Delivery delivery = Get(deliveryId, userId);
+            if (delivery == null) return 0;
+
+            List<Package> pList = GetAllPackages(deliveryId, userId);
+            if (pList == null) return 0;
+
+            if (op.Equals("add")) pList.Add(package);
+            else if (op.Equals("edit")) pList = packageService.EditPackageList(pList, package);
+            else if (op.Equals("delete")) pList.Remove(package);
+            else return 0;
+
+            DeliveryService.deliveryList.Edit();
+            return 1;
+        }
+
+        public Package CreatePackage(string deliveryId, string userId, string type = null, string amount = null, string width = null,
             string height = null, string depth = null, string weight = null, string cost = null, string address = null)
         {
-            if (!Exists(deliveryId, userId)) return 0;
-            return packageService.Add(deliveryId, type, amount, width, height, depth, weight, cost, address);
+            if (!Exists(deliveryId, userId)) return null;
+
+            Package package = packageService.Create(deliveryId, type, amount, width, height, depth, weight, cost, address);
+            if (package != null) return null;
+
+
         }
 
         public int EditPackage(string deliveryId, string userId, string packageId, string type = null,

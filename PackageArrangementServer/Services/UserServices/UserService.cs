@@ -94,7 +94,7 @@ namespace PackageArrangementServer.Services
             if (dList == null) return 0;
 
             if (op.Equals("add")) dList.Add(delivery);
-            else if (op.Equals("edit")) dList = deliveryService.Edit(dList, delivery);
+            else if (op.Equals("edit")) dList = deliveryService.EditDeliveryList(dList, delivery);
             else if (op.Equals("delete")) dList.Remove(delivery);
             else return 0;
 
@@ -159,7 +159,7 @@ namespace PackageArrangementServer.Services
             return deliveryService.GetPackage(deliveryId, userId, packageId);
         }
 
-        public int AddPackage(string userId, string deliveryId, string type = null, string amount = null,
+        public int CreatePackage(string userId, string deliveryId, string type = null, string amount = null,
             string width = null, string height = null, string depth = null, string weight = null,
             string cost = null, string address = null)
         {

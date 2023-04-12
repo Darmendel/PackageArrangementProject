@@ -32,8 +32,14 @@
             IContainer medium = new MediumContainer();
             IContainer big = new BigContainer();
 
-            d1.Add(new Delivery("1", "1", tomorrow, new List<Package>(), small));
-            d1.Add(new Delivery("2", "1", t1, new List<Package>(), medium));
+            Delivery del1 = new Delivery("1", "1", tomorrow, new List<Package>(), small);
+            Delivery del2 = new Delivery("2", "1", t1, new List<Package>(), medium);
+
+            d1.Add(del1);
+            d1.Add(del2);
+
+            d1.Edit(del1, cost: 2100.ToString());
+            d1.Edit(del2, cost: 2250.ToString());
             EditUser(users, "1", d1);
 
             /*d2.Add(new Delivery("3", "2", t4, new List<Package>(), small));

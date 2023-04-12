@@ -59,7 +59,6 @@ namespace PackageArrangementServer.Services
 
         /// <summary>
         /// Updates a package.
-        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="packageId"></param>
         /// <param name="deliveryId"></param>
@@ -71,8 +70,8 @@ namespace PackageArrangementServer.Services
         /// <param name="weight"></param>
         /// <param name="cost"></param>
         /// <param name="address"></param>
-        /// <returns>int</returns>
-        public int Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
+        /// <returns>Package</returns>
+        public Package Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
             string height = null, string depth = null, string weight = null, string cost = null, string address = null);
 
         /// <summary>
@@ -85,11 +84,10 @@ namespace PackageArrangementServer.Services
 
         /// <summary>
         /// Deletes a package.
-        /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
         /// <param name="packageId"></param>
         /// <param name="deliveryId"></param>
-        /// <returns>int</returns>
-        public int Delete(string packageId, string deliveryId);
+        /// <returns>Package</returns>
+        public Package Delete(string packageId, string deliveryId);
     }
 }

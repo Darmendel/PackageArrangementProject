@@ -179,7 +179,7 @@ namespace PackageArrangementServer.Controllers
             return package;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Login.
         /// </summary>
         /// <param name="req"></param>
@@ -190,7 +190,7 @@ namespace PackageArrangementServer.Controllers
         public IActionResult Post([FromBody] LoginRequest req)
         {
             throw new NotImplementedException(); // jwt?
-        }
+        }*/
 
         /// <summary>
         /// Login.
@@ -201,7 +201,7 @@ namespace PackageArrangementServer.Controllers
         //[ValidateAntiForgeryToken]
         public void Post([FromBody] RegisterRequest req)
         {
-            if (userService.Add(req.Id, req.Name, req.Email, req.Password) > 0) Response.StatusCode = 204;
+            if (userService.Create(req.Id, req.Name, req.Email, req.Password) == null) Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;
         }
@@ -213,7 +213,7 @@ namespace PackageArrangementServer.Controllers
         [HttpPost("{userId}/deliveries")]
         public void Post(string userId, [FromBody] RequestCreationOfNewDelivery req)
         {
-            if (userService.AddDelivery(userId, req.DeliveryDate, req.Packages) > 0)
+            if (userService.CreateDelivery(userId, req.DeliveryDate, req.Packages) > 0)
                 Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;
@@ -226,7 +226,7 @@ namespace PackageArrangementServer.Controllers
         [HttpPost("{userId}/deliveries/{deliveryId}/packages")]
         public void Post(string userId, [FromBody] RequestCreationOfNewPackage req)
         {
-            if (userService.AddPackage(userId, req.DeliveryId, req.Type, req.Amount, req.Width,
+            if (userService.CreatePackage(userId, req.DeliveryId, req.Type, req.Amount, req.Width,
                 req.Height, req.Depth, req.Weight, req.Cost, req.Address) > 0)
                 Response.StatusCode = 204;
             else Response.StatusCode = 400;

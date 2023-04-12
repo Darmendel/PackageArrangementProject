@@ -201,13 +201,22 @@ namespace PackageArrangementServer.Services
             string cost = null, string address = null)
         {
             if (!Exists(userId)) return 0;
-            return deliveryService.EditPackage(deliveryId, userId, packageId, type, amount, width, height, depth, weight, cost, address);
+
+            Package package = deliveryService.EditPackage(deliveryId, userId, packageId, type, amount, width, height,
+                depth, weight, cost, address);
+            if (package == null) return 0;
+
+            return Update(userId, deliveryId, package, "edit");
         }
 
         public int DeletePackage(string userId, string deliveryId, string packageId)
         {
             if (!Exists(userId)) return 0;
-            return deliveryService.DeletePackage(deliveryId, userId, packageId);
+
+            Package package = deliveryService.DeletePackage(deliveryId, userId, packageId);
+            if (package == null) return 0;
+
+            return Update(userId, deliveryId, package, "delete");
         }
 
     }

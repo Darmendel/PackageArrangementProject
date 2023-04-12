@@ -91,13 +91,14 @@ namespace PackageArrangementServer.Services
             return package;
         }
 
-        public int Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
+        public Package Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
             string height = null, string depth = null, string weight = null, string cost = null, string address = null)
         {
             Package package = Get(packageId, deliveryId);
-            if (package == null) return 0;
+            if (package == null) return null;
+
             PackageService.packageList.Edit(package, type, amount, width, height, depth, weight, cost, address);
-            return 1;
+            return Get(packageId, deliveryId);
         }
 
         public List<Package> EditPackageList(List<Package> list, Package package)
@@ -117,12 +118,12 @@ namespace PackageArrangementServer.Services
             return list;
         }
 
-        public int Delete(string packageId, string deliveryId)
+        public Package Delete(string packageId, string deliveryId)
         {
             Package package = Get(packageId, deliveryId);
-            if (package == null) return 0;
+            if (package == null) return null;
             PackageService.packageList.Remove(package);
-            return 1;
+            return package;
         }
     }
 }

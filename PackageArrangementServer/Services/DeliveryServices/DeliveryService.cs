@@ -255,22 +255,32 @@ namespace PackageArrangementServer.Services
             string height = null, string depth = null, string weight = null, string cost = null, string address = null)
         {
             if (!Exists(deliveryId, userId)) return null;
-
             Package package = packageService.Create(deliveryId, type, amount, width, height, depth, weight, cost, address);
-            if (package != null) return null;
 
-            int res = Update(deliveryId, userId, package, "add");
-            if (res == 0) return null;
+            if (package != null)
+            {
+                int res = Update(deliveryId, userId, package, "add");
+                if (res == 0) return null;
+            }
 
             return package;
         }
 
-        public int EditPackage(string deliveryId, string userId, string packageId, string type = null,
+        public Package EditPackage(string deliveryId, string userId, string packageId, string type = null,
             string amount = null, string width = null, string height = null, string depth = null, string weight = null,
             string cost = null, string address = null)
         {
-            if (!Exists(deliveryId, userId)) return 0;
-            return packageService.Edit(deliveryId, packageId, type, amount, width, height, depth, weight, cost, address);
+            if (!Exists(deliveryId, userId)) return null;
+            Package package = packageService.Edit(deliveryId, packageId, type, amount, width, height, depth,
+                weight, cost, address);
+
+            if (package != null)
+            {
+                int res = Update(deliveryId, userId, package, "edit");
+                if (res == 0) return null;
+            }
+
+            return package;
         }
 
         public List<Package> EditPackageList(string deliveryId, string userId, List<Package> list, Package package)
@@ -279,10 +289,18 @@ namespace PackageArrangementServer.Services
             return packageService.EditPackageList(list, package);
         }
 
-        public int DeletePackage(string deliveryId, string userId, string packageId)
+        public Package DeletePackage(string deliveryId, string userId, string packageId)
         {
-            if (!Exists(deliveryId, userId)) return 0;
-            return packageService.Delete(packageId, deliveryId);
+            if (!Exists(deliveryId, userId)) return null;
+            Package package = packageService.Delete(packageId, deliveryId);
+            
+            if (package != null)
+            {
+                int res = Update(deliveryId, userId, package, "delete");
+                if (res == 0) return null;
+            }
+
+            return package;
         }
     }
 }

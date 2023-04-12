@@ -131,10 +131,11 @@ def create_boxs_from_input(input: Input):
 
 
 def improvement_alg(pkgs=list[Package], cont_info=Container):
-    conf_mat = conflict_matrix(pkgs=pkgs)
-    dens_mat = density_matrix(pkgs=pkgs, cont=Container)
-
-
+    improved_alg = ImprovedAlg(pkgs=pkgs, cont=cont_info)
+    conf_mat = improved_alg.conflict_matrix()
+    # print(conf_mat)
+    # print(conf_mat.shape)
+    dens_mat = improved_alg.density_matrix()
 
     pass
 

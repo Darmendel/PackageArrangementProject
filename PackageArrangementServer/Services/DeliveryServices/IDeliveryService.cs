@@ -174,6 +174,16 @@ namespace PackageArrangementServer.Services
             string cost = null, string address = null);
 
         /// <summary>
+        /// Updates a package in a delivery.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="list"></param>
+        /// <param name="package"></param>
+        /// <returns>List<Package></returns>
+        public List<Package> EditPackageList(string deliveryId, string userId, List<Package> list, Package package);
+
+        /// <summary>
         /// Deletes a package from a delivery.
         /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>

@@ -247,7 +247,7 @@ namespace PackageArrangementServer.Services
             else if (op.Equals("delete")) pList.Remove(package);
             else return 0;
 
-            DeliveryService.deliveryList.Edit();
+            DeliveryService.deliveryList.Edit(delivery, packages: pList);
             return 1;
         }
 
@@ -259,7 +259,10 @@ namespace PackageArrangementServer.Services
             Package package = packageService.Create(deliveryId, type, amount, width, height, depth, weight, cost, address);
             if (package != null) return null;
 
+            int res = Update(deliveryId, userId, package, "add");
+            if (res == 0) return null;
 
+            return package;
         }
 
         public int EditPackage(string deliveryId, string userId, string packageId, string type = null,
@@ -268,6 +271,12 @@ namespace PackageArrangementServer.Services
         {
             if (!Exists(deliveryId, userId)) return 0;
             return packageService.Edit(deliveryId, packageId, type, amount, width, height, depth, weight, cost, address);
+        }
+
+        public List<Package> EditPackageList(string deliveryId, string userId, List<Package> list, Package package)
+        {
+            if (!Exists(deliveryId, userId) || list == null || package == null) return null;
+            return packageService.EditPackageList(list, package);
         }
 
         public int DeletePackage(string deliveryId, string userId, string packageId)

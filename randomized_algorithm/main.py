@@ -149,7 +149,7 @@ def start():
     # construction algorithm
     solution = construction_phase(pkgs=pkgs, cont=cont)
     # improvement algorithm:
-    improved_soulution = improvement_alg(pkgs=solution, cont_info=cont)
+    improved_solution = improvement_alg(pkgs=solution, cont_info=cont)
 
 
 start()

@@ -159,12 +159,41 @@ namespace PackageArrangementServer.Services
             return deliveryService.GetPackage(deliveryId, userId, packageId);
         }
 
+        private int Update(string userId, string deliveryId, Package package, string op)
+        {
+            User user = Get(userId);
+            if (user == null) return 0;
+
+            List<Package> pList = deliveryService.GetAllPackages(deliveryId, userId);
+            if (pList == null) return 0;
+
+            if (op.Equals("add")) pList.Add(package);
+            else if (op.Equals("edit")) pList = deliveryService.EditPackageList(deliveryId, userId, pList, package);
+            else if (op.Equals("delete")) pList.Remove(package);
+            else return 0;
+
+            deliveryService.Edit(deliveryId, userId, packages: pList);
+
+            Delivery delivery = deliveryService.Get(deliveryId, userId);
+            if (deliveryId == null) return 0;
+
+            if (op.Equals("add")) return Update(userId, delivery, "add");
+            else if (op.Equals("edit")) return Update(userId, delivery, "edit");
+            else if (op.Equals("delete")) return Update(userId, delivery, "delete");
+            else return 0;
+        }
+
         public int CreatePackage(string userId, string deliveryId, string type = null, string amount = null,
             string width = null, string height = null, string depth = null, string weight = null,
             string cost = null, string address = null)
         {
             if (!Exists(userId)) return 0;
-            return deliveryService.AddPackage(deliveryId, userId, type, amount, width, height, depth, weight, cost, address);
+
+            Package package = deliveryService.CreatePackage(deliveryId, userId, type, amount, width, height,
+                depth, weight, cost, address);
+            if (package == null) return 0;
+
+            return Update(userId, deliveryId, package, "add");
         }
 
         public int EditPackage(string userId, string deliveryId, string packageId, string type = null,

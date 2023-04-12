@@ -1,16 +1,17 @@
 ﻿using PackageArrangementServer.Models;
-using PackageArrangementServer.Models.Containers;
 
 namespace PackageArrangementServer.Services
 {
     public class DeliveryService : IDeliveryService
     {
         private IPackageService packageService;
+        private IDeliveryServiceHelper helper;
         private static DeliveryList deliveryList;
 
-        public DeliveryService(IPackageService ps)
+        public DeliveryService(IPackageService ps, IDeliveryServiceHelper dsh)
         {
             this.packageService = ps;
+            this.helper = dsh;
             //deliveryList = new DeliveryList();
             deliveryList = StaticData.GetDeliveries();
         }
@@ -53,44 +54,15 @@ namespace PackageArrangementServer.Services
 
         public int Cost(Delivery delivery)
         {
-            if (delivery == null) return -1;
-
-            if (delivery.Packages == null && delivery.Container == null) return -1;
-
-            int cost = 0;
-
-            if (delivery.Packages != null)
-            {
-                foreach (Package package in delivery.Packages)
-                {
-                    if (package.Cost == null) continue;
-
-                    try
-                    {
-                        int pc = Int32.Parse(package.Cost);
-                        cost += pc;
-                    }
-                    catch (FormatException) { }
-                }
-            }
-
-            if (delivery.Container != null)
-            {
-                try
-                {
-                    int c = Int32.Parse(delivery.Container.Cost);
-                    cost += c;
-                }
-                catch (FormatException) { }
-            }
-
-            return cost;
+            return helper.Cost(delivery);
         }
 
         public int Cost(string deliveryId, string userId)
         {
-            Delivery delivery = Get(deliveryId, userId);
-            return Cost(delivery);
+            //Delivery delivery = Get(deliveryId, userId);
+            //return Cost(delivery);
+
+            return helper.Cost(Get(deliveryId, userId));
         }
 
         public DeliveryStatus Status(Delivery delivery)

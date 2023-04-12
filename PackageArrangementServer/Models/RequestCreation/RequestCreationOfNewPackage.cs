@@ -12,6 +12,5 @@
         //public bool IsFragile { get; set; }
         public string Cost { get; set; } // add type check
         public string Address { get; set; }
-        //public string Server { get; set; }
     }
 }

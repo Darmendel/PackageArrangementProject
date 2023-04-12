@@ -1,4 +1,4 @@
-﻿namespace PackageArrangementServer.Models.Containers
+﻿namespace PackageArrangementServer.Models
 {
     public interface IContainer
     {

@@ -25,9 +25,11 @@ namespace PackageArrangementServer.Models
             this.DeliveryDate = (DateTime) deliveryDate;
             this.Packages = packages;
 
-            int cost = CalculateCost(packages, container);
+            /*int cost = CalculateCost(packages, container);
             if (cost > 0) this.Cost = cost.ToString();
-            else this.Cost = 0.ToString();
+            else this.Cost = 0.ToString();*/
+
+            this.Cost = 0.ToString();
 
             if (container != null) this.Container = container;
             else this.Container = new MediumContainer();
@@ -35,11 +37,11 @@ namespace PackageArrangementServer.Models
             this.Status = DeliveryStatus.Pending;
         }
 
-        private int CalculateCost(List<Package> packages = null, IContainer? container = null)
+        /*private int CalculateCost(List<Package> packages = null, IContainer? container = null)
         {
             IDeliveryServiceHelper helper = new DeliveryServiceHelper();
             return helper.Cost(packages, container);
-        }
+        }*/
 
     }
 }

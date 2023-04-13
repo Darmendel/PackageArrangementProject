@@ -6,12 +6,14 @@ namespace PackageArrangementServer.Services
     {
         private IPackageService packageService;
         private IDeliveryServiceHelper helper;
+        private IContainerService containerService;
         private static DeliveryList deliveryList;
 
-        public DeliveryService(IPackageService ps, IDeliveryServiceHelper dsh)
+        public DeliveryService(IPackageService ps, IDeliveryServiceHelper dsh, IContainerService cs)
         {
             this.packageService = ps;
             this.helper = dsh;
+            this.containerService = cs;
             //deliveryList = new DeliveryList();
             deliveryList = StaticData.GetDeliveries();
         }
@@ -198,6 +200,11 @@ namespace PackageArrangementServer.Services
             if (delivery == null) return null;
             DeliveryService.deliveryList.Remove(delivery);
             return delivery;
+        }
+
+        public IContainer GetContainer(ContainerSize size)
+        {
+            return containerService.Get(size);
         }
 
         public List<Package> GetAllPackages(string deliveryId, string userId)

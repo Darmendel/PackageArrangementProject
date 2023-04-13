@@ -17,11 +17,11 @@
             this.Cost = 850.ToString();
         }
 
-        public bool IsMedium(IContainer container)
+        /*public bool IsMedium(IContainer container)
         {
             if (container == null) return false;
             if (container.GetType() == typeof(MediumContainer)) return true;
             return false;
-        }
+        }*/
     }
 }

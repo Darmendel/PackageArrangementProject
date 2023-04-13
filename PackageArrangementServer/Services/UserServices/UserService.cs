@@ -159,6 +159,11 @@ namespace PackageArrangementServer.Services
             return 1;
         }
 
+        public IContainer GetContainer(ContainerSize size)
+        {
+            return deliveryService.GetContainer(size);
+        }
+
         public List<Package> GetAllPackages(string userId, string deliveryId)
         {
             if (!Exists(userId)) return null;

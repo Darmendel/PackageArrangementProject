@@ -14,7 +14,7 @@ import copy
 from improvement_alg_methods import *
 import numpy as np
 
-CONTAINER_HEIGHT = 0
+
 
 
 def construction(pkgs: list[Package], cont: Container) -> (list[Package], Container):
@@ -121,9 +121,9 @@ def construction_phase(pkgs: list[Package], cont: Container) -> list[Package]:
     return best_sol
 
 
-def create_boxs_from_input(input: Input):
+def create_boxs_from_input(input_: Input):
     pkgs = []
-    for i in input.boxes[1:]:
+    for i in input_.boxes[1:]:
         pkgs.append(Package(customer=i[0], height=i[1], width=i[2], length=i[3], weight=i[4],
                             priority=i[5], above=i[6], positions=i[7]))
 
@@ -133,8 +133,8 @@ def create_boxs_from_input(input: Input):
 def improvement_alg(pkgs=list[Package], cont_info=Container):
     improved_alg = ImprovedAlg(pkgs=pkgs, cont=cont_info)
     conf_mat = improved_alg.conflict_matrix()
-    # print(conf_mat)
-    # print(conf_mat.shape)
+    print(conf_mat)
+    print(conf_mat.shape)
     dens_mat = improved_alg.density_matrix()
 
     pass
@@ -144,8 +144,6 @@ def start():
     # create boxes
     raw_data = Input("dataset.csv")
     cont = Container(height=int(raw_data.contdim[0]), width=int(raw_data.contdim[1]), length=int(raw_data.contdim[2]))
-    global CONTAINER_HEIGHT
-    CONTAINER_HEIGHT = 1 / cont.height
     pkgs = create_boxs_from_input(raw_data)
     # construction algorithm
     solution = construction_phase(pkgs=pkgs, cont=cont)

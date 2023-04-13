@@ -22,3 +22,15 @@ class Penaltylevel(Enum):
 class ARM(Enum):
     LENGTH = 60
     HEIGHT = 200
+
+
+@unique
+class Point(Enum):
+    START = 1
+    END = 0
+
+@unique
+class Exist(Enum):
+    TRUE = -1
+    FALSE = 0
+

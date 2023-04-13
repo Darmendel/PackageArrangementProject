@@ -25,21 +25,21 @@ class ImprovedAlg:
 
     # visibility
     def value_fv(self, qj: float, vj: int, zj: int):
-        (a, b), c = Penaltylevel.MEDIUM.value, self.cont.height
+        (a, b), c = Penaltylevel.MEDIUM.value, 1 / self.cont.height
         return (1 + c * zj) * (a * qj + b * vj)
 
     # above
     def value_fa(self, qj: float, vj: int, zj: int):
-        (a, b), c = Penaltylevel.MEDIUM.value, self.cont.height
+        (a, b), c = Penaltylevel.MEDIUM.value, 1 / self.cont.height
         return (1 + c * zj) * (a * qj + b * vj)
 
     # reachability
     def value_fr(self, qj: float, vj: float, zj: int, reachability: int):
-        (a, b), c = Penaltylevel.MEDIUM.value, self.cont.height
+        (a, b), c = Penaltylevel.MEDIUM.value, 1 / self.cont.height
         return (1 + c * reachability) * (a * qj + b * vj)
 
     def general(self, pkg_i: Package, pkg_j: Package):  # complete false, false, false
-        v, a, r = self.conflict(pkg_i=pkg_i, pkg_j=pkg_j)
+        v, a, r = ImprovedAlg.conflict(pkg_i=pkg_i, pkg_j=pkg_j)
         if v:
             f_v = self.value_fv(qj=pkg_j.weight, vj=pkg_j.volume, zj=pkg_j.location[2])
         else:
@@ -55,7 +55,8 @@ class ImprovedAlg:
             f_r = 0
         return f_v + f_a + f_r
 
-    def overlap(self, pkg_i: Package, pkg_j=Package, attr=str):
+    @staticmethod
+    def overlap(pkg_i: Package, pkg_j=Package, attr=str):
         location_long_i = {"x": (pkg_i.location[0], pkg_i.length), "y": (pkg_i.location[1], pkg_i.width),
                            "z": (pkg_i.location[2], pkg_i.height)}
         location_long_j = {"x": (pkg_j.location[0], pkg_j.length), "y": (pkg_j.location[1], pkg_j.width),
@@ -66,16 +67,17 @@ class ImprovedAlg:
         return i_loc < j_loc < i_loc + i_len or j_loc < i_loc < j_loc + j_len
 
     # no conflict  - False, conflict = True:
-    def conflict(self, pkg_i: Package, pkg_j: Package):
+    @staticmethod
+    def conflict(pkg_i: Package, pkg_j: Package):
         if pkg_i.customer > pkg_j.customer:
             return False, False, False
         else:
             above, visibility, reach = False, False, False
-            if pkg_j.location[2] > pkg_i.location[2] + pkg_i.height and self.overlap(pkg_i, pkg_j, "x") and \
-                    self.overlap(pkg_i, pkg_j, "y"):
+            if pkg_j.location[2] > pkg_i.location[2] + pkg_i.height and ImprovedAlg.overlap(pkg_i, pkg_j, "x") and \
+                    ImprovedAlg.overlap(pkg_i, pkg_j, "y"):
                 above = True
-            if pkg_j.location[0] > pkg_i.location[0] + pkg_i.length and self.overlap(pkg_i, pkg_j, "y") and \
-                    self.overlap(pkg_i, pkg_j, "z"):
+            if pkg_j.location[0] > pkg_i.location[0] + pkg_i.length and ImprovedAlg.overlap(pkg_i, pkg_j, "y") and \
+                    ImprovedAlg.overlap(pkg_i, pkg_j, "z"):
                 visibility = True
             reach = (pkg_j.location[0] + pkg_j.length) - (pkg_i.location[0] + pkg_i.length)
             if reach > min(ARM.HEIGHT.value - pkg_i.location[2], ARM.LENGTH.value):
@@ -89,7 +91,7 @@ class ImprovedAlg:
         for i, item_i in enumerate(matrix):
             for j, item_j in enumerate(matrix):
                 if i != j:
-                    if self.conflict(item_i, item_j) != (False, False, False):
+                    if ImprovedAlg.conflict(item_i, item_j) != (False, False, False):
                         c_matrix[i, j] = self.general(pkg_i=item_i, pkg_j=item_j)
                     else:
                         c_matrix[i, j] = 0

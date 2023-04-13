@@ -1,0 +1,39 @@
+.uploading h1 {
+    font-size: 2rem;
+    padding-top: 10rem;
+    color: white;
+    font-weight: 300;
+    padding-bottom: 1rem;
+}
+
+.uploading {
+    background-color: white;
+    padding-bottom: 17.5rem;
+}
+
+.uploading input {
+    /* padding: 1rem; */
+    border: 1px solid white;
+    border-radius: 5px 5px 5px 5px;
+    color: #fff;
+    width: 17%;
+    font-size: 1.6rem;
+    margin-left: 53.1rem;
+    cursor: pointer;
+}
+
+.continue-upload {
+    background-color: orangered;
+    border-color: orangered;
+    width: 8%;
+}
+
+.continue-upload:hover {
+    border-color: white;
+    cursor: pointer;
+}
+
+.nav-upload {
+    background-color: #0a1930;   
+}
+ 

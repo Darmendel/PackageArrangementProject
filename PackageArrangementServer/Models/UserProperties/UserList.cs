@@ -42,24 +42,36 @@
             }
         }
 
-        private List<Delivery> GetDeliveryList(string id)
-        {
-            List<Delivery> lst = new List<Delivery>();
-            //DateTime now = DateTime.Now;
-            DateTime tomorrow = DateTime.Now.AddDays(1);
-
-            for (int i = 0; i < 4; i++)
-            {
-                string ind = "" + i;
-                if (id != ind) lst.Add(new Delivery(id, ind, tomorrow, new PackageList().Packages));
-            }
-
-            return lst;
-        }
-
         public void Remove(User user)
         {
             if (_users.Contains(user)) _users.Remove(user);
+        }
+
+        public void AddDelivery(User user, Delivery delivery)
+        {
+            if (user == null || delivery == null) return;
+            if (user.Deliveries.Contains(delivery)) return;
+            user.Deliveries.Add(delivery);
+            Edit(user, deliveries: user.Deliveries);
+        }
+
+        public void EditDelivery(User user, Delivery delivery)
+        {
+            if (user == null || delivery == null) return;
+            if (!user.Deliveries.Contains(delivery)) return;
+
+            int index = user.Deliveries.IndexOf(delivery);
+            user.Deliveries[index] = delivery;
+
+            Edit(user, deliveries: user.Deliveries);
+        }
+
+        public void DeleteDelivery(User user, Delivery delivery)
+        {
+            if (user == null || delivery == null) return;
+            if (!user.Deliveries.Contains(delivery)) return;
+            user.Deliveries.Remove(delivery);
+            Edit(user, deliveries: user.Deliveries);
         }
     }
 }

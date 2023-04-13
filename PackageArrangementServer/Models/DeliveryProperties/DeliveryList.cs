@@ -50,5 +50,32 @@
             if (_deliveries == null) return;
             if (_deliveries.Contains(delivery)) _deliveries.Remove(delivery);
         }
+
+        public void AddPackage(Delivery delivery, Package package)
+        {
+            if (delivery == null || package == null) return;
+            if (delivery.Packages.Contains(package)) return;
+            delivery.Packages.Add(package);
+            Edit(delivery, packages: delivery.Packages);
+        }
+
+        public void EditPackage(Delivery delivery, Package package)
+        {
+            if (delivery == null || package == null) return;
+            if (!delivery.Packages.Contains(package)) return;
+
+            int index = delivery.Packages.IndexOf(package);
+            delivery.Packages[index] = package;
+
+            Edit(delivery, packages: delivery.Packages);
+        }
+
+        public void DeletePackage(Delivery delivery, Package package)
+        {
+            if (delivery == null || package == null) return;
+            if (!delivery.Packages.Contains(package)) return;
+            delivery.Packages.Remove(package);
+            Edit(delivery, packages: delivery.Packages);
+        }
     }
 }

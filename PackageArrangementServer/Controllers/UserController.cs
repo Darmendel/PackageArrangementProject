@@ -284,5 +284,19 @@ namespace PackageArrangementServer.Controllers
             return;
         }
 
+        /// <summary>
+        /// Deletes a package in a user's delivery.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="packageId"></param>
+        [HttpDelete("{userId}/deliveries/{deliveryId}/packages/{packageId}")]
+        public void Delete(string userId, string deliveryId, string packageId)
+        {
+            if (userService.DeletePackage(userId, deliveryId, packageId) > 0) Response.StatusCode = 204;
+            else Response.StatusCode = 400;
+            return;
+        }
+
     }
 }

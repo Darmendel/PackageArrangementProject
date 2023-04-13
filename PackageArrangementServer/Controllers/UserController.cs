@@ -232,6 +232,18 @@ namespace PackageArrangementServer.Controllers
             return;
         }
 
+        /// <summary>
+        /// Selects a container for a user's delivery.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="size"></param>
+        [HttpPost("{userId}/deliveries/{deliveryId}/container")]
+        public void Post(string userId, string deliveryId, ContainerSize size)
+        {
+
+        }
+
         /*[HttpPut("{userId}")]
         public async Task Put([FromBody] RegisterRequest req)
         {
@@ -265,6 +277,18 @@ namespace PackageArrangementServer.Controllers
                 req.Container) > 0) Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;
+        }
+
+        /// <summary>
+        /// Updates a user's delivery's container.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="size"></param>
+        [HttpPut("{userId}/deliveries/{deliveryId}/container")]
+        public void Put(string userId, string deliveryId, ContainerSize size)
+        {
+
         }
 
         /// <summary>

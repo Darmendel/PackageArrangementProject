@@ -2,6 +2,7 @@
 {
     public struct MediumContainer : IContainer
     {
+        public ContainerSize Size { get; }
         public string Height { get; }
         public string Width { get; }
         public string Depth { get; }
@@ -9,6 +10,7 @@
 
         public MediumContainer()
         {
+            this.Size = ContainerSize.Medium;
             this.Height = 600.ToString();
             this.Width = 800.ToString();
             this.Depth = 1600.ToString();

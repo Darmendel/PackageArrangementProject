@@ -2,6 +2,7 @@
 {
     public struct BigContainer : IContainer
     {
+        public ContainerSize Size { get; }
         public string Height { get; }
         public string Width { get; }
         public string Depth { get; }
@@ -9,6 +10,7 @@
 
         public BigContainer()
         {
+            this.Size = ContainerSize.Large;
             this.Height = 800.ToString();
             this.Width = 1000.ToString();
             this.Depth = 1800.ToString();

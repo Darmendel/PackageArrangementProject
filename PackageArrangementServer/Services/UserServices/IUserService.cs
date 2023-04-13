@@ -142,6 +142,18 @@ namespace PackageArrangementServer.Services
         /// <returns>DeliveryStatus</returns>
         public DeliveryStatus GetDeliveryStatus(string userId, string deliveryId);
 
+        //public DeliveryStatus UpdateDeliveryStatus(string userId, string deliveryId, DeliveryStatus deliveryStatus);
+
+        /// <summary>
+        /// Given a user id and a delivery id, updates which container was selected.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="container"></param>
+        /// <returns>int</returns>
+        public int UpdateDelivery(string userId, string deliveryId, IContainer container);
+
         /// <summary>
         /// Updates a user's delivery.
         /// Returns 1 if succeeded, and 0 otherwise.

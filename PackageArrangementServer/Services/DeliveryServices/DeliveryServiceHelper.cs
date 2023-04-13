@@ -18,7 +18,8 @@ namespace PackageArrangementServer.Services
                     try
                     {
                         int pc = Int32.Parse(package.Cost);
-                        cost += pc;
+                        int amount = Int32.Parse(package.Amount);
+                        cost += (pc * amount);
                     }
                     catch (FormatException) { return -1; }
                 }

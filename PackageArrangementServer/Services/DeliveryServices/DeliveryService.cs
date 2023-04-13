@@ -206,35 +206,14 @@ namespace PackageArrangementServer.Services
             return packageService.Count(deliveryId);
         }
 
-        private int Update(string deliveryId, string userId, Package package, string op)
-        {
-            Delivery delivery = Get(deliveryId, userId);
-            if (delivery == null) return 0;
-
-            List<Package> pList = GetAllPackages(deliveryId, userId);
-            if (pList == null) return 0;
-
-            if (op.Equals("add")) pList.Add(package);
-            else if (op.Equals("edit")) pList = packageService.EditPackageList(pList, package);
-            else if (op.Equals("delete")) pList.Remove(package);
-            else return 0;
-
-            DeliveryService.deliveryList.Edit(delivery, packages: pList);
-            return 1;
-        }
-
         public Package CreatePackage(string deliveryId, string userId, string type = null, string amount = null, string width = null,
             string height = null, string depth = null, string weight = null, string cost = null, string address = null)
         {
-            if (!Exists(deliveryId, userId)) return null;
+            Delivery delivery = Get(deliveryId, userId);
+            if (delivery == null) return null;
+
             Package package = packageService.Create(deliveryId, type, amount, width, height, depth, weight, cost, address);
-
-            if (package != null)
-            {
-                int res = Update(deliveryId, userId, package, "add");
-                if (res == 0) return null;
-            }
-
+            deliveryList.AddPackage(delivery, package);
             return package;
         }
 
@@ -242,16 +221,13 @@ namespace PackageArrangementServer.Services
             string amount = null, string width = null, string height = null, string depth = null, string weight = null,
             string cost = null, string address = null)
         {
-            if (!Exists(deliveryId, userId)) return null;
-            Package package = packageService.Edit(deliveryId, packageId, type, amount, width, height, depth,
+            Delivery delivery = Get(deliveryId, userId);
+            if (delivery == null) return null;
+
+            Package package = packageService.Edit(packageId, deliveryId, type, amount, width, height, depth,
                 weight, cost, address);
 
-            if (package != null)
-            {
-                int res = Update(deliveryId, userId, package, "edit");
-                if (res == 0) return null;
-            }
-
+            deliveryList.EditPackage(delivery, package);
             return package;
         }
 
@@ -263,15 +239,11 @@ namespace PackageArrangementServer.Services
 
         public Package DeletePackage(string deliveryId, string userId, string packageId)
         {
-            if (!Exists(deliveryId, userId)) return null;
-            Package package = packageService.Delete(packageId, deliveryId);
-            
-            if (package != null)
-            {
-                int res = Update(deliveryId, userId, package, "delete");
-                if (res == 0) return null;
-            }
+            Delivery delivery = Get(deliveryId, userId);
+            if (delivery == null) return null;
 
+            Package package = packageService.Delete(packageId, deliveryId);
+            deliveryList.DeletePackage(delivery, package);
             return package;
         }
     }

@@ -28,9 +28,9 @@
             DateTime t3 = tomorrow.AddDays(3);
             DateTime t4 = tomorrow.AddDays(4);
 
-            IContainer small = new SmallContainer();
-            IContainer medium = new MediumContainer();
-            IContainer big = new BigContainer();
+            IContainer small = new SmallContainer(); // cost = 700
+            IContainer medium = new MediumContainer(); // cost = 850
+            IContainer big = new BigContainer(); // cost = 1000
 
             Delivery del1 = new Delivery("1", "1", tomorrow, new List<Package>(), small);
             Delivery del2 = new Delivery("2", "1", t1, new List<Package>(), medium);
@@ -38,8 +38,8 @@
             d1.Add(del1);
             d1.Add(del2);
 
-            d1.Edit(del1, cost: 2100.ToString());
-            d1.Edit(del2, cost: 2250.ToString());
+            d1.Edit(del1, cost: 3300.ToString());
+            d1.Edit(del2, cost: 3180.ToString());
             EditUser(users, "1", d1);
 
             /*d2.Add(new Delivery("3", "2", t4, new List<Package>(), small));
@@ -68,6 +68,7 @@
                 string deliveryId = i.ToString();
                 PackageList p = new PackageList();
 
+                // cost = 2600
                 p.Add(new Package(id1, deliveryId, "Clothing", "2", "100", "50", "70", "5", "200", "Fifth avn."));
                 p.Add(new Package(id2, deliveryId, "Lamps", "1", "300", "150", "200", "100", "700", "Fifth avn."));
                 p.Add(new Package(id3, deliveryId, "Books", "3", "50", "50", "50", "400", "500", "Fifth avn."));

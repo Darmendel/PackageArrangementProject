@@ -112,6 +112,12 @@ namespace PackageArrangementServer.Services
         public Delivery Delete(string deliveryId, string userId);
 
         /// <summary>
+        /// Given a size of the container, return the selected container.
+        /// </summary>
+        /// <param name="size">IContainer</param>
+        public IContainer GetContainer(ContainerSize size);
+
+        /// <summary>
         /// Given a delivery id and a user id, returns all of the packages of the delivery.
         /// </summary>
         /// <param name="deliveryId"></param>

@@ -232,7 +232,7 @@ namespace PackageArrangementServer.Controllers
             return;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Selects a container for a user's delivery.
         /// </summary>
         /// <param name="userId"></param>
@@ -241,13 +241,11 @@ namespace PackageArrangementServer.Controllers
         [HttpPost("{userId}/deliveries/{deliveryId}/container")]
         public void Post(string userId, string deliveryId, ContainerSize size)
         {
-
-        }
+        }*/
 
         /*[HttpPut("{userId}")]
         public async Task Put([FromBody] RegisterRequest req)
         {
-
         }*/
 
         /// <summary>
@@ -288,7 +286,14 @@ namespace PackageArrangementServer.Controllers
         [HttpPut("{userId}/deliveries/{deliveryId}/container")]
         public void Put(string userId, string deliveryId, ContainerSize size)
         {
-
+            IContainer container = userService.GetContainer(size);
+            if (container == null) Response.StatusCode = 400;
+            else
+            {
+                userService.UpdateDelivery(userId, deliveryId, container);
+                Response.StatusCode = 204;
+            }
+            return;
         }
 
         /// <summary>

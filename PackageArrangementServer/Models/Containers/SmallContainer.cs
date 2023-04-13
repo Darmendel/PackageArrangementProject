@@ -17,11 +17,11 @@
             this.Cost = 700.ToString();
         }
 
-        public bool IsSmall(IContainer container)
+        /*public bool IsSmall(IContainer container)
         {
             if (container == null) return false;
             if (container.GetType() == typeof(SmallContainer)) return true;
             return false;
-        }
+        }*/
     }
 }

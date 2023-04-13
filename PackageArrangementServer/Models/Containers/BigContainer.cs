@@ -17,11 +17,11 @@
             this.Cost = 1000.ToString();
         }
 
-        public bool IsBig(IContainer container)
+        /*public bool IsBig(IContainer container)
         {
             if (container == null) return false;
             if (container.GetType() == typeof(BigContainer)) return true;
             return false;
-        }
+        }*/
     }
 }

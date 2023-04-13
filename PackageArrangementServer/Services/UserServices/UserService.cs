@@ -84,7 +84,7 @@ namespace PackageArrangementServer.Services
             return deliveryService.Get(deliveryId, userId);
         }
 
-        private int Update(string userId, Delivery delivery, string op)
+        /*private int Update(string userId, Delivery delivery, string op)
         {
             User user = Get(userId);
             if (user == null) return 0;
@@ -99,7 +99,7 @@ namespace PackageArrangementServer.Services
 
             UserService.userList.Edit(user, deliveries: dList);
             return 1;
-        }
+        }*/
 
         public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage>? packages = null,
             IContainer container = null)
@@ -123,6 +123,16 @@ namespace PackageArrangementServer.Services
         {
             if (!Exists(userId)) return DeliveryStatus.NonExisting;
             return deliveryService.Status(deliveryId, userId);
+        }
+
+        public int UpdateDelivery(string userId, string deliveryId, IContainer container)
+        {
+            if (!Exists(userId)) return 0;
+
+            Delivery delivery = deliveryService.Update(userId, deliveryId, container);
+            if (delivery == null) return 0;
+            return 1;
+
         }
 
         // cost and deliveryStatus might be needed to reavluate and changed.
@@ -159,31 +169,6 @@ namespace PackageArrangementServer.Services
         {
             if (!Exists(userId)) return null;
             return deliveryService.GetPackage(deliveryId, userId, packageId);
-        }
-
-        private int Update(string userId, string deliveryId, Package package, string op)
-        {
-            User user = Get(userId);
-            if (user == null) return 0;
-
-            List<Package> pList = deliveryService.GetAllPackages(deliveryId, userId);
-            if (pList == null) return 0;
-
-            /*if (op.Equals("add")) pList.Add(package);
-            else if (op.Equals("edit")) pList = deliveryService.EditPackageList(deliveryId, userId, pList, package);
-            else if (op.Equals("delete")) pList.Remove(package);
-            else return 0;*/
-
-            deliveryService.Edit(deliveryId, userId, packages: pList);
-
-            Delivery delivery = deliveryService.Get(deliveryId, userId);
-            if (deliveryId == null) return 0;
-
-            /*if (op.Equals("add")) return Update(userId, delivery, "add");
-            else if (op.Equals("edit")) return Update(userId, delivery, "edit");
-            else if (op.Equals("delete")) return Update(userId, delivery, "delete");
-            else return 0;*/
-            return 1;
         }
 
         public int CreatePackage(string userId, string deliveryId, string type = null, string amount = null,

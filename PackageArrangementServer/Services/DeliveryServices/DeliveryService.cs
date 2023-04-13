@@ -146,6 +146,24 @@ namespace PackageArrangementServer.Services
             return delivery;
         }
 
+        public Delivery Update(string deliveryId, string userId, IContainer c)
+        {
+            if (!Exists(deliveryId, userId)) return null;
+            return Edit(deliveryId, userId, container: c);
+        }
+
+        public Delivery Update(string deliveryId, string userId, DateTime? d)
+        {
+            if (!Exists(deliveryId, userId)) return null;
+            return Edit(deliveryId, userId, deliveryDate: d);
+        }
+
+        public Delivery Update(string deliveryId, string userId, List<Package>? p)
+        {
+            if (!Exists(deliveryId, userId)) return null;
+            return Edit(deliveryId, userId, packages: p);
+        }
+
         // cost and deliveryStatus might be needed to reavluate and changed.
         public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null,
             List<Package>? packages = null, IContainer container = null)
@@ -160,7 +178,7 @@ namespace PackageArrangementServer.Services
             return Get(deliveryId, userId);
         }
 
-        public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery)
+        /*public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery)
         {
             int index = list.IndexOf(delivery);
             if (index == -1) return null;
@@ -172,7 +190,7 @@ namespace PackageArrangementServer.Services
             list[index].Status = delivery.Status;
 
             return list;
-        }
+        }*/
 
         public Delivery Delete(string deliveryId, string userId)
         {

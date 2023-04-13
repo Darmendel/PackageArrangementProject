@@ -72,6 +72,19 @@ namespace PackageArrangementServer.Services
             IContainer container = null);
 
         /// <summary>
+        /// Given a delivery id and a user id, updates which container was selected.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="container"></param>
+        /// <returns>Delivery</returns>
+        public Delivery Update(string deliveryId, string userId, IContainer container);
+
+        public Delivery Update(string deliveryId, string userId, DateTime? deliveryDate);
+
+        public Delivery Update(string deliveryId, string userId, List<Package>? packages);
+
+        /// <summary>
         /// Updates a delivery (changes it's list of packages or it's selected container and calculates it's new cost and status).
         /// </summary>
         /// <param name="deliveryId"></param>
@@ -88,7 +101,7 @@ namespace PackageArrangementServer.Services
         /// <param name="list"></param>
         /// <param name="delivery"></param>
         /// <returns>List<Delivery></returns>
-        public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery);
+        //public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery);
 
         /// <summary>
         /// Deletes a delivery.

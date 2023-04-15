@@ -21,3 +21,4 @@ class Package:
         self.area = self.length * self.width
         self.cur_pos = None
         self.location = location
+        self.size = self.length, self.width, self.height

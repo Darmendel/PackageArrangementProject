@@ -68,7 +68,7 @@ namespace PackageArrangementServer.Services
         /// <param name="packages"></param>
         /// <param name="container"></param>
         /// <returns>Delivery</returns>
-        public Delivery Create(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage> packages = null,
+        public Delivery Create(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery> packages = null,
             IContainer container = null);
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace PackageArrangementServer.Services
 
         public Delivery Update(string deliveryId, string userId, DateTime? deliveryDate);
 
-        public Delivery Update(string deliveryId, string userId, List<Package>? packages);
+        //public Delivery Update(string deliveryId, string userId, List<Package>? packages);
 
         /// <summary>
         /// Updates a delivery (changes it's list of packages or it's selected container and calculates it's new cost and status).
@@ -93,7 +93,7 @@ namespace PackageArrangementServer.Services
         /// <param name="packages"></param>
         /// <param name="container"></param>
         /// <returns>Delivery</returns>
-        public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, IContainer container = null);
+        public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<RequestEditPackage>? packages = null, IContainer container = null);
 
         /// <summary>
         /// Updates a delivery list.

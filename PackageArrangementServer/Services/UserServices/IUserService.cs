@@ -121,7 +121,7 @@ namespace PackageArrangementServer.Services
         /// <param name="packages"></param>
         /// <param name="container"></param>
         /// <returns>int</returns>
-        public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage>? packages = null,
+        public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
             IContainer container = null);
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace PackageArrangementServer.Services
         /// <param name="container"></param>
         /// <returns>int</returns>
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, IContainer container = null);
+            List<RequestEditPackage>? packages = null, IContainer container = null);
 
         /// <summary>
         /// Deletes a user's delivery.

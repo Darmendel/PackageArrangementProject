@@ -16,8 +16,8 @@ namespace PackageArrangementServer.Services
 
         public List<User> GetAllUsers()
         {
-            if (userList.Count == 0) return null;
-            return UserService.userList.Users;
+            //if (userList.Count == 0) return null;
+            return UserService.userList.Users; // Returns empty lists as well
         }
 
         public bool Exists(string id)
@@ -101,15 +101,17 @@ namespace PackageArrangementServer.Services
             return 1;
         }*/
 
-        public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage>? packages = null,
+        public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
             IContainer container = null)
         {
-            if (!Exists(userId)) return 0;
+            User user = Get(userId);
+            if (user == null) return 0;
 
             Delivery delivery = deliveryService.Create(userId, deliveryDate, packages, container);
             if (delivery == null) return 0;
 
             //return Update(userId, delivery, "add");
+            userList.AddDelivery(user, delivery);
             return 1;
         }
 
@@ -132,12 +134,11 @@ namespace PackageArrangementServer.Services
             Delivery delivery = deliveryService.Update(userId, deliveryId, container);
             if (delivery == null) return 0;
             return 1;
-
         }
 
         // cost and deliveryStatus might be needed to reavluate and changed.
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, IContainer container = null)
+            List<RequestEditPackage>? packages = null, IContainer container = null)
         {
             if (!Exists(userId)) return 0;
 

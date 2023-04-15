@@ -22,8 +22,8 @@ namespace PackageArrangementServer.Services
                 if (package.DeliveryId == deliveryId) lst.Add(package);
             }
             
-            if (lst.Count > 0) return lst;
-            return null;
+            //if (lst.Count > 0) return lst;
+            return lst; // Returns empty lists as well
         }
 
         public bool Exists(string packageId, string deliveryId)
@@ -67,14 +67,41 @@ namespace PackageArrangementServer.Services
             return packageId;
         }
 
-        public Package ConvertToPackage(RequestCreationOfNewPackage request)
+        /*public Package ConvertToPackage(RequestCreationOfNewPackage request)
         {
-            if (request == null) return null;
+            RequestCreationOfNewPackageInNewDelivery req = new RequestCreationOfNewPackageInNewDelivery()
+            {
+                Type = request.Type,
+                Amount = request.Amount,
+                Width = request.Width,
+                Height = request.Height,
+                Depth = request.Depth,
+                Weight = request.Weight,
+                Cost = request.Cost,
+                Address = request.Address
+            };
+            return ConvertToPackage(request.DeliveryId, req);
+        }*/
 
-            string packageId = CreatePackageId(request.DeliveryId);
+        public Package ConvertToPackage(string deliveryId, RequestCreationOfNewPackageInNewDelivery request)
+        {
+            if (deliveryId == null || request == null) return null;
+
+            string packageId = CreatePackageId(deliveryId);
             if (packageId == null) return null;
 
-            return new Package(packageId, request.Type, request.DeliveryId, request.Amount, request.Width,
+            return new Package(packageId, deliveryId, request.Type, request.Amount, request.Width,
+                request.Height, request.Depth, request.Weight, request.Cost, request.Address);
+        }
+
+        public Package ConvertToPackage(string deliveryId, RequestEditPackage request)
+        {
+            if (deliveryId == null || request == null) return null;
+
+            string packageId = CreatePackageId(deliveryId);
+            if (packageId == null) return null;
+
+            return new Package(packageId, deliveryId, request.Type, request.Amount, request.Width,
                 request.Height, request.Depth, request.Weight, request.Cost, request.Address);
         }
 

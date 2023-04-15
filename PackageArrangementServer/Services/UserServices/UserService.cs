@@ -127,6 +127,24 @@ namespace PackageArrangementServer.Services
             return deliveryService.Status(deliveryId, userId);
         }
 
+        public int UpdateDelivery(string userId, string deliveryId, List<Package>? packages)
+        {
+            if (!Exists(userId)) return 0;
+
+            Delivery delivery = deliveryService.Update(userId, deliveryId, packages);
+            if (delivery == null) return 0;
+            return 1;
+        }
+
+        public int UpdateDelivery(string userId, string deliveryId, DateTime? deliveryDate)
+        {
+            if (!Exists(userId)) return 0;
+
+            Delivery delivery = deliveryService.Update(userId, deliveryId, deliveryDate);
+            if (delivery == null) return 0;
+            return 1;
+        }
+
         public int UpdateDelivery(string userId, string deliveryId, IContainer container)
         {
             if (!Exists(userId)) return 0;
@@ -138,7 +156,7 @@ namespace PackageArrangementServer.Services
 
         // cost and deliveryStatus might be needed to reavluate and changed.
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<RequestEditPackage>? packages = null, IContainer container = null)
+            List<Package>? packages = null, IContainer container = null)
         {
             if (!Exists(userId)) return 0;
 

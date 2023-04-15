@@ -145,6 +145,24 @@ namespace PackageArrangementServer.Services
         //public DeliveryStatus UpdateDeliveryStatus(string userId, string deliveryId, DeliveryStatus deliveryStatus);
 
         /// <summary>
+        /// Updates a user's delivery's package list.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="packages"></param>
+        /// <returns>int</returns>
+        public int UpdateDelivery(string userId, string deliveryId, List<Package>? packages);
+
+        /// <summary>
+        /// Updates a delivery's delivery date.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="deliveryDate"></param>
+        /// <returns>int</returns>
+        public int UpdateDelivery(string userId, string deliveryId, DateTime? deliveryDate);
+
+        /// <summary>
         /// Given a user id and a delivery id, updates which container was selected.
         /// Returns 1 if succeeded, and 0 otherwise.
         /// </summary>
@@ -165,7 +183,7 @@ namespace PackageArrangementServer.Services
         /// <param name="container"></param>
         /// <returns>int</returns>
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
-            List<RequestEditPackage>? packages = null, IContainer container = null);
+            List<Package>? packages = null, IContainer container = null);
 
         /// <summary>
         /// Deletes a user's delivery.

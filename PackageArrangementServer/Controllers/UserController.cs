@@ -195,7 +195,6 @@ namespace PackageArrangementServer.Controllers
         /// Login.
         /// </summary>
         /// <param name="req"></param>
-        /// <exception cref="NotImplementedException"></exception>
         [HttpPost("{id}/{name}/{password}")]
         //[ValidateAntiForgeryToken]
         public void Post([FromBody] RegisterRequest req)
@@ -262,7 +261,7 @@ namespace PackageArrangementServer.Controllers
             return;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Updates a user's delivery.
         /// </summary>
         /// <param name="userId"></param>
@@ -275,6 +274,12 @@ namespace PackageArrangementServer.Controllers
                 req.Container) > 0) Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;
+        }*/
+
+        [HttpPut("{userId}/deliveries/{deliveryId}/delivery-date")]
+        public void PutDeliveryDate(string userId, string deliveryId, string deliveryDate)
+        {
+            
         }
 
         /// <summary>
@@ -284,14 +289,14 @@ namespace PackageArrangementServer.Controllers
         /// <param name="deliveryId"></param>
         /// <param name="size"></param>
         [HttpPut("{userId}/deliveries/{deliveryId}/container")]
-        public void Put(string userId, string deliveryId, ContainerSize size)
+        public void PutCotainer(string userId, string deliveryId, ContainerSize size)
         {
             IContainer container = userService.GetContainer(size);
             if (container == null) Response.StatusCode = 400;
             else
             {
-                userService.UpdateDelivery(userId, deliveryId, container);
-                Response.StatusCode = 204;
+                if (userService.UpdateDelivery(userId, deliveryId, container) > 0) Response.StatusCode = 400;
+                else Response.StatusCode = 204;
             }
             return;
         }

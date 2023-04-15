@@ -39,7 +39,8 @@ namespace PackageArrangementServer.Services
         /// Given a delivery id and a user id, calculates the cost of a delivery.
         /// Returns -1 if there's no such delivery or user.
         /// </summary>
-        /// <param name="delivery"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
         /// <returns>int</returns>
         public int Cost(string deliveryId, string userId);
 
@@ -72,17 +73,31 @@ namespace PackageArrangementServer.Services
             IContainer container = null);
 
         /// <summary>
-        /// Given a delivery id and a user id, updates which container was selected.
+        /// Updates a delivery's package list.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="packages"></param>
+        /// <returns>Delivery</returns>
+        public Delivery Update(string deliveryId, string userId, List<Package>? packages);
+
+        /// <summary>
+        /// Updates a delivery's delivery date.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="deliveryDate"></param>
+        /// <returns>Delivery</returns>
+        public Delivery Update(string deliveryId, string userId, DateTime? deliveryDate);
+
+        /// <summary>
+        /// Updates a delivery's container.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <param name="container"></param>
         /// <returns>Delivery</returns>
         public Delivery Update(string deliveryId, string userId, IContainer container);
-
-        public Delivery Update(string deliveryId, string userId, DateTime? deliveryDate);
-
-        //public Delivery Update(string deliveryId, string userId, List<Package>? packages);
 
         /// <summary>
         /// Updates a delivery (changes it's list of packages or it's selected container and calculates it's new cost and status).
@@ -93,7 +108,7 @@ namespace PackageArrangementServer.Services
         /// <param name="packages"></param>
         /// <param name="container"></param>
         /// <returns>Delivery</returns>
-        public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<RequestEditPackage>? packages = null, IContainer container = null);
+        public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, IContainer container = null);
 
         /// <summary>
         /// Updates a delivery list.

@@ -10,7 +10,7 @@
         {
             UserList userList = new UserList();
             userList.Add(new User { Id = "1", Name = "A", Email = "u1@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
-            //userList.Add(new User { Id = "2", Name = "B", Email = "u2@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
+            userList.Add(new User { Id = "2", Name = "B", Email = "u2@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
             //userList.Add(new User { Id = "3", Name = "C", Email = "u3@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
             return userList;
         }

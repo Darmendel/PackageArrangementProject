@@ -39,7 +39,23 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Package</returns>
-        public Package ConvertToPackage(RequestCreationOfNewPackage request);
+        //public Package ConvertToPackage(RequestCreationOfNewPackage request);
+
+        /// <summary>
+        /// Converts a request to create a package to a package.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="request"></param>
+        /// <returns>Package</returns>
+        public Package ConvertToPackage(string deliveryId, RequestCreationOfNewPackageInNewDelivery request);
+
+        /// <summary>
+        /// Converts a request to create a package to a package.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="request"></param>
+        /// <returns>Package</returns>
+        public Package ConvertToPackage(string deliveryId, RequestEditPackage request);
 
         /// <summary>
         /// Given a delivery id, adds a new package.

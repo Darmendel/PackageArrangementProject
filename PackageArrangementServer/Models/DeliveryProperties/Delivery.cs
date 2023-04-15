@@ -7,12 +7,12 @@ namespace PackageArrangementServer.Models
     {
         [Key]
         public string Id { get; set; }
-        public string UserId { get; set; }
+        public string UserId { get; set; } // define as second key
         public DateTime CreatedDate { get; set; }
         public DateTime DeliveryDate { get; set; }
         public List<Package> Packages { get; set; }
         public IContainer? Container { get; set; }
-        public string Cost { get; set; } // add type check
+        public string Cost { get; set; }
         public DeliveryStatus Status { get; set; }
 
 

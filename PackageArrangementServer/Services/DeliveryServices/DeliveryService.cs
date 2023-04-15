@@ -4,16 +4,18 @@ namespace PackageArrangementServer.Services
 {
     public class DeliveryService : IDeliveryService
     {
+        private IContainerService containerService;
         private IPackageService packageService;
         private IDeliveryServiceHelper helper;
-        private IContainerService containerService;
+        
         private static DeliveryList deliveryList;
 
-        public DeliveryService(IPackageService ps, IDeliveryServiceHelper dsh, IContainerService cs)
+        public DeliveryService(IContainerService cs, IPackageService ps, IDeliveryServiceHelper dsh)
         {
+            this.containerService = cs;
             this.packageService = ps;
             this.helper = dsh;
-            this.containerService = cs;
+            
             //deliveryList = new DeliveryList();
             deliveryList = StaticData.GetDeliveries();
         }
@@ -28,8 +30,8 @@ namespace PackageArrangementServer.Services
                 if (delivery.UserId == userId) lst.Add(delivery);
             }
 
-            if (lst.Count > 0) return lst;
-            return null;
+            //if (lst.Count > 0) return lst;
+            return lst; // Returns empty lists as well
 
             //return lst;
         }
@@ -98,19 +100,24 @@ namespace PackageArrangementServer.Services
             return Update(delivery);
         }*/
 
-        private Package ConvertToPackage(RequestCreationOfNewPackage request)
+        /*private Package ConvertToPackage(RequestCreationOfNewPackage request)
         {
             return packageService.ConvertToPackage(request);
+        }*/
+
+        private Package ConvertToPackage(string deliveryId, RequestCreationOfNewPackageInNewDelivery request)
+        {
+            return packageService.ConvertToPackage(deliveryId, request);
         }
 
-        private List<Package> GetPackageList(List<RequestCreationOfNewPackage> packages)
+        private List<Package> GetPackageList(string deliveryId, List<RequestCreationOfNewPackageInNewDelivery> packages)
         {
             if (packages == null) return null;
             List<Package> packageList = new List<Package>();
 
-            foreach (RequestCreationOfNewPackage package in packages)
+            foreach (RequestCreationOfNewPackageInNewDelivery package in packages)
             {
-                Package p = ConvertToPackage(package);
+                Package p = ConvertToPackage(deliveryId, package);
                 if (p != null) packageList.Add(p);
             }
             return packageList;
@@ -127,13 +134,13 @@ namespace PackageArrangementServer.Services
             return deliveryId;
         }
 
-        public Delivery Create(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage> packages = null,
+        public Delivery Create(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery> packages = null,
             IContainer container = null)
         {
             string deliveryId = CreateDeliveryId(userId);
             if (deliveryId == null) return null;
 
-            List<Package> packageList = GetPackageList(packages);
+            List<Package> packageList = GetPackageList(deliveryId, packages);
             if (packageList == null) packageList = new List<Package>();
 
             Delivery delivery = new Delivery(deliveryId, userId, deliveryDate, packageList, container);
@@ -160,23 +167,44 @@ namespace PackageArrangementServer.Services
             return Edit(deliveryId, userId, deliveryDate: d);
         }
 
-        public Delivery Update(string deliveryId, string userId, List<Package>? p)
+        /*public Delivery Update(string deliveryId, string userId, List<Package>? p)
         {
             if (!Exists(deliveryId, userId)) return null;
             return Edit(deliveryId, userId, packages: p);
+        }*/
+
+        private Package ConvertToPackage(string deliveryId, RequestEditPackage request)
+        {
+            return packageService.ConvertToPackage(deliveryId, request);
+        }
+
+        private List<Package> GetPackageList(string deliveryId, List<RequestEditPackage> packages)
+        {
+            if (packages == null) return null;
+            List<Package> packageList = new List<Package>();
+
+            foreach (RequestEditPackage package in packages)
+            {
+                Package p = ConvertToPackage(deliveryId, package);
+                if (p != null) packageList.Add(p);
+            }
+            return packageList;
         }
 
         // cost and deliveryStatus might be needed to reavluate and changed.
         public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null,
-            List<Package>? packages = null, IContainer container = null)
+            List<RequestEditPackage>? packages = null, IContainer container = null)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return null;
 
+            List<Package> packageList = GetPackageList(deliveryId, packages);
+            if (packageList == null) packageList = new List<Package>();
+
             string cost = Cost(deliveryId, userId).ToString();
             DeliveryStatus status = Status(deliveryId, userId);
 
-            DeliveryService.deliveryList.Edit(delivery, deliveryDate, packages, container, cost, status);
+            DeliveryService.deliveryList.Edit(delivery, deliveryDate, packageList, container, cost, status);
             return Get(deliveryId, userId);
         }
 

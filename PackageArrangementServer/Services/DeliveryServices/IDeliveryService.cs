@@ -133,6 +133,15 @@ namespace PackageArrangementServer.Services
         public IContainer GetContainer(ContainerSize size);
 
         /// <summary>
+        /// Given dimentions of a container, returns a new container.
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <param name="depth"></param>
+        /// <returns>IContainer</returns>
+        public IContainer CreateContainer(string height, string width, string depth);
+
+        /// <summary>
         /// Given a delivery id and a user id, returns all of the packages of the delivery.
         /// </summary>
         /// <param name="deliveryId"></param>
@@ -171,17 +180,14 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
-        /// <param name="type"></param>
         /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="weight"></param>
-        /// <param name="cost"></param>
         /// <param name="address"></param>
         /// <returns>Package</returns>
-        public Package CreatePackage(string deliveryId, string userId, string type = null, string amount = null,string width = null,
-            string height = null, string depth = null, string weight = null, string cost = null, string address = null);
+        public Package CreatePackage(string deliveryId, string userId, string amount = null,string width = null,
+            string height = null, string depth = null, string address = null);
 
         /// <summary>
         /// Updates a package in a delivery.
@@ -198,9 +204,8 @@ namespace PackageArrangementServer.Services
         /// <param name="cost"></param>
         /// <param name="address"></param>
         /// <returns>Package</returns>
-        public Package EditPackage(string deliveryId, string userId, string packageId, string type = null,
-            string amount = null, string width = null, string height = null, string depth = null, string weight = null,
-            string cost = null, string address = null);
+        public Package EditPackage(string deliveryId, string userId, string packageId, string amount = null,
+            string width = null, string height = null, string depth = null, string address = null);
 
         /// <summary>
         /// Updates a package in a delivery.

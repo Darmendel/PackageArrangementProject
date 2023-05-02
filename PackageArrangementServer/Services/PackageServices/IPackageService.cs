@@ -61,34 +61,28 @@ namespace PackageArrangementServer.Services
         /// Given a delivery id, adds a new package.
         /// </summary>
         /// <param name="deliveryId"></param>
-        /// <param name="type"></param>
         /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="weight"></param>
-        /// <param name="cost"></param>
         /// <param name="address"></param>
         /// <returns>Package</returns>
-        public Package Create(string deliveryId, string type = null, string amount = null, string width = null, string height = null,
-            string depth = null, string weight = null, string cost = null, string address = null);
+        public Package Create(string deliveryId, string amount = null, string width = null, string height = null,
+            string depth = null, string address = null);
 
         /// <summary>
         /// Updates a package.
         /// </summary>
         /// <param name="packageId"></param>
         /// <param name="deliveryId"></param>
-        /// <param name="type"></param>
         /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="weight"></param>
-        /// <param name="cost"></param>
         /// <param name="address"></param>
         /// <returns>Package</returns>
-        public Package Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
-            string height = null, string depth = null, string weight = null, string cost = null, string address = null);
+        public Package Edit(string packageId, string deliveryId, string amount = null, string width = null,
+            string height = null, string depth = null, string address = null);
 
         /// <summary>
         /// Updates a package list.

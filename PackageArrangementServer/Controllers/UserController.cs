@@ -9,10 +9,13 @@ namespace PackageArrangementServer.Controllers
     public class UserController : ControllerBase
     {
         private IUserService userService;
+        private RabbitMqClientBase rabbitMqClient;
 
-        public UserController(IUserService us)
+        public UserController(IUserService us, RabbitMqClientBase rb)
         {
             userService = us;
+            rabbitMqClient = rb;
+
             Global.UserId = "1";
             Global.DeliveryId = "1";
         }

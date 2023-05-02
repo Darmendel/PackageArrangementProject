@@ -69,9 +69,9 @@
                 PackageList p = new PackageList();
 
                 // cost = 2600
-                p.Add(new Package(id1, deliveryId, "Clothing", "2", "100", "50", "70", "5", "200", "Fifth avn."));
-                p.Add(new Package(id2, deliveryId, "Lamps", "1", "300", "150", "200", "100", "700", "Fifth avn."));
-                p.Add(new Package(id3, deliveryId, "Books", "3", "50", "50", "50", "400", "500", "Fifth avn."));
+                p.Add(new Package(id1, deliveryId, "2", "100", "50", "70", "Fifth avn."));
+                p.Add(new Package(id2, deliveryId, "1", "300", "150", "200", "Fifth avn."));
+                p.Add(new Package(id3, deliveryId, "3", "50", "50", "50", "Fifth avn."));
 
                 EditDelivery(deliveries, deliveryId, p);
                 packageList.Extend(p);

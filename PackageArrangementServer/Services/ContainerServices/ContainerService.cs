@@ -1,4 +1,5 @@
 ﻿using PackageArrangementServer.Models;
+using System.Text.RegularExpressions;
 
 namespace PackageArrangementServer.Services
 {
@@ -12,11 +13,22 @@ namespace PackageArrangementServer.Services
             return false;
         }
 
+        public static bool Validate(string height, string width, string depth)
+        {
+            if (height == null || !Regex.IsMatch(height, @"^\d+$")) return false;
+            if (width == null || !Regex.IsMatch(width, @"^\d+$")) return false;
+            if (depth == null || !Regex.IsMatch(depth, @"^\d+$")) return false;
+
+            return true;
+        }
+
         public static string Type(ContainerSize size)
         {
             if (size == ContainerSize.Small) return "small";
             if (size == ContainerSize.Medium) return "medium";
             if (size == ContainerSize.Large) return "large";
+
+            // Ignoring general
             return null;
         }
 
@@ -41,6 +53,15 @@ namespace PackageArrangementServer.Services
 
             return null;
         }
+
+        public IContainer Create(string height, string width, string depth)
+        {
+            if (!Validate(height, width, depth)) return null;
+            return new GeneralContainer(height, width, depth); // need to calculate it's cost!
+        }
+
+        bool IContainerService.Validate(string height, string width, string depth) =>
+            ContainerService.Validate(height, width, depth);
 
         bool IContainerService.Validate(ContainerSize size) => ContainerService.Validate(size);
 

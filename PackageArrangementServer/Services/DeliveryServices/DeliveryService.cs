@@ -228,6 +228,11 @@ namespace PackageArrangementServer.Services
             return containerService.Get(size);
         }
 
+        public IContainer CreateContainer(string height, string width, string depth)
+        {
+            return containerService.Create(height, width, depth);
+        }
+
         public List<Package> GetAllPackages(string deliveryId, string userId)
         {
             if (!Exists(deliveryId, userId)) return null;
@@ -252,26 +257,24 @@ namespace PackageArrangementServer.Services
             return packageService.Count(deliveryId);
         }
 
-        public Package CreatePackage(string deliveryId, string userId, string type = null, string amount = null, string width = null,
-            string height = null, string depth = null, string weight = null, string cost = null, string address = null)
+        public Package CreatePackage(string deliveryId, string userId, string amount = null, string width = null,
+            string height = null, string depth = null, string address = null)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return null;
 
-            Package package = packageService.Create(deliveryId, type, amount, width, height, depth, weight, cost, address);
+            Package package = packageService.Create(deliveryId, amount, width, height, depth, address);
             deliveryList.AddPackage(delivery, package);
             return package;
         }
 
-        public Package EditPackage(string deliveryId, string userId, string packageId, string type = null,
-            string amount = null, string width = null, string height = null, string depth = null, string weight = null,
-            string cost = null, string address = null)
+        public Package EditPackage(string deliveryId, string userId, string packageId, string amount = null,
+            string width = null, string height = null, string depth = null, string address = null)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return null;
 
-            Package package = packageService.Edit(packageId, deliveryId, type, amount, width, height, depth,
-                weight, cost, address);
+            Package package = packageService.Edit(packageId, deliveryId, amount, width, height, depth, address);
 
             deliveryList.EditPackage(delivery, package);
             return package;

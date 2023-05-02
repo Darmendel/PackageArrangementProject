@@ -12,6 +12,15 @@ namespace PackageArrangementServer.Services
         bool Validate(ContainerSize size);
 
         /// <summary>
+        /// Validates that the given size represents an actual container.
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <param name="depth"></param>
+        /// <returns>bool</returns>
+        bool Validate(string height, string width, string depth);
+
+        /// <summary>
         /// Returns the type of the container - small, medium or large.
         /// </summary>
         /// <param name="size"></param>
@@ -38,5 +47,14 @@ namespace PackageArrangementServer.Services
         /// <param name="size"></param>
         /// <returns>IContainer</returns>
         IContainer Get(ContainerSize size);
+
+        /// <summary>
+        /// Creates a new container.
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <param name="depth"></param>
+        /// <returns>IContainer</returns>
+        public IContainer Create(string height, string width, string depth);
     }
 }

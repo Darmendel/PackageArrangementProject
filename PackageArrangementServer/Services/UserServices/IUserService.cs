@@ -195,10 +195,19 @@ namespace PackageArrangementServer.Services
         public int DeleteDelivery(string userId, string deliveryId);
 
         /// <summary>
-        /// Given a size of the container, return the selected container.
+        /// Given a size of the container, returns the selected container.
         /// </summary>
         /// <param name="size">IContainer</param>
         public IContainer GetContainer(ContainerSize size);
+
+        /// <summary>
+        /// Given dimentions of a container, returns a new container.
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <param name="depth"></param>
+        /// <returns>IContainer</returns>
+        public IContainer CreateContainer(string height, string width, string depth);
 
         /// <summary>
         /// Returns a list of all packages in a user's delivery.
@@ -223,17 +232,14 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
-        /// <param name="type"></param>
         /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="weight"></param>
-        /// <param name="cost"></param>
         /// <param name="address"></param>
         /// <returns>int</returns>
-        public int CreatePackage(string userId, string deliveryId, string type = null, string amount = null, string width = null,
-            string height = null, string depth = null, string weight = null, string cost = null, string address = null);
+        public int CreatePackage(string userId, string deliveryId, string amount = null, string width = null,
+            string height = null, string depth = null, string address = null);
 
         /// <summary>
         /// Updates a package in a user's delivery.
@@ -242,18 +248,14 @@ namespace PackageArrangementServer.Services
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <param name="packageId"></param>
-        /// <param name="type"></param>
         /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="weight"></param>
-        /// <param name="cost"></param>
         /// <param name="address"></param>
         /// <returns>int</returns>
-        public int EditPackage(string userId, string deliveryId, string packageId, string type = null,
-            string amount = null, string width = null, string height = null, string depth = null, string weight = null,
-            string cost = null, string address = null);
+        public int EditPackage(string userId, string deliveryId, string packageId, string amount = null,
+            string width = null, string height = null, string depth = null, string address = null);
 
         /// <summary>
         /// Deletes a package from a user's delivery.

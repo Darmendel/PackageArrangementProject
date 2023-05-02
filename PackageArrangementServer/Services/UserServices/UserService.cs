@@ -183,6 +183,11 @@ namespace PackageArrangementServer.Services
             return deliveryService.GetContainer(size);
         }
 
+        public IContainer CreateContainer(string height, string width, string depth)
+        {
+            return deliveryService.CreateContainer(height, width, depth);
+        }
+
         public List<Package> GetAllPackages(string userId, string deliveryId)
         {
             if (!Exists(userId)) return null;
@@ -195,27 +200,23 @@ namespace PackageArrangementServer.Services
             return deliveryService.GetPackage(deliveryId, userId, packageId);
         }
 
-        public int CreatePackage(string userId, string deliveryId, string type = null, string amount = null,
-            string width = null, string height = null, string depth = null, string weight = null,
-            string cost = null, string address = null)
+        public int CreatePackage(string userId, string deliveryId, string amount = null, string width = null,
+            string height = null, string depth = null, string address = null)
         {
             if (!Exists(userId)) return 0;
 
-            Package package = deliveryService.CreatePackage(deliveryId, userId, type, amount, width, height,
-                depth, weight, cost, address);
+            Package package = deliveryService.CreatePackage(deliveryId, userId, amount, width, height, depth, address);
 
             if (package == null) return 0;
             return 1;
         }
 
-        public int EditPackage(string userId, string deliveryId, string packageId, string type = null,
-            string amount = null, string width = null, string height = null, string depth = null, string weight = null,
-            string cost = null, string address = null)
+        public int EditPackage(string userId, string deliveryId, string packageId, string amount = null,
+            string width = null, string height = null, string depth = null, string address = null)
         {
             if (!Exists(userId)) return 0;
 
-            Package package = deliveryService.EditPackage(deliveryId, userId, packageId, type, amount, width, height,
-                depth, weight, cost, address);
+            Package package = deliveryService.EditPackage(deliveryId, userId, packageId, amount, width, height, depth, address);
 
             if (package == null) return 0;
             return 1;

@@ -5,11 +5,13 @@ namespace PackageArrangementServer.Services
     public class UserService : IUserService
     {
         private IDeliveryService deliveryService;
+        private IRabbitMqProducerService producerService;
         private static UserList userList;
 
-        public UserService(IDeliveryService ds)
+        public UserService(IDeliveryService ds, IRabbitMqProducerService ps)
         {
             this.deliveryService = ds;
+            this.producerService = ps;
             //userList = new UserList();
             userList = StaticData.GetUsers();
         }
@@ -110,6 +112,12 @@ namespace PackageArrangementServer.Services
             Delivery delivery = deliveryService.Create(userId, deliveryDate, packages, container);
             if (delivery == null) return 0;
 
+            List<Package> packageList = deliveryService.GetPackageList(delivery.Id, userId, packages);
+            if (packageList == null) return 0;
+
+            int res = producerService.Send(packageList, container, null); // change null to name of queue
+            if (res == 0) return 0;
+
             //return Update(userId, delivery, "add");
             userList.AddDelivery(user, delivery);
             return 1;
@@ -133,6 +141,13 @@ namespace PackageArrangementServer.Services
 
             Delivery delivery = deliveryService.Update(userId, deliveryId, packages);
             if (delivery == null) return 0;
+
+            IContainer container = deliveryService.GetContainer(deliveryId, userId);
+            if (container == null) return 0;
+
+            int res = producerService.Send(packages, container, null); // change null to name of queue
+            if (res == 0) return 0;
+
             return 1;
         }
 
@@ -151,6 +166,13 @@ namespace PackageArrangementServer.Services
 
             Delivery delivery = deliveryService.Update(userId, deliveryId, container);
             if (delivery == null) return 0;
+
+            List<Package> packages = deliveryService.GetAllPackages(deliveryId, userId);
+            if (packages == null) return 0;
+
+            int res = producerService.Send(packages, container, null); // change null to name of queue
+            if (res == 0) return 0;
+
             return 1;
         }
 

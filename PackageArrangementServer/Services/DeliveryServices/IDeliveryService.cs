@@ -133,6 +133,14 @@ namespace PackageArrangementServer.Services
         public IContainer GetContainer(ContainerSize size);
 
         /// <summary>
+        /// Returns the container that the user have selected.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <returns>IContainer</returns>
+        public IContainer GetContainer(string deliveryId, string userId);
+
+        /// <summary>
         /// Given dimentions of a container, returns a new container.
         /// </summary>
         /// <param name="height"></param>
@@ -146,8 +154,10 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
-        /// <returns></returns>
+        /// <returns>List<Package></returns>
         public List<Package> GetAllPackages(string deliveryId, string userId);
+
+        public List<Package> GetPackageList(string deliveryId, string userId, List<RequestCreationOfNewPackageInNewDelivery> packages);
 
         /// <summary>
         /// Checks if a certain package exists in a delivery.

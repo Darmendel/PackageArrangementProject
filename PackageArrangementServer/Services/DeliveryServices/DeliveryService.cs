@@ -81,24 +81,6 @@ namespace PackageArrangementServer.Services
             return packageService.ConvertToPackage(request);
         }*/
 
-        private Package ConvertToPackage(string deliveryId, RequestCreationOfNewPackageInNewDelivery request)
-        {
-            return packageService.ConvertToPackage(deliveryId, request);
-        }
-
-        private List<Package> GetPackageList(string deliveryId, List<RequestCreationOfNewPackageInNewDelivery> packages)
-        {
-            if (packages == null) return null;
-            List<Package> packageList = new List<Package>();
-
-            foreach (RequestCreationOfNewPackageInNewDelivery package in packages)
-            {
-                Package p = ConvertToPackage(deliveryId, package);
-                if (p != null) packageList.Add(p);
-            }
-            return packageList;
-        }
-
         private string CreateDeliveryId(string userId)
         {
             if (string.IsNullOrEmpty(userId)) return null;
@@ -116,7 +98,7 @@ namespace PackageArrangementServer.Services
             string deliveryId = CreateDeliveryId(userId);
             if (deliveryId == null) return null;
 
-            List<Package> packageList = GetPackageList(deliveryId, packages);
+            List<Package> packageList = packageService.GetPackageList(deliveryId, packages);
             if (packageList == null) packageList = new List<Package>();
 
             Delivery delivery = new Delivery(deliveryId, userId, deliveryDate, packageList, container);
@@ -228,6 +210,13 @@ namespace PackageArrangementServer.Services
             return containerService.Get(size);
         }
 
+        public IContainer GetContainer(string deliveryId, string userId)
+        {
+            Delivery delivery = Get(deliveryId, userId);
+            if (delivery == null) return null;
+            return delivery.Container;
+        }
+
         public IContainer CreateContainer(string height, string width, string depth)
         {
             return containerService.Create(height, width, depth);
@@ -237,6 +226,13 @@ namespace PackageArrangementServer.Services
         {
             if (!Exists(deliveryId, userId)) return null;
             return packageService.GetAllPackages(deliveryId);
+        }
+
+        public List<Package> GetPackageList(string deliveryId, string userId,
+            List<RequestCreationOfNewPackageInNewDelivery> packages)
+        {
+            if (!Exists(deliveryId, userId)) return null;
+            return packageService.GetPackageList(deliveryId, packages);
         }
 
         public bool PackageExists(string deliveryId, string userId, string packageId)

@@ -1,14 +1,14 @@
 a {
     font-size: 16px;
     font-weight: 300;
-    color: #fff;
+    color: #0a1930;
     text-decoration: none;
     margin-right: 1rem;
     transition: all 0.3s;
   }
   a:hover,
   #nav-links-mobile a:hover {
-    color: orangered;
+    color: white;
   }
   a.btn {
     border-radius: 5px;

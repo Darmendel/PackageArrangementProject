@@ -1,147 +1,205 @@
-import { useState } from 'react'
-import './Uploading.css'
-import Navbar from '../navbar/Navbar';
+// test
 
+import { useState } from 'react';
+import './Uploading.css';
+import Navbar from '../navbar/Navbar';
+import { Link } from "react-router-dom";
 import Papa from "papaparse";
 
 // Allowed extensions for input file
 const allowedExtensions = ["csv"];
 
 const Uploading = () => {
-  // const [file, setFile] = useState();
-  // const [array, setArray] = useState([]);
+  const [csvData, setCsvData] = useState([]);
+  const [editableRowIndex, setEditableRowIndex] = useState(-1);
+  const [newPackage, setNewPackage] = useState({
+    UnpackOrder: '',
+    Height: '',
+    Width: '',
+    Length: ''
+  });
 
-  // const fileReader = new FileReader();
-
-  // const handleOnChange = (e) => {
-  //   setFile(e.target.files[0]);
-  // };
-
-  // const csvFileToArray = string => {
-  //   const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
-  //   const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
-
-  //   const array = csvRows.map(i => {
-  //     const values = i.split(",");
-  //     const obj = csvHeader.reduce((object, header, index) => {
-  //       object[header] = values[index];
-  //       return object;
-  //     }, {});
-  //     return obj;
-  //   });
-
-  //   setArray(array);
-  // };
-
-  // const handleOnSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   if (file) {
-  //     fileReader.onload = function (event) {
-  //       const text = event.target.result;
-  //       csvFileToArray(text);
-  //     };
-
-  //     fileReader.readAsText(file);
-  //   }
-  // };
-
-  // const headerKeys = Object.keys(Object.assign({}, ...array));
-
-  // This state will store the parsed data
-  const [data, setData] = useState([]);
-
-  // It state will contain the error when file is not used
-  const [error, setError] = useState("");
-   
-  // It will store the file uploaded by the user
-  const [file, setFile] = useState("");
-
-  // This function will be called when the file input changes
-  const handleFileChange = (e) => {
-    setError("");
-      
-    // Check if user has entered the file
-    if (e.target.files.length) {
-      const inputFile = e.target.files[0];
-
-      // Set the state
-      setFile(inputFile);
-    }
-  };
-
-  const handleParse = () => {
-        
-    // If user clicks the parse button without a file we show a error
-    if (!file) return setError("Please upload a file first.");
-
-    // Initialize a reader which allows user to read any file or blob.
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
     const reader = new FileReader();
-      
-    // Event listener on reader when the file loads, we parse it and set the data.
-    reader.onload = async ({ target }) => {
-      const csv = Papa.parse(target.result, { header: true });
-      const parsedData = csv?.data;
-      const columns = Object.keys(parsedData[0]);
-      setData(columns);
+    reader.onload = (e) => {
+      const parsedData = parseCSV(e.target.result);
+      setCsvData(parsedData);
     };
     reader.readAsText(file);
-  };
+  }
+
+  function parseCSV(csvData) {
+    const parsedData = Papa.parse(csvData, { header: true }).data;
+    return parsedData;
+  }
+
+  function handleEditClick(rowIndex) {
+    setEditableRowIndex(rowIndex);
+  }
+
+  function handleSaveClick(rowIndex) {
+    setEditableRowIndex(-1);
+  }
+
+  function handleCancelClick() {
+    setEditableRowIndex(-1);
+  }
+
+  function handleDeleteClick(rowIndex) {
+    const newData = [...csvData];
+    newData.splice(rowIndex, 1);
+    setCsvData(newData);
+  }
 
   return (
-    <div className='uploading' style={{ textAlign: "center" }}>
+    <div className='uploading'>
       <div className='nav-upload'><Navbar /></div>
-      <h1 htmlFor="csvInput" style={{ display: "block" }}>
-        Enter CSV File
-      </h1>
-        
-        <input
-          onChange={handleFileChange}
-          id="csvInput"
-          name="file"
-          type="File"
-          accept=".csv"
-        />
-        <button className='continue-upload' onClick={handleParse}>Continue</button>
-          
-      <div style={{ marginTop: "3rem" }}>
-        {error ? error : data.map((col,
-          idx) => <div key={idx}>{col}</div>)}
+      <div className='table-wrapper'>
+        {csvData.length === 0 &&
+          <h1 htmlFor="csvInput" style={{ display: "block" }}>
+            Enter CSV File: 
+            <input className='input-csv' type="file" onChange={handleFileUpload} />
+          </h1>
+        }
+        {csvData.length > 0 &&
+          <div>
+            
+            <h2>Container size (CM):</h2>
+            <form>
+              <input className='input-container'
+                type='number'
+                name='height'
+                required='required'
+                placeholder='Enter height'
+              />
+              <input className='input-container'
+                type='number'
+                name='width'
+                required='required'
+                placeholder='Enter width'
+              />
+              <input className='input-container'
+                type='number'
+                name='length'
+                required='required'
+                placeholder='Enter length'
+              />
+              <button className='set-button' >Set</button>
+            </form>
+
+            <h2>Adding a new package:</h2>
+            <form>
+                <input className='input-add-package'
+                type='number'
+                name='unpackOrder'
+                required='required'
+                placeholder='Enter unpackOrder'
+                value={newPackage.unpackOrder}
+                onChange={(e) =>
+                  setNewPackage({ ...newPackage, UnpackOrder: e.target.value })
+                }
+              />
+              <input className='input-add-package'
+                type='number'
+                name='height'
+                required='required'
+                placeholder='Enter height'
+                value={newPackage.Height}
+                onChange={(e) =>
+                  setNewPackage({ ...newPackage, Height: e.target.value })
+                }
+              />
+              <input className='input-add-package'
+                type='number'
+                name='width'
+                required='required'
+                placeholder='Enter width'
+                value={newPackage.Width}
+                onChange={(e) =>
+                  setNewPackage({ ...newPackage, Width: e.target.value })
+                }
+              />
+              <input className='input-add-package'
+                type='number'
+                name='length'
+                required='required'
+                placeholder='Enter length'
+                value={newPackage.Length}
+                onChange={(e) =>
+                  setNewPackage({ ...newPackage, Length: e.target.value })
+                }
+              />
+              <button className='add-button' onClick={(e) => {
+                e.preventDefault();
+                setCsvData([newPackage, ...csvData]);
+                setNewPackage({
+                  UnpackOrder: '',
+                  Height: '',
+                  Width: '',
+                  Length: ''
+                });
+              }}>Add</button>
+            </form>
+            <table>
+            <thead>
+                <tr>
+                  {Object.keys(csvData[0]).map((header, index) => (
+                    <th key={index}>{header}</th>
+                  ))}
+                  <th className="actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {csvData
+                  .filter((row) => Object.values(row).some((value) => value !== ''))
+                  .map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {Object.entries(row).map(([field, value], cellIndex) => (
+                        <td key={cellIndex}>
+                          {editableRowIndex === rowIndex ? (
+                            <input
+                              className="input-body"
+                              type="text"
+                              defaultValue={value}
+                              onBlur={(e) => {
+                                const newData = [...csvData];
+                                newData[rowIndex][field] = e.target.value;
+                                setCsvData(newData);
+                              }}
+                              style={{ color: "black" }}
+                            />
+                          ) : (
+                            value
+                          )}
+                        </td>
+                      ))}
+                      <td className="actions">
+                        {editableRowIndex === rowIndex ? (
+                          <div>
+                            <button onClick={() => handleSaveClick(rowIndex)}>Save</button>
+                            <button onClick={handleCancelClick}>Cancel</button>
+                          </div>
+                        ) : (
+                          <div>
+                            <button onClick={() => handleEditClick(rowIndex)}>Edit</button>
+                            <button
+                              onClick={() => handleDeleteClick(rowIndex)}
+                              disabled={Object.values(row).every((value) => value === '')}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}            
+              </tbody>
+            </table>
+          </div>
+        }
       </div>
     </div>
-  //   <div className='uploading' style={{ textAlign: "center" }}>
-  //     <div className='nav-upload'><Navbar /></div>
-  //     <h1>Upload CSV File:</h1>
-  //     <form>
-  //       <input
-  //       type={"file"}
-  //       id={"csvFileInput"}
-  //       accept={".csv"}
-  //       onChange={handleOnChange}
-  //       />
-  //       <button className='continue-upload' type='submit'>Continue</button>
-  //     </form>
-  //     <br />
-  //     <table>
-  //       <thead>
-  //       <tr key={"header"}>
-  //           {headerKeys.map((key) => (
-  //           <th>{key}</th>
-  //           ))}
-  //       </tr>
-  //       </thead>
-
-  //       <tbody>
-  //       {array.map((item) => (
-  //           <tr key={item.id}>
-  //           {Object.values(item).map((val) => (
-  //               <td>{val}</td>
-  //           ))}
-  //           </tr>
-  //       ))}
-  //       </tbody>
-  //     </table>
-  //   </div>
   );
 };
 

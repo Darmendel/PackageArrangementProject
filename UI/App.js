@@ -4,6 +4,7 @@ import GetStarted from './components/getStarted/GetStarted';
 import { Link, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignUp from './components/signUp/SignUp';
 import Uploading from './components/uploading/Uploading';
+
 import React, { useState } from 'react';
 
 

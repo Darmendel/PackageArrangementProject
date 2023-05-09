@@ -105,6 +105,19 @@ namespace PackageArrangementServer.Services
                 request.Height, request.Depth, request.Address);
         }
 
+        public List<Package> GetPackageList(string deliveryId, List<RequestCreationOfNewPackageInNewDelivery> packages)
+        {
+            if (packages == null) return null;
+            List<Package> packageList = new List<Package>();
+
+            foreach (RequestCreationOfNewPackageInNewDelivery package in packages)
+            {
+                Package p = ConvertToPackage(deliveryId, package);
+                if (p != null) packageList.Add(p);
+            }
+            return packageList;
+        }
+
         public Package Create(string deliveryId, string amount = null, string width = null, string height = null,
             string depth = null, string address = null)
         {

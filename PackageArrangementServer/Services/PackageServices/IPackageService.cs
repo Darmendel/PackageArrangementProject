@@ -57,6 +57,8 @@ namespace PackageArrangementServer.Services
         /// <returns>Package</returns>
         public Package ConvertToPackage(string deliveryId, RequestEditPackage request);
 
+        public List<Package> GetPackageList(string deliveryId, List<RequestCreationOfNewPackageInNewDelivery> packages);
+
         /// <summary>
         /// Given a delivery id, adds a new package.
         /// </summary>

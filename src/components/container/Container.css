@@ -1,0 +1,33 @@
+input[type="radio"] {
+    display: none;
+    
+}
+  
+label img {
+    cursor: pointer;
+
+}
+
+input[type="radio"]:checked + label img {
+    border: 2px solid blue;
+}
+
+label #radio-img-small {
+    width: 70px;
+    height: 70px;
+}
+
+label #radio-img-medium {
+    width: 100px;
+    height: 100px;
+}
+
+label #radio-img-large {
+    width: 130px;
+    height: 130px;
+}
+
+/* label #radio-custom {
+    size:10px;
+}    */
+  

@@ -106,6 +106,10 @@ namespace PackageArrangementServer.Services
         public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
             IContainer container = null)
         {
+            if (container == null)
+            {
+                container = new BigContainer();
+            }
             User user = Get(userId);
             if (user == null) return 0;
 
@@ -115,7 +119,7 @@ namespace PackageArrangementServer.Services
             List<Package> packageList = deliveryService.GetPackageList(delivery.Id, userId, packages);
             if (packageList == null) return 0;
 
-            int res = producerService.Send(packageList, container, null); // change null to name of queue
+            int res = producerService.Send(packageList, container, "order_report"); // change null to name of queue
             if (res == 0) return 0;
 
             //return Update(userId, delivery, "add");

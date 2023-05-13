@@ -18,9 +18,9 @@ namespace PackageArrangementServer.Models
         {
             ConnectionFactory factory = new ConnectionFactory();
 
-            factory.UserName = "";
-            factory.Password = "";
-            factory.Port = 7165;
+            factory.UserName = "user";
+            factory.Password = "pass";
+            factory.Port = 5672;
             factory.HostName = LocalHost;
             factory.VirtualHost = "/";
 

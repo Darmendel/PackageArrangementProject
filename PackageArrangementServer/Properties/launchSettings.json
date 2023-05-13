@@ -11,12 +11,12 @@
   "profiles": {
     "PackageArrangementServer": {
       "commandName": "Project",
-      "launchBrowser": true,  
+      "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:7165;http://localhost:5165",
+      "applicationUrl": "https://localhost:7165",
       "dotnetRunMessages": true
     },
     "IIS Express": {
@@ -29,3 +29,5 @@
     }
   }
 }
+
+// http://localhost:5165

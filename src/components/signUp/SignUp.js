@@ -21,14 +21,14 @@ const SignUp = () => {
           },
           body: JSON.stringify(newUser)
         });
-        const data = await res.json();
+        // const data = await res.json();
 
-        if (!res.ok) {
-          console.log(data.description);
-          return;
-        }
+        // if (!res.ok) {
+        //   console.log(data.description);
+        //   return;
+        // }
 
-        console.log(data);
+        // console.log(data);
     } catch (error) {
         console.log(error);
       }

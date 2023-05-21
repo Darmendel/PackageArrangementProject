@@ -17,12 +17,10 @@
 }
 
 .uploading h2 {
-    /* font-size: 2rem; */
     color: white;
     font-weight: 300;
     margin-left: 1rem;
     padding-top: 5rem;
-    /* position: absolute; */
 }
 
 .input-csv {
@@ -35,9 +33,7 @@
     margin-left: 1rem;
     cursor: pointer;
     margin-top: 5rem;
-    /* position: relative; */
     top: 40px;
-    /* display: inline-block; */
 }
 
 .input-add-package {
@@ -49,10 +45,7 @@
     font-size: 1.6rem;
     margin-left: 1rem;
     cursor: pointer;
-    /* margin-top: 5rem; */
-    /* position: relative; */
     top: 40px;
-    /* display: inline-block; */
 }
 
 .add-button {
@@ -61,7 +54,6 @@
     width: auto;
     background-color: #0a1930;
     border-color: white;
-    /* display: inline; */
 }
 
 .set-button {
@@ -124,7 +116,7 @@ button:hover {
 }
 
 th.actions {
-    width: 120px; /* adjust as needed */
+    width: 120px; 
 }
 
 td.actions div {
@@ -139,19 +131,14 @@ td.actions div {
     background-color: orangered;
     border-radius: 5px 5px 5px 5px;
     font-weight: 500;
-    /* position: absolute;
-    right: 0; */
-    /* bottom: 70px; */
     margin-left: 300px;
-  }
+}
   
-  .continue-lnk:hover {
+.continue-lnk:hover {
     border: solid;
     color: white;
-  }
+}
 
-  /* .add-line {
-    display:inline-block;
-  } */
+  
 
 

@@ -1,16 +1,27 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./Container.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Navbar from '../navbar/Navbar';
+import { sendDataToServer } from '../Api';
 
 const Container = () => {
+  const location = useLocation();
   const [selectedContainer, setSelectedContainer] = useState("");
   const [customContainerValues, setCustomContainerValues] = useState({
     height: "",
     width: "",
     length: ""
   });
-  
+  const [csvData, setCsvData] = useState([]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const csvDataParam = searchParams.get("csvData");
+    if (csvDataParam) {
+      const parsedCsvData = JSON.parse(decodeURIComponent(csvDataParam));
+      setCsvData(parsedCsvData);
+    }
+  }, [location.search]);
 
   const handleContainerClick = (containerId) => {
     setSelectedContainer(containerId);
@@ -22,8 +33,6 @@ const Container = () => {
       ...prevValues,
       [name]: value
     }));
-
-    
   };
 
   const isContainerSelected = (containerId) => {
@@ -128,13 +137,47 @@ const Container = () => {
       isClickable = selectedContainer !== "";
     }
 
+    const handleContinueClick = () => {
+      let containerData = {};
+
+      if (selectedContainer === 'custom-container') {
+        containerData = customContainerValues;
+      } else if (selectedContainer === 'small-container') {
+        containerData = {
+          height: 300,
+          width: 400,
+          length: 800
+        };
+      } else if (selectedContainer === 'medium-container') {
+        containerData = {
+          height: 600,
+          width: 800,
+          length: 1600
+        };
+      } else if (selectedContainer === 'large-container') {
+        containerData = {
+          height: 1200,
+          width: 1600,
+          length: 3200
+        };
+      }
+
+      // Call the sendDataToServer function and pass the necessary data
+      console.log(containerData);
+      sendDataToServer(csvData, containerData);
+    };
+
     if (isClickable) {
       return (
         <div>
           <Link 
             className={"continue-container-clickable"}
             disabled={false} 
-            to="/editing">Continue</Link>
+            to="/editing"
+            onClick={handleContinueClick} // Call the function on button click
+          >
+            Continue
+          </Link>
         </div>
       );
     } else {
@@ -143,14 +186,16 @@ const Container = () => {
           <Link 
             className={"continue-container"}
             disabled={true} 
-            to="/container">Continue</Link>
+            to="/container"
+          >
+            Continue
+          </Link>
         </div>
       );
     }
-
-    
   };
-    
+
+
 
   return (
     <div>

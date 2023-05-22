@@ -4,46 +4,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 
 const SignUp = () => {
-  
-  const newUser = {
-      firstName: 'Moria',
-      lastName: 'Yefet',
-      mail: 'moria.yefet@gmail.com',
-      password: '123456'
-  };
 
-    const clickHandler = async () => {
-      try {
-        const res = await fetch('https://localhost:7165/api/User', {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(newUser)
-        });
-        // const data = await res.json();
-
-        // if (!res.ok) {
-        //   console.log(data.description);
-        //   return;
-        // }
-
-        // console.log(data);
-    } catch (error) {
-        console.log(error);
-      }
-  };
-  
-  useEffect(() => {
-    const btnEl = document.querySelector(".btn-submit-user");
-    btnEl.addEventListener('click', clickHandler);
-    return () => {
-      btnEl.removeEventListener('click', clickHandler);
-    };
-  }, [clickHandler]);
-  
-  
-  
   return (
     <section id="signUp">
       <Navbar />
@@ -63,7 +24,6 @@ const SignUp = () => {
             <input type="password" placeholder="Enter your password..." />
           </div>
           <Link className="sign-lnk" to="/uploading">Sign</Link>
-          <button className="btn-submit-user">Submit User</button>
         </form>
         <div className="bottom-sign">
           <h1>Already have an account?</h1>

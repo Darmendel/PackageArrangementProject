@@ -4,8 +4,6 @@ import Navbar from '../navbar/Navbar';
 import { Link } from "react-router-dom";
 import Papa from "papaparse";
 
-// Allowed extensions for input file
-const allowedExtensions = ["csv"];
 
 const Uploading = () => {
   const [csvData, setCsvData] = useState([]);
@@ -62,9 +60,6 @@ const Uploading = () => {
         }
         {csvData.length > 0 &&
           <div>
-            
-            
-
             <h2>Adding a new package:</h2>
             <form className='add-line'>
                 <input className='input-add-package'
@@ -117,11 +112,18 @@ const Uploading = () => {
                   Length: ''
                 });
               }}>Add</button>
-              <Link className="continue-lnk" to="/container">Continue</Link>
+              <Link 
+                className="continue-lnk" 
+                // pass the csvData as a query parameter in the URL when navigating to 
+                // the Container page
+                to={{ pathname: "/container", 
+                search: `?csvData=${encodeURIComponent(JSON.stringify(csvData))}` }}>
+                Continue
+              </Link>
             </form>
             
             <table>
-            <thead>
+              <thead>
                 <tr>
                   {Object.keys(csvData[0]).map((header, index) => (
                     <th key={index}>{header}</th>

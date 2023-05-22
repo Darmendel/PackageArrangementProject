@@ -1,12 +1,11 @@
 import './App.css';
 import Home from './components/home/Home';
 import GetStarted from './components/getStarted/GetStarted';
-import { Link, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignUp from './components/signUp/SignUp';
 import Uploading from './components/uploading/Uploading';
 import Container from './components/container/Container';
-
-import React, { useState } from 'react';
+import React from 'react';
 
 
 function App() {

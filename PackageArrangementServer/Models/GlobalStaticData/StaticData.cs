@@ -9,8 +9,8 @@
         private static UserList SetUsers()
         {
             UserList userList = new UserList();
-            userList.Add(new User { Id = "1", Name = "A", Email = "u1@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
-            userList.Add(new User { Id = "2", Name = "B", Email = "u2@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
+            userList.Add(new User ("1", "A", "u1@gmail.com", "12345", new List<Delivery>() ));
+            userList.Add(new User ("2", "B", "u2@gmail.com", "12345", new List<Delivery>() ));
             //userList.Add(new User { Id = "3", Name = "C", Email = "u3@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
             return userList;
         }

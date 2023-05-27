@@ -1,4 +1,6 @@
 ﻿using PackageArrangementServer.Models;
+using Firebase.Database;
+using Firebase.Database.Query;
 
 namespace PackageArrangementServer.Services
 {
@@ -6,14 +8,63 @@ namespace PackageArrangementServer.Services
     {
         private IDeliveryService deliveryService;
         private IRabbitMqProducerService producerService;
-        private static UserList userList;
+        private static FirebaseClient client = new FirebaseClient("https://packagearrangementprojectbiu-default-rtdb.europe-west1.firebasedatabase.app/");
+        private static UserList userList = FetchFromDB().Result;
 
         public UserService(IDeliveryService ds, IRabbitMqProducerService ps)
         {
             this.deliveryService = ds;
             this.producerService = ps;
             //userList = new UserList();
-            userList = StaticData.GetUsers();
+            //userList = StaticData.GetUsers();
+        }
+        
+        private static async Task<UserList> FetchFromDB()
+        {
+            var users = await client.Child("Users/").OnceAsync<RegisterRequest>();
+            List<User> usersList = new List<User>();
+
+            foreach (var us in users) 
+                usersList.Add(new User(us.Key, us.Object));
+         
+            return new UserList(usersList);
+
+        }
+
+        private async Task<string> AddToDB(RegisterRequest request)
+        {
+            try { return (await client.Child("Users").PostAsync(request)).Key; }
+            catch (Exception ex) { return null;}
+        }
+
+
+        /// <summary>
+        /// Adds new user to the db.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>bool</returns>
+        public bool SignUpUser(RegisterRequest request)
+        {
+            if (request == null) return false;
+            if (Exists(request.Email)) return false;
+            string key = AddToDB(request).Result;
+            if (key != null) userList.Add(new User(key, request));
+            else return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Login.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>bool</returns>
+        public bool Login(LoginRequest request)
+        {
+            if (request == null) return false;
+            User user = Get(request.Email);
+            if (user != null) return user.Password.Equals(request.Password);
+            return false;
         }
 
         public List<User> GetAllUsers()
@@ -22,27 +73,27 @@ namespace PackageArrangementServer.Services
             return UserService.userList.Users; // Returns empty lists as well
         }
 
-        public bool Exists(string id)
+        public bool Exists(string email)
         {
-            if (string.IsNullOrEmpty(id)) return false;
+            if (string.IsNullOrEmpty(email)) return false;
 
             foreach (User user in UserService.userList.Users)
             {
-                if (user.Id == id) return true;
+                if (user.Email == email) return true;
             }
             return false;
         }
 
-        public User Get(string id)
+        public User Get(string email)
         {
-            if (!Exists(id)) return null;
-            return GetAllUsers().Find(x => x.Id == id);
+            if (!Exists(email)) return null;
+            return GetAllUsers().Find(x => x.Email == email);
         }
 
         public User Create(string id, string name, string email, string password)
         {
             if (Exists(id)) return null;
-            User user = new User { Id = id, Name = name, Email = email, Password = password, Deliveries = new List<Delivery>() };
+            User user = new (id, name, email, password, new List<Delivery>() );
             userList.Add(user);
             return user;
         }
@@ -52,8 +103,8 @@ namespace PackageArrangementServer.Services
             if (Exists(id)) return null;
             User user = null;
 
-            if (deliveries == null) user = new User {Id = id, Name = name, Email = email, Password = password, Deliveries = new List<Delivery>() };
-            else user = new User { Id = id, Name = name, Email = email, Password = password, Deliveries = deliveries };
+            if (deliveries == null) user = new User (id, name, email, password, new List<Delivery>() );
+            else user = new User (id, name, email, password, deliveries );
 
             userList.Add(user);
             return user;
@@ -119,7 +170,7 @@ namespace PackageArrangementServer.Services
             List<Package> packageList = deliveryService.GetPackageList(delivery.Id, userId, packages);
             if (packageList == null) return 0;
 
-            int res = producerService.Send(packageList, container, "order_report"); // change null to name of queue
+            int res = producerService.Send(delivery.Id, packageList, container, "order_report"); // change null to name of queue
             if (res == 0) return 0;
 
             //return Update(userId, delivery, "add");
@@ -149,7 +200,7 @@ namespace PackageArrangementServer.Services
             IContainer container = deliveryService.GetContainer(deliveryId, userId);
             if (container == null) return 0;
 
-            int res = producerService.Send(packages, container, null); // change null to name of queue
+            int res = producerService.Send(delivery.Id, packages, container, null); // change null to name of queue
             if (res == 0) return 0;
 
             return 1;
@@ -174,7 +225,7 @@ namespace PackageArrangementServer.Services
             List<Package> packages = deliveryService.GetAllPackages(deliveryId, userId);
             if (packages == null) return 0;
 
-            int res = producerService.Send(packages, container, null); // change null to name of queue
+            int res = producerService.Send(delivery.Id, packages, container, null); // change null to name of queue
             if (res == 0) return 0;
 
             return 1;

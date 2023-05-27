@@ -9,7 +9,7 @@ namespace PackageArrangementServer.Services
 
         public RabbitMqProducerService() { producer = new RabbitMqProducer(); }
 
-        public int Send(List<Package> packages, IContainer container, string friendqueue)
+        public int Send(string deliveryId, List<Package> packages, IContainer container, string friendqueue)
         {
             if (packages == null || container == null || friendqueue == null) return 0;
 

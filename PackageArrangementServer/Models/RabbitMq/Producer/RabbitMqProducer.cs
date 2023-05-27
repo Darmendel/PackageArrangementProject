@@ -11,7 +11,7 @@ namespace PackageArrangementServer.Models
 
         public RabbitMqProducer()
         {
-            _connection = ConnectToRabbitMq();
+            //_connection = ConnectToRabbitMq();
         }
 
         private IConnection ConnectToRabbitMq()

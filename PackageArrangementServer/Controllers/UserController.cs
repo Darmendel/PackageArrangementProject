@@ -19,6 +19,36 @@ namespace PackageArrangementServer.Controllers
         }
 
         /// <summary>
+        /// Sign In.
+        /// </summary>
+        /// <param name="req"></param>
+        [HttpPost("Login")]
+        //[ValidateAntiForgeryToken] 
+        public void Post([FromBody] LoginRequest req)
+        {
+            if (userService.Login(req) == true) Response.StatusCode = 204;
+            else Response.StatusCode = 400;
+            return;
+        }
+
+
+        /// <summary>
+        /// Sign Up.
+        /// </summary>
+        /// <param name="req"></param>
+        [HttpPost("SignUp")]
+        //[ValidateAntiForgeryToken]
+        public void Post([FromBody] RegisterRequest req)
+        {
+            if (userService.SignUpUser(req) == true) Response.StatusCode = 204;
+            else Response.StatusCode = 400;
+            return;
+        }
+
+
+
+
+        /// <summary>
         /// Checks if a user entered a valid id and a valid password.
         /// </summary>
         /// <param name="id"></param>
@@ -192,19 +222,7 @@ namespace PackageArrangementServer.Controllers
             throw new NotImplementedException(); // jwt?
         }*/
 
-        /// <summary>
-        /// Login.
-        /// </summary>
-        /// <param name="req"></param>
-        [HttpPost("{id}/{name}/{password}")]
-        //[ValidateAntiForgeryToken]
-        public void Post([FromBody] RegisterRequest req)
-        {
-            if (userService.Create(req.Id, req.Name, req.Email, req.Password) == null) Response.StatusCode = 204;
-            else Response.StatusCode = 400;
-            return;
-        }
-
+        
         /// <summary>
         /// Creates a new delivery.
         /// </summary>

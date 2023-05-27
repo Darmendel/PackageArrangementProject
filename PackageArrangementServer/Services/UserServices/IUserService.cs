@@ -4,6 +4,21 @@ namespace PackageArrangementServer.Services
 {
     public interface IUserService
     {
+
+        /// <summary>
+        /// Adds new user to the db.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>bool</returns>
+        public bool SignUpUser(RegisterRequest request);
+
+        /// <summary>
+        /// Login.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>bool</returns>
+        public bool Login(LoginRequest request);
+
         /// <summary>
         /// Returns a list of all users.
         /// </summary>

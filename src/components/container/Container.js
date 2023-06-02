@@ -173,7 +173,7 @@ const Container = () => {
           <Link 
             className={"continue-container-clickable"}
             disabled={false} 
-            to="/editing"
+            to="/visualization"
             onClick={handleContinueClick} // Call the function on button click
           >
             Continue

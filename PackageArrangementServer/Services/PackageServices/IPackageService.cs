@@ -63,28 +63,24 @@ namespace PackageArrangementServer.Services
         /// Given a delivery id, adds a new package.
         /// </summary>
         /// <param name="deliveryId"></param>
-        /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="address"></param>
+        /// /// <param name="order"></param>
         /// <returns>Package</returns>
-        public Package Create(string deliveryId, string amount = null, string width = null, string height = null,
-            string depth = null, string address = null);
+        public Package Create(string deliveryId, string width = null, string height = null, string depth = null, string order = null);
 
         /// <summary>
         /// Updates a package.
         /// </summary>
         /// <param name="packageId"></param>
         /// <param name="deliveryId"></param>
-        /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="address"></param>
         /// <returns>Package</returns>
-        public Package Edit(string packageId, string deliveryId, string amount = null, string width = null,
-            string height = null, string depth = null, string address = null);
+        public Package Edit(string packageId, string deliveryId, string width = null,
+            string height = null, string depth = null);
 
         /// <summary>
         /// Updates a package list.

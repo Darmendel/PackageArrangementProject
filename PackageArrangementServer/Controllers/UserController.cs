@@ -24,11 +24,11 @@ namespace PackageArrangementServer.Controllers
         /// <param name="req"></param>
         [HttpPost("Login")]
         //[ValidateAntiForgeryToken] 
-        public void Post([FromBody] LoginRequest req)
+        public string Post([FromBody] LoginRequest req)
         {
-            if (userService.Login(req) == true) Response.StatusCode = 204;
-            else Response.StatusCode = 400;
-            return;
+            string id = userService.Login(req);
+            Response.StatusCode = id != null ?  200 : 401;
+            return id;
         }
 
 
@@ -40,7 +40,7 @@ namespace PackageArrangementServer.Controllers
         //[ValidateAntiForgeryToken]
         public void Post([FromBody] RegisterRequest req)
         {
-            if (userService.SignUpUser(req) == true) Response.StatusCode = 204;
+            if (userService.SignUpUser(req) == true) Response.StatusCode = 201;
             else Response.StatusCode = 400;
             return;
         }
@@ -54,7 +54,7 @@ namespace PackageArrangementServer.Controllers
         /// <param name="id"></param>
         /// <param name="password"></param>
         /// <returns>bool</returns>
-        private bool Validate(string id, string password)
+        /*private bool Validate(string id, string password)
         {
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(password)) return false;
 
@@ -62,7 +62,7 @@ namespace PackageArrangementServer.Controllers
             if (user == null) return false;
 
             return user.Password == password;
-        }
+        }*/
 
         /// <summary>
         /// Returns all users.
@@ -80,7 +80,7 @@ namespace PackageArrangementServer.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>User</returns>
-        [HttpGet("userId")]
+        /*[HttpGet("userId")]
         public User? Get(string userId)
         {
             User user = userService.Get(userId);
@@ -91,7 +91,7 @@ namespace PackageArrangementServer.Controllers
             }
             Response.StatusCode = 200;
             return user;
-        }
+        }*/
 
         /// <summary>
         /// Returns a list of all deliveries.
@@ -227,13 +227,14 @@ namespace PackageArrangementServer.Controllers
         /// Creates a new delivery.
         /// </summary>
         /// <param name="req"></param>
+        /// <returns>string</returns>
         [HttpPost("{userId}/deliveries")]
-        public void Post(string userId, [FromBody] RequestCreationOfNewDelivery req)
+        public string Post(string userId, [FromBody] RequestCreationOfNewDelivery req)
         {
-            if (userService.CreateDelivery(userId, req.DeliveryDate, req.Packages) > 0)
-                Response.StatusCode = 204;
-            else Response.StatusCode = 400;
-            return;
+            string id;
+            id = userService.CreateDelivery(userId, req.DeliveryDate, req.Packages);
+            Response.StatusCode = id != null ? 200 : 404;
+            return id;
         }
 
         /// <summary>
@@ -243,8 +244,8 @@ namespace PackageArrangementServer.Controllers
         [HttpPost("{userId}/deliveries/{deliveryId}/packages")]
         public void Post(string userId, [FromBody] RequestCreationOfNewPackage req)
         {
-            if (userService.CreatePackage(userId, req.DeliveryId, req.Amount, req.Width, req.Height,
-                req.Depth, req.Address) > 0)
+            if (userService.CreatePackage(userId, req.DeliveryId, req.Width, req.Height,
+                req.Depth) > 0)
                 Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;
@@ -351,8 +352,8 @@ namespace PackageArrangementServer.Controllers
         [HttpPut("{userId}/deliveries/{deliveryId}/packages/{packageId}")]
         public void Put(string userId, string deliveryId, string packageId, [FromBody] RequestEditPackage req)
         {
-            if (userService.EditPackage(userId, deliveryId, packageId, req.Amount, req.Width, req.Height,
-                req.Depth, req.Address) > 0)
+            if (userService.EditPackage(userId, deliveryId, packageId, req.Width, req.Height,
+                req.Depth) > 0)
                 Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;

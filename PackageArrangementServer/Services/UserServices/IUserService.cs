@@ -16,8 +16,8 @@ namespace PackageArrangementServer.Services
         /// Login.
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>bool</returns>
-        public bool Login(LoginRequest request);
+        /// <returns>user id key</returns>
+        public string Login(LoginRequest request);
 
         /// <summary>
         /// Returns a list of all users.
@@ -28,16 +28,18 @@ namespace PackageArrangementServer.Services
         /// <summary>
         /// Checks if a user exists.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="val"></param>
+        /// /// <param name="type"></param>
         /// <returns>bool</returns>
-        public bool Exists(string id);
+        public bool Exists(string val, string type);
 
         /// <summary>
         /// Returns a user by id.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="val"></param>
+        /// /// <param name="type"></param>
         /// <returns>User</returns>
-        public User Get(string id);
+        public User Get(string val, string type);
 
         /*/// <summary>
         /// Creates a new user.
@@ -135,8 +137,8 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryDate"></param>
         /// <param name="packages"></param>
         /// <param name="container"></param>
-        /// <returns>int</returns>
-        public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
+        /// <returns>string</returns>
+        public string CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
             IContainer container = null);
 
         /// <summary>
@@ -247,14 +249,12 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
-        /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="address"></param>
         /// <returns>int</returns>
-        public int CreatePackage(string userId, string deliveryId, string amount = null, string width = null,
-            string height = null, string depth = null, string address = null);
+        public int CreatePackage(string userId, string deliveryId, string width = null,
+            string height = null, string depth = null);
 
         /// <summary>
         /// Updates a package in a user's delivery.
@@ -263,14 +263,12 @@ namespace PackageArrangementServer.Services
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <param name="packageId"></param>
-        /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="address"></param>
         /// <returns>int</returns>
-        public int EditPackage(string userId, string deliveryId, string packageId, string amount = null,
-            string width = null, string height = null, string depth = null, string address = null);
+        public int EditPackage(string userId, string deliveryId, string packageId,
+            string width = null, string height = null, string depth = null);
 
         /// <summary>
         /// Deletes a package from a user's delivery.

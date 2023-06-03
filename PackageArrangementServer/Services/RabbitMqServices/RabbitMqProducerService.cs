@@ -1,4 +1,6 @@
-﻿using PackageArrangementServer.Models;
+﻿using Newtonsoft.Json;
+using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.Requests.RequestCreation;
 using System.Text.Json;
 
 namespace PackageArrangementServer.Services
@@ -13,9 +15,13 @@ namespace PackageArrangementServer.Services
         {
             if (packages == null || container == null || friendqueue == null) return 0;
 
-            string message = JsonSerializer.Serialize(packages);
+            DeliveryRequest deliveryRequest = new DeliveryRequest() { Id = deliveryId, Packages = packages, Container = container};
+
+            string message = JsonConvert.SerializeObject(deliveryRequest);
+
+            /*string message = JsonSerializer.Serialize(packages);
             string c = JsonSerializer.Serialize(container);
-            message += "," + c;
+            message += "," + c;*/
 
             // Console.WriteLine(message);
 

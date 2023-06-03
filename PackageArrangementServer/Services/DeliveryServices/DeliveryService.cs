@@ -253,24 +253,24 @@ namespace PackageArrangementServer.Services
             return packageService.Count(deliveryId);
         }
 
-        public Package CreatePackage(string deliveryId, string userId, string amount = null, string width = null,
-            string height = null, string depth = null, string address = null)
+        public Package CreatePackage(string deliveryId, string userId, string width = null,
+            string height = null, string depth = null)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return null;
 
-            Package package = packageService.Create(deliveryId, amount, width, height, depth, address);
+            Package package = packageService.Create(deliveryId, width, height, depth);
             deliveryList.AddPackage(delivery, package);
             return package;
         }
 
-        public Package EditPackage(string deliveryId, string userId, string packageId, string amount = null,
-            string width = null, string height = null, string depth = null, string address = null)
+        public Package EditPackage(string deliveryId, string userId, string packageId, 
+                        string width = null, string height = null, string depth = null)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return null;
 
-            Package package = packageService.Edit(packageId, deliveryId, amount, width, height, depth, address);
+            Package package = packageService.Edit(packageId, deliveryId, width, height, depth);
 
             deliveryList.EditPackage(delivery, package);
             return package;

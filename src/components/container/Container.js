@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import "./Container.css";
 import { Link, useLocation } from "react-router-dom";
 import Navbar from '../navbar/Navbar';
-import { sendDataToServer } from '../Api';
+import { sendDeliveryDataToServer } from '../Api';
 
 const Container = () => {
   const location = useLocation();
@@ -162,9 +162,9 @@ const Container = () => {
         };
       }
 
-      // Call the sendDataToServer function and pass the necessary data
-      console.log(containerData);
-      sendDataToServer(csvData, containerData);
+      // Call the sendDeliveryDataToServer function and pass the necessary data
+      //console.log(containerData);
+      sendDeliveryDataToServer(containerData, csvData);
     };
 
     if (isClickable) {

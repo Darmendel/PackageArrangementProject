@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.Requests.RequestCreation;
 using PackageArrangementServer.Services;
 
 namespace PackageArrangementServer.Controllers
@@ -232,7 +233,21 @@ namespace PackageArrangementServer.Controllers
         public string Post(string userId, [FromBody] RequestCreationOfNewDelivery req)
         {
             string id;
-            id = userService.CreateDelivery(userId, req.DeliveryDate, req.Packages);
+            id = userService.CreateDelivery(userId, req.DeliveryDate, req.Packages, req.containerSize);
+            Response.StatusCode = id != null ? 200 : 404;
+            return id;
+        }
+
+        /// <summary>
+        /// Creates a new delivery.
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns>string</returns>
+        [HttpPost("{userId}/deliveries/custompackage")]
+        public string Post(string userId, [FromBody] RequestCreationOfNewDeliveryCustomContainer req)
+        {
+            string id;
+            id = userService.CreateDelivery(userId, req);
             Response.StatusCode = id != null ? 200 : 404;
             return id;
         }

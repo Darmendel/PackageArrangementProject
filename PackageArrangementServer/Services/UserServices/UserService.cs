@@ -1,6 +1,7 @@
 ﻿using PackageArrangementServer.Models;
 using Firebase.Database;
 using Firebase.Database.Query;
+using PackageArrangementServer.Models.Requests.RequestCreation;
 
 namespace PackageArrangementServer.Services
 {
@@ -159,13 +160,9 @@ namespace PackageArrangementServer.Services
             return 1;
         }*/
 
-        public string CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
-            IContainer container = null)
+        private string CreateDeliveryGeneral(string userId, DateTime? deliveryDate, List<RequestCreationOfNewPackageInNewDelivery>? packages,
+            IContainer container)
         {
-            if (container == null)
-            {
-                container = new BigContainer();
-            }
             User user = Get(userId, "id");
             if (user == null) return null;
 
@@ -181,6 +178,35 @@ namespace PackageArrangementServer.Services
             //return Update(userId, delivery, "add");
             userList.AddDelivery(user, delivery);
             return delivery.Id;
+        }
+        public string CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
+            ContainerSize size = ContainerSize.Large)
+        {
+            IContainer container;
+
+            switch (size)
+            {
+                case ContainerSize.Small:
+                    container = new SmallContainer();
+                    break;
+                case ContainerSize.Medium:
+                    container = new MediumContainer();
+                    break;
+                case ContainerSize.Large:
+                    container = new BigContainer();
+                    break;
+                default:
+                    container = new BigContainer();
+                    break;
+
+            }
+            return CreateDeliveryGeneral(userId, deliveryDate, packages, container);
+        }
+
+
+        public string CreateDelivery(string userId, RequestCreationOfNewDeliveryCustomContainer req)
+        {
+            return CreateDeliveryGeneral(userId, req.DeliveryDate, req.Packages, req.Container);
         }
 
         public int GetDeliveryCost(string userId, string deliveryId)
@@ -313,5 +339,18 @@ namespace PackageArrangementServer.Services
             return 1;
         }
 
+        public User FindUserByDeliveryId(string deliveryId)
+        {
+            foreach (User u in GetAllUsers()) {
+                foreach (Delivery d in u.Deliveries)
+                {
+                    if (d.Id.Equals(deliveryId))
+                    {
+                        return u;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

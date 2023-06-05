@@ -1,4 +1,5 @@
 ﻿using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.Requests.RequestCreation;
 
 namespace PackageArrangementServer.Services
 {
@@ -139,8 +140,17 @@ namespace PackageArrangementServer.Services
         /// <param name="container"></param>
         /// <returns>string</returns>
         public string CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
-            IContainer container = null);
+            ContainerSize size = ContainerSize.Large);
 
+        /// <summary>
+        /// Creates a new delivery for a user.
+        /// Returns 1 if succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="req"></param>
+        /// <returns>string</returns>
+        public string CreateDelivery(string userId, RequestCreationOfNewDeliveryCustomContainer req);
+        
         /// <summary>
         /// Calculates a user's delivery cost.
         /// Returns -1 if there's no such delivery or user.
@@ -279,5 +289,14 @@ namespace PackageArrangementServer.Services
         /// <param name="packageId"></param>
         /// <returns></returns>
         public int DeletePackage(string userId, string deliveryId, string packageId);
+
+
+        /// <summary>
+        /// Finds user by matching delivery id.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <returns></returns>
+        public User FindUserByDeliveryId(string deliveryId);
+
     }
 }

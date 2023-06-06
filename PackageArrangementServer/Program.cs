@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PackageArrangementServer.Data;
 using PackageArrangementServer.Services;
+using PackageArrangementServer.Services.ResultServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddScoped<IContainerService, ContainerService>();
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<IRabbitMqProducerService, RabbitMqProducerService>();
 builder.Services.AddScoped<IRabbitMqConsumerService, RabbitMqConsumerService>();
+builder.Services.AddScoped<IResultService, ResultService>();
 
 // Add services to the container.
 

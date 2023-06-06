@@ -13,6 +13,6 @@ namespace PackageArrangementServer.Services
         /// <param name="container"></param>
         /// <param name="friendqueue"></param>
         /// <returns>int</returns>
-        public int Send(List<Package> packages, IContainer container, string friendqueue);
+        public int Send(string deliveryId, List<Package> packages, IContainer container, string friendqueue);
     }
 }

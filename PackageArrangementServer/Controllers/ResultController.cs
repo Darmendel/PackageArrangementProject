@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.Requests.RequestCreation;
 using PackageArrangementServer.Services;
+using PackageArrangementServer.Services.ResultServices;
 
 namespace PackageArrangementServer.Controllers
 {
@@ -9,15 +11,23 @@ namespace PackageArrangementServer.Controllers
     public class ResultController : ControllerBase
     {
         private IRabbitMqConsumerService consumerService;
+        private IResultService resultService;
 
-        public ResultController(IRabbitMqConsumerService cs) { consumerService = cs; }
+        public ResultController(IResultService rs) { resultService = rs; }
 
-        [HttpPost]
-        public string Post(string result)
+        //public ResultController(IRabbitMqConsumerService cs) { consumerService = cs; }
+
+        /// <summary>
+        /// Handle delivery arrangement.
+        /// </summary>
+        /// <param name="req"></param>
+        [HttpPost("DeliveryArrangement")]
+        public void Post([FromBody] DeliveryTwoResults req)
         {
+            resultService.DeliveryArrangement(req);
             Response.StatusCode = 200;
-            Console.WriteLine(result);
-            return result;
+            Console.WriteLine(req);
+            return;
         }
     }
 }

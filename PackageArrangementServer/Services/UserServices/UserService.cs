@@ -1,4 +1,7 @@
 ﻿using PackageArrangementServer.Models;
+using Firebase.Database;
+using Firebase.Database.Query;
+using PackageArrangementServer.Models.Requests.RequestCreation;
 
 namespace PackageArrangementServer.Services
 {
@@ -6,14 +9,64 @@ namespace PackageArrangementServer.Services
     {
         private IDeliveryService deliveryService;
         private IRabbitMqProducerService producerService;
-        private static UserList userList;
+        private static FirebaseClient client = new FirebaseClient("https://packagearrangementprojectbiu-default-rtdb.europe-west1.firebasedatabase.app/");
+        private static UserList userList = FetchFromDB().Result;
 
         public UserService(IDeliveryService ds, IRabbitMqProducerService ps)
         {
             this.deliveryService = ds;
             this.producerService = ps;
             //userList = new UserList();
-            userList = StaticData.GetUsers();
+            //userList = StaticData.GetUsers();
+        }
+        
+        private static async Task<UserList> FetchFromDB()
+        {
+            var users = await client.Child("Users/").OnceAsync<RegisterRequest>();
+            List<User> usersList = new List<User>();
+
+            foreach (var us in users) 
+                usersList.Add(new User(us.Key, us.Object));
+         
+            return new UserList(usersList);
+
+        }
+
+        private async Task<string> AddToDB(RegisterRequest request)
+        {
+            try { return (await client.Child("Users").PostAsync(request)).Key; }
+            catch (Exception ex) { return null;}
+        }
+
+
+        /// <summary>
+        /// Adds new user to the db.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>bool</returns>
+        public bool SignUpUser(RegisterRequest request)
+        {
+            if (request == null) return false;
+            if (Exists(request.Email, "email")) return false;
+            string key = AddToDB(request).Result;
+            if (key != null) userList.Add(new User(key, request));
+            else return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Login.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>bool</returns>
+        public string Login(LoginRequest request)
+        {
+            if (request == null) return null;
+            User user = Get(request.Email, "email");
+            if (user != null && user.Password.Equals(request.Password))
+                return user.Id;
+            return null;
         }
 
         public List<User> GetAllUsers()
@@ -22,38 +75,42 @@ namespace PackageArrangementServer.Services
             return UserService.userList.Users; // Returns empty lists as well
         }
 
-        public bool Exists(string id)
+        public bool Exists(string val, string type)
         {
-            if (string.IsNullOrEmpty(id)) return false;
+            if (string.IsNullOrEmpty(val)) return false;
 
             foreach (User user in UserService.userList.Users)
             {
-                if (user.Id == id) return true;
+                if (type == "email")
+                    if (user.Email == val) return true;
+                if (type == "id")
+                    if (user.Id == val) return true;
             }
             return false;
         }
 
-        public User Get(string id)
+        public User Get(string val, string type)
         {
-            if (!Exists(id)) return null;
-            return GetAllUsers().Find(x => x.Id == id);
+            if (!Exists(val, type)) return null;
+            return type == "email" ? GetAllUsers().Find(x => x.Email == val) : 
+                                     GetAllUsers().Find(x => x.Id == val);
         }
 
         public User Create(string id, string name, string email, string password)
         {
-            if (Exists(id)) return null;
-            User user = new User { Id = id, Name = name, Email = email, Password = password, Deliveries = new List<Delivery>() };
+            if (Exists(id, "email")) return null;
+            User user = new (id, name, email, password, new List<Delivery>() );
             userList.Add(user);
             return user;
         }
 
         public User Create(string id, string name, string email, string password, List<Delivery> deliveries = null)
         {
-            if (Exists(id)) return null;
+            if (Exists(id, "email")) return null;
             User user = null;
 
-            if (deliveries == null) user = new User {Id = id, Name = name, Email = email, Password = password, Deliveries = new List<Delivery>() };
-            else user = new User { Id = id, Name = name, Email = email, Password = password, Deliveries = deliveries };
+            if (deliveries == null) user = new User (id, name, email, password, new List<Delivery>() );
+            else user = new User (id, name, email, password, deliveries );
 
             userList.Add(user);
             return user;
@@ -62,27 +119,27 @@ namespace PackageArrangementServer.Services
         public int Edit(string id, string name = null, string email = null, string password = null,
             List<Delivery> deliveries = null)
         {
-            if (!Exists(id)) return 0;
-            UserService.userList.Edit(Get(id), name, email, password, deliveries);
+            if (!Exists(id, "id")) return 0;
+            UserService.userList.Edit(Get(id, "id"), name, email, password, deliveries);
             return 1;
         }
 
         public int Delete(string id)
         {
-            if (!Exists(id)) return 0;
-            UserService.userList.Remove(Get(id));
+            if (!Exists(id, "id")) return 0;
+            UserService.userList.Remove(Get(id, "id"));
             return 1;
         }
 
         public List<Delivery> GetAllDeliveries(string id)
         {
-            if (!Exists(id)) return null;
+            if (!Exists(id, "id")) return null;
             return deliveryService.GetAllDeliveries(id);
         }
 
         public Delivery GetDelivery(string userId, string deliveryId)
         {
-            if (!Exists(userId)) return null;
+            if (!Exists(userId, "id")) return null;
             return deliveryService.Get(deliveryId, userId);
         }
 
@@ -103,45 +160,70 @@ namespace PackageArrangementServer.Services
             return 1;
         }*/
 
-        public int CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
-            IContainer container = null)
+        private string CreateDeliveryGeneral(string userId, DateTime? deliveryDate, List<RequestCreationOfNewPackageInNewDelivery>? packages,
+            IContainer container)
         {
-            if (container == null)
-            {
-                container = new BigContainer();
-            }
-            User user = Get(userId);
-            if (user == null) return 0;
+            User user = Get(userId, "id");
+            if (user == null) return null;
 
             Delivery delivery = deliveryService.Create(userId, deliveryDate, packages, container);
-            if (delivery == null) return 0;
+            if (delivery == null) return null;
 
             List<Package> packageList = deliveryService.GetPackageList(delivery.Id, userId, packages);
-            if (packageList == null) return 0;
+            if (packageList == null) return null;
 
-            int res = producerService.Send(packageList, container, "order_report"); // change null to name of queue
-            if (res == 0) return 0;
+            int res = producerService.Send(delivery.Id, packageList, container, "order_report"); // change null to name of queue
+            if (res == 0) return null;
 
             //return Update(userId, delivery, "add");
             userList.AddDelivery(user, delivery);
-            return 1;
+            return delivery.Id;
+        }
+        public string CreateDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery>? packages = null,
+            ContainerSize size = ContainerSize.Large)
+        {
+            IContainer container;
+
+            switch (size)
+            {
+                case ContainerSize.Small:
+                    container = new SmallContainer();
+                    break;
+                case ContainerSize.Medium:
+                    container = new MediumContainer();
+                    break;
+                case ContainerSize.Large:
+                    container = new BigContainer();
+                    break;
+                default:
+                    container = new BigContainer();
+                    break;
+
+            }
+            return CreateDeliveryGeneral(userId, deliveryDate, packages, container);
+        }
+
+
+        public string CreateDelivery(string userId, RequestCreationOfNewDeliveryCustomContainer req)
+        {
+            return CreateDeliveryGeneral(userId, req.DeliveryDate, req.Packages, req.Container);
         }
 
         public int GetDeliveryCost(string userId, string deliveryId)
         {
-            if (!Exists(userId)) return -1;
+            if (!Exists(userId, "id")) return -1;
             return deliveryService.Cost(deliveryId, userId);
         }
 
         public DeliveryStatus GetDeliveryStatus(string userId, string deliveryId)
         {
-            if (!Exists(userId)) return DeliveryStatus.NonExisting;
+            if (!Exists(userId, "id")) return DeliveryStatus.NonExisting;
             return deliveryService.Status(deliveryId, userId);
         }
 
         public int UpdateDelivery(string userId, string deliveryId, List<Package>? packages)
         {
-            if (!Exists(userId)) return 0;
+            if (!Exists(userId, "id")) return 0;
 
             Delivery delivery = deliveryService.Update(userId, deliveryId, packages);
             if (delivery == null) return 0;
@@ -149,7 +231,7 @@ namespace PackageArrangementServer.Services
             IContainer container = deliveryService.GetContainer(deliveryId, userId);
             if (container == null) return 0;
 
-            int res = producerService.Send(packages, container, null); // change null to name of queue
+            int res = producerService.Send(delivery.Id, packages, container, null); // change null to name of queue
             if (res == 0) return 0;
 
             return 1;
@@ -157,7 +239,7 @@ namespace PackageArrangementServer.Services
 
         public int UpdateDelivery(string userId, string deliveryId, DateTime? deliveryDate)
         {
-            if (!Exists(userId)) return 0;
+            if (!Exists(userId, "id")) return 0;
 
             Delivery delivery = deliveryService.Update(userId, deliveryId, deliveryDate);
             if (delivery == null) return 0;
@@ -166,7 +248,7 @@ namespace PackageArrangementServer.Services
 
         public int UpdateDelivery(string userId, string deliveryId, IContainer container)
         {
-            if (!Exists(userId)) return 0;
+            if (!Exists(userId, "id")) return 0;
 
             Delivery delivery = deliveryService.Update(userId, deliveryId, container);
             if (delivery == null) return 0;
@@ -174,7 +256,7 @@ namespace PackageArrangementServer.Services
             List<Package> packages = deliveryService.GetAllPackages(deliveryId, userId);
             if (packages == null) return 0;
 
-            int res = producerService.Send(packages, container, null); // change null to name of queue
+            int res = producerService.Send(delivery.Id, packages, container, null); // change null to name of queue
             if (res == 0) return 0;
 
             return 1;
@@ -184,7 +266,7 @@ namespace PackageArrangementServer.Services
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
             List<Package>? packages = null, IContainer container = null)
         {
-            if (!Exists(userId)) return 0;
+            if (!Exists(userId, "id")) return 0;
 
             Delivery delivery = deliveryService.Edit(deliveryId, userId, deliveryDate, packages, container);
             if (delivery == null) return 0;
@@ -195,7 +277,7 @@ namespace PackageArrangementServer.Services
 
         public int DeleteDelivery(string userId, string deliveryId)
         {
-            if (!Exists(userId)) return 0;
+            if (!Exists(userId, "id")) return 0;
 
             Delivery delivery = deliveryService.Delete(deliveryId, userId);
             if (delivery == null) return 0;
@@ -216,33 +298,33 @@ namespace PackageArrangementServer.Services
 
         public List<Package> GetAllPackages(string userId, string deliveryId)
         {
-            if (!Exists(userId)) return null;
+            if (!Exists(userId, "id")) return null;
             return deliveryService.GetAllPackages(deliveryId, userId);
         }
 
         public Package GetPackage(string userId, string deliveryId, string packageId)
         {
-            if (!Exists(userId)) return null;
+            if (!Exists(userId, "id")) return null;
             return deliveryService.GetPackage(deliveryId, userId, packageId);
         }
 
-        public int CreatePackage(string userId, string deliveryId, string amount = null, string width = null,
-            string height = null, string depth = null, string address = null)
+        public int CreatePackage(string userId, string deliveryId, string width = null,
+            string height = null, string depth = null)
         {
-            if (!Exists(userId)) return 0;
+            if (!Exists(userId, "id")) return 0;
 
-            Package package = deliveryService.CreatePackage(deliveryId, userId, amount, width, height, depth, address);
+            Package package = deliveryService.CreatePackage(deliveryId, userId, width, height, depth);
 
             if (package == null) return 0;
             return 1;
         }
 
-        public int EditPackage(string userId, string deliveryId, string packageId, string amount = null,
-            string width = null, string height = null, string depth = null, string address = null)
+        public int EditPackage(string userId, string deliveryId, string packageId, 
+            string width = null, string height = null, string depth = null)
         {
-            if (!Exists(userId)) return 0;
+            if (!Exists(userId, "id")) return 0;
 
-            Package package = deliveryService.EditPackage(deliveryId, userId, packageId, amount, width, height, depth, address);
+            Package package = deliveryService.EditPackage(deliveryId, userId, packageId, width, height, depth);
 
             if (package == null) return 0;
             return 1;
@@ -250,12 +332,25 @@ namespace PackageArrangementServer.Services
 
         public int DeletePackage(string userId, string deliveryId, string packageId)
         {
-            if (!Exists(userId)) return 0;
+            if (!Exists(userId, "id")) return 0;
             Package package = deliveryService.DeletePackage(deliveryId, userId, packageId);
 
             if (package == null) return 0;
             return 1;
         }
 
+        public User FindUserByDeliveryId(string deliveryId)
+        {
+            foreach (User u in GetAllUsers()) {
+                foreach (Delivery d in u.Deliveries)
+                {
+                    if (d.Id.Equals(deliveryId))
+                    {
+                        return u;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

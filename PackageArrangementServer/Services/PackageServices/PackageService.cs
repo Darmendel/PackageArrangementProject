@@ -90,8 +90,7 @@ namespace PackageArrangementServer.Services
             string packageId = CreatePackageId(deliveryId);
             if (packageId == null) return null;
 
-            return new Package(packageId, deliveryId, request.Amount, request.Width,
-                request.Height, request.Depth, request.Address);
+            return new Package(packageId, deliveryId, request.Width, request.Height, request.Depth, request.Order);
         }
 
         public Package ConvertToPackage(string deliveryId, RequestEditPackage request)
@@ -101,8 +100,7 @@ namespace PackageArrangementServer.Services
             string packageId = CreatePackageId(deliveryId);
             if (packageId == null) return null;
 
-            return new Package(packageId, deliveryId, request.Amount, request.Width,
-                request.Height, request.Depth, request.Address);
+            return new Package(packageId, deliveryId, request.Width, request.Height, request.Depth, request.Order);
         }
 
         public List<Package> GetPackageList(string deliveryId, List<RequestCreationOfNewPackageInNewDelivery> packages)
@@ -118,26 +116,25 @@ namespace PackageArrangementServer.Services
             return packageList;
         }
 
-        public Package Create(string deliveryId, string amount = null, string width = null, string height = null,
-            string depth = null, string address = null)
+        public Package Create(string deliveryId, string width = null, string height = null,
+            string depth = null, string order = null)
         {
             string packageId = CreatePackageId(deliveryId);
             if (packageId == null) return null;
 
-            Package package = new Package(packageId, deliveryId, amount, width, height,
-                depth, address);
+            Package package = new Package(packageId, deliveryId, width, height, depth, order);
 
             PackageService.packageList.Add(package);
             return package;
         }
 
-        public Package Edit(string packageId, string deliveryId, string amount = null, string width = null,
-            string height = null, string depth = null, string address = null)
+        public Package Edit(string packageId, string deliveryId, string width = null,
+            string height = null, string depth = null)
         {
             Package package = Get(packageId, deliveryId);
             if (package == null) return null;
 
-            PackageService.packageList.Edit(package, amount, width, height, depth, address);
+            PackageService.packageList.Edit(package, width, height, depth);
             return Get(packageId, deliveryId);
         }
 
@@ -146,11 +143,9 @@ namespace PackageArrangementServer.Services
             int index = list.IndexOf(package);
             if (index == -1) return null;
 
-            list[index].Amount = package.Amount;
             list[index].Width = package.Width;
             list[index].Height = package.Height;
             list[index].Depth = package.Depth;
-            list[index].Address = package.Address;
 
             return list;
         }

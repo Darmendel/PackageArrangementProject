@@ -1,5 +1,7 @@
 ﻿using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.Requests.RequestCreation;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PackageArrangementServer.Services
 {
@@ -9,16 +11,17 @@ namespace PackageArrangementServer.Services
 
         public RabbitMqProducerService() { producer = new RabbitMqProducer(); }
 
-        public int Send(List<Package> packages, IContainer container, string friendqueue)
+        public int Send(string deliveryId, List<Package> packages, IContainer container, string friendqueue)
         {
             if (packages == null || container == null || friendqueue == null) return 0;
 
-            string message = JsonSerializer.Serialize(packages);
-            string c = JsonSerializer.Serialize(container);
-            message += "," + c;
+            DeliveryRequest deliveryRequest = new DeliveryRequest(deliveryId, container, packages);
+            JsonSerializerOptions options = new()
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            };
 
-            // Console.WriteLine(message);
-
+            string message = JsonSerializer.Serialize<DeliveryRequest>(deliveryRequest, options);
             bool res = producer.Send(message, friendqueue);
             return res ? 1 : 0;
         }

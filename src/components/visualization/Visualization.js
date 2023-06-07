@@ -4,25 +4,33 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Visualization = () => {
-  const canvasRef = useRef(null);
+  const ref = useRef(null);
 
   useEffect(() => {
-    const CONTAINER_HEIGHT = 5;
+    const xPositions = [0, 200];
+    const yPositions = [0, 300];
+    const zPositions = [0, 400];
+    
+    const boxesWidth = [200 / 100, 100 / 100];
+    const boxesHeight = [200 / 100, 200 / 100];
+    const boxesDepth = [400 / 100, 600 / 100];
+    
+    const CONTAINER_HEIGHT = 600 / 100;
       
     var selectedBox = null;
     var boxes = [];
 
-    const boxWidth = 1;
-    const boxHeight = 1;
-    const boxDepth = 1;
+    var boxWidth = 0;
+    var boxHeight = 0;
+    var boxDepth = 0;
     const spacing = 0;
 
-    const groundWidth = 10;
+    const groundWidth = 800 / 100;
     const groundHeight = 0.1;
-    const groundDepth = 5;
-    const maxBoxesWidth = Math.floor(groundWidth / (boxWidth + spacing)) - 3;
-    const maxBoxesHeight = Math.floor(CONTAINER_HEIGHT / (boxHeight + spacing)) - 2;
-    const maxBoxesDepth = Math.floor(groundDepth / (boxDepth + spacing)) - 2;
+    const groundDepth = 1600 / 100;
+    // const maxBoxesWidth = Math.floor(groundWidth / (boxWidth + spacing)) - 3;
+    // const maxBoxesHeight = Math.floor(CONTAINER_HEIGHT / (boxHeight + spacing)) - 2;
+    // const maxBoxesDepth = Math.floor(groundDepth / (boxDepth + spacing)) - 2;
 
     //const startX = -((maxBoxesWidth - 1) * (boxWidth + spacing)) / 2;
     //const startY = -((maxBoxesHeight - 1) * (boxHeight + spacing)) / 2;
@@ -41,7 +49,7 @@ const Visualization = () => {
     var renderer = new THREE.WebGLRenderer();
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    ref.current.appendChild(renderer.domElement);
 
     var controls = new OrbitControls(camera, renderer.domElement);
     controls.enabledPan = false;
@@ -83,7 +91,7 @@ const Visualization = () => {
         this.back = this.position.z + this.depth / 2;
       }
       
-      update(ground) {
+      update() {
         this.updateSides();
         
         // this.position.x += this.velocity.x;
@@ -107,27 +115,27 @@ const Visualization = () => {
 
     // Creating boxes and ground
 
-    for (let i = 0; i < maxBoxesWidth; i++) {
-      for (let j = 0; j < maxBoxesHeight; j++) {
-        for (let k = 0; k < maxBoxesDepth; k++) {
-          const positionX = boxWidth/2 + (boxWidth + spacing) * i - groundWidth/2;
-          const positionY = groundHeight/2 + boxHeight/2 + (boxHeight + spacing) * j;
-          const positionZ = (boxDepth + spacing) * k;
-          const position = new THREE.Vector3(positionX, positionY, positionZ);
-          // const velocity = new THREE.Vector3(0, 0, 0); // Example velocity
+    var numOfBoxes = xPositions.length;
+    for (let i = 0; i < numOfBoxes; i++) {
+      boxWidth = boxesWidth[i];
+      boxHeight = boxesHeight[i];
+      boxDepth = boxesDepth[i];
+      const positionX = boxWidth/2 + (boxWidth + spacing) * i - groundWidth/2;
+      const positionY = groundHeight/2 + boxHeight/2 + (boxHeight + spacing) * i;
+      const positionZ = boxDepth/2 + (boxDepth + spacing) * i - groundDepth/2;
+      const position = new THREE.Vector3(positionX, positionY, positionZ);
+      // const velocity = new THREE.Vector3(0, 0, 0); // Example velocity
 
-          const box = new Box({
-            width: boxWidth,
-            height: boxHeight,
-            depth: boxDepth,
-            // velocity: velocity,
-            position: position,
-          });
-          box.castShadow = true;
-          scene.add(box);
-          boxes.push(box);
-        }
-      }
+      const box = new Box({
+        width: boxWidth,
+        height: boxHeight,
+        depth: boxDepth,
+        // velocity: velocity,
+        position: position,
+      });
+      box.castShadow = true;
+      scene.add(box);
+      boxes.push(box);
     }
 
     const ground = new Box({
@@ -177,13 +185,6 @@ const Visualization = () => {
       return xCollision && yCollision && zCollision;
     }
 
-    // Check if there is a collision between box1 and some other box
-    function hasCollision(box1) {
-      return boxes.some((box2) => {
-        box2 !== box1 && boxCollision({ box1: box1, box2: box2 });
-      });
-    }
-
     function hoverBoxes() {
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(scene.children);
@@ -223,40 +224,60 @@ const Visualization = () => {
     }
 
     function onMouseMove(event) {
+      event.preventDefault();
       // calculate mouse position in normalized device coordinates
       // (-1 to +1) for both components
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
+      raycaster.setFromCamera(mouse, camera);
+      
       // Move the selected box with the mouse
       if (selectedBox) {
-        raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects(scene.children);
-
+    
         if (intersects.length > 0) {
           const intersectionPoint = intersects[0].point;
-          // Check if the new position is within the container's boundaries
+    
+          // Calculate the allowed boundary for moving the box
           const minX = ground.left + selectedBox.width / 2;
           const maxX = ground.right - selectedBox.width / 2;
           const minY = ground.top + selectedBox.height / 2;
           const maxY = ground.top + CONTAINER_HEIGHT - selectedBox.height / 2;
           const minZ = ground.front + selectedBox.depth / 2;
           const maxZ = ground.back - selectedBox.depth / 2;
-          
+    
           intersectionPoint.x = Math.max(Math.min(intersectionPoint.x, maxX), minX);
           intersectionPoint.y = Math.max(Math.min(intersectionPoint.y, maxY), minY);
           intersectionPoint.z = Math.max(Math.min(intersectionPoint.z, maxZ), minZ);
-          
+    
           // console.log('intersectionPoint.x:', intersectionPoint.x);
           // console.log('intersectionPoint.y:', intersectionPoint.y);
           // console.log('intersectionPoint.z:', intersectionPoint.z);
-          
-          selectedBox.position.copy(intersectionPoint);
+
+          // Check if the intersection point is within the container's boundaries
+          if (
+            intersectionPoint.x >= minX &&
+            intersectionPoint.x <= maxX &&
+            intersectionPoint.y >= minY &&
+            intersectionPoint.y <= maxY &&
+            intersectionPoint.z >= minZ &&
+            intersectionPoint.z <= maxZ
+          ) {
+            // Check if there is a collision between the selected box and other boxes
+            const hasCollision = boxes.some((box) => {
+              return box !== selectedBox && boxCollision({ box1: selectedBox, box2: box });
+            });
+    
+            // Move the selected box only if there is no collision or after a collision to a neighboring free place
+            if (!hasCollision || !boxCollision({ box1: selectedBox, box2: intersects[0].object })) {
+              selectedBox.position.copy(intersectionPoint);
+            }
+          }
         }
       }
     }
-
-    function onClick(event) {
+    
+    function onClick() {
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(scene.children);
 
@@ -302,8 +323,6 @@ const Visualization = () => {
               });
               
               if (!hasCollision) {
-                
-
                 selectedBox.position.copy(intersectionPoint);
                 selectedBox = null; // Deselect the box after placing it
               }
@@ -314,9 +333,15 @@ const Visualization = () => {
         }
       }
     }
+
+  
+    return () => {
+      // Clean up Three.js scene here
+    };
+    
   }, []);
 
-  return <canvas ref={canvasRef}/>;
+  return <div ref={ref}></div>;
 };
 
 export default Visualization;

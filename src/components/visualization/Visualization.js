@@ -7,15 +7,105 @@ const Visualization = () => {
   const ref = useRef(null);
 
   useEffect(() => {
-    const xPositions = [0, 200];
-    const yPositions = [0, 300];
-    const zPositions = [0, 400];
+    const data = {"id": 1, 
+    "container": {
+      "height": 600, 
+      "width": 800, 
+      "depth": 1600, 
+      "cost": 0}, 
+    "firstPackages": [
+      {"id": 6, 
+      "width": 200, 
+      "depth": 800, 
+      "height": 200, 
+      "order": 5, 
+      "x": 0, 
+      "y": 0, 
+      "z": 0, 
+      "deliveryId": 1}, 
+      {"id": 23, "width": 200, "depth": 800, "height": 200, "order": 22, "x": 0, "y": 0, "z": 200, "deliveryId": 1}, {"id": 31, "width": 200, "depth": 800, "height": 200, "order": 30, "x": 0, "y": 0, "z": 400, "deliveryId": 1}, {"id": 29, "width": 200, "depth": 800, "height": 200, "order": 28, "x": 0, "y": 200, "z": 0, "deliveryId": 1}, {"id": 30, "width": 200, "depth": 800, "height": 200, "order": 29, "x": 0, "y": 200, "z": 200, "deliveryId": 1}, {"id": 43, "width": 200, "depth": 800, "height": 200, "order": 42, "x": 0, "y": 200, "z": 400, "deliveryId": 1}, {"id": 36, "width": 200, "depth": 800, "height": 200, "order": 35, "x": 0, "y": 400, "z": 0, "deliveryId": 1}, {"id": 37, "width": 200, "depth": 800, "height": 200, "order": 36, "x": 0, "y": 400, "z": 200, "deliveryId": 1}, {"id": 10, "width": 200, "depth": 200, "height": 600, "order": 9, "x": 0, "y": 600, "z": 0, "deliveryId": 1}, {"id": 9, "width": 200, "depth": 200, "height": 600, "order": 8, "x": 200, "y": 600, "z": 0, "deliveryId": 1}, {"id": 11, "width": 200, "depth": 200, "height": 600, "order": 10, "x": 400, "y": 600, "z": 0, "deliveryId": 1}, {"id": 44, "width": 200, "depth": 200, "height": 600, "order": 43, "x": 600, "y": 600, "z": 0, "deliveryId": 1}, {"id": 33, "width": 200, "depth": 1200, "height": 100, "order": 32, "x": 0, "y": 400, "z": 400, "deliveryId": 1}, {"id": 38, "width": 200, "depth": 200, "height": 600, "order": 37, "x": 800, "y": 0, "z": 0, "deliveryId": 1}, {"id": 2, "width": 200, "depth": 200, "height": 400, "order": 1, "x": 800, "y": 200, "z": 0, "deliveryId": 1}, {"id": 3, "width": 400, "depth": 200, "height": 200, "order": 2, "x": 800, "y": 400, "z": 0, "deliveryId": 1}, {"id": 28, "width": 400, "depth": 200, "height": 200, "order": 27, "x": 800, "y": 400, "z": 200, "deliveryId": 1}, {"id": 18, "width": 800, "depth": 100, "height": 200, "order": 17, "x": 1000, "y": 0, "z": 0, "deliveryId": 1}, {"id": 22, "width": 400, "depth": 200, "height": 200, "order": 21, "x": 1000, "y": 0, "z": 200, "deliveryId": 1}, {"id": 24, "width": 400, "depth": 200, "height": 200, "order": 23, "x": 1000, "y": 0, "z": 400, "deliveryId": 1}, {"id": 27, "width": 400, "depth": 200, "height": 200, "order": 26, "x": 1000, "y": 400, "z": 200, "deliveryId": 1}, {"id": 32, "width": 800, "depth": 100, "height": 200, "order": 31, "x": 1100, "y": 0, "z": 0, "deliveryId": 1}, {"id": 39, "width": 400, "depth": 200, "height": 200, "order": 38, "x": 1200, "y": 0, "z": 0, "deliveryId": 1}, {"id": 35, "width": 400, "depth": 200, "height": 200, "order": 34, "x": 1200, "y": 0, "z": 200, "deliveryId": 1}, {"id": 40, "width": 400, "depth": 200, "height": 200, "order": 39, "x": 1200, "y": 0, "z": 400, "deliveryId": 1}, {"id": 41, "width": 400, "depth": 200, "height": 200, "order": 40, "x": 1200, "y": 400, "z": 0, "deliveryId": 1}, {"id": 42, "width": 400, "depth": 200, "height": 200, "order": 41, "x": 1200, "y": 400, "z": 200, "deliveryId": 1}, {"id": 5, "width": 200, "depth": 300, "height": 200, "order": 4, "x": 800, "y": 600, "z": 400, "deliveryId": 1}, {"id": 4, "width": 200, "depth": 300, "height": 200, "order": 3, "x": 1100, "y": 600, "z": 400, "deliveryId": 1}, {"id": 7, "width": 200, "depth": 100, "height": 600, "order": 6, "x": 1400, "y": 0, "z": 0, "deliveryId": 1}, {"id": 12, "width": 200, "depth": 100, "height": 600, "order": 11, "x": 1400, "y": 200, "z": 0, "deliveryId": 1}, {"id": 8, "width": 200, "depth": 100, "height": 600, "order": 7, "x": 1400, "y": 400, "z": 0, "deliveryId": 1}, {"id": 13, "width": 200, "depth": 100, "height": 600, "order": 12, "x": 1400, "y": 600, "z": 0, "deliveryId": 1}, {"id": 34, "width": 200, "depth": 100, "height": 600, "order": 33, "x": 1500, "y": 0, "z": 0, "deliveryId": 1}, {"id": 19, "width": 200, "depth": 200, "height": 200, "order": 18, "x": 800, "y": 200, "z": 400, "deliveryId": 1}, {"id": 16, "width": 200, "depth": 200, "height": 200, "order": 15, "x": 1200, "y": 400, "z": 400, "deliveryId": 1}
+    ], 
+    "secondPackages": [
+      {"id": 6, 
+      "width": 200, 
+      "depth": 800, 
+      "height": 200, 
+      "order": 5, 
+      "x": 0, 
+      "y": 0, 
+      "z": 0, 
+      "deliveryId": 1}, 
+      {"id": 23, "width": 200, "depth": 800, "height": 200, "order": 22, "x": 0, "y": 0, "z": 200, "deliveryId": 1}, {"id": 31, "width": 200, "depth": 800, "height": 200, "order": 30, "x": 0, "y": 0, "z": 400, "deliveryId": 1}, {"id": 9, "width": 200, "depth": 200, "height": 600, "order": 8, "x": 200, "y": 600, "z": 0, "deliveryId": 1}, {"id": 38, "width": 200, "depth": 200, "height": 600, "order": 37, "x": 800, "y": 0, "z": 0, "deliveryId": 1}, {"id": 18, "width": 800, "depth": 100, "height": 200, "order": 17, "x": 1000, "y": 0, "z": 0, "deliveryId": 1}, {"id": 22, "width": 400, "depth": 200, "height": 200, "order": 21, "x": 1000, "y": 0, "z": 200, "deliveryId": 1}, {"id": 24, "width": 400, "depth": 200, "height": 200, "order": 23, "x": 1000, "y": 0, "z": 400, "deliveryId": 1}, {"id": 32, "width": 800, "depth": 100, "height": 200, "order": 31, "x": 1100, "y": 0, "z": 0, "deliveryId": 1}, {"id": 39, "width": 400, "depth": 200, "height": 200, "order": 38, "x": 1200, "y": 0, "z": 0, "deliveryId": 1}, {"id": 35, "width": 400, "depth": 200, "height": 200, "order": 34, "x": 1200, "y": 0, "z": 200, "deliveryId": 1}, {"id": 40, "width": 400, "depth": 200, "height": 200, "order": 39, "x": 1200, "y": 0, "z": 400, "deliveryId": 1}, {"id": 7, "width": 200, "depth": 100, "height": 600, "order": 6, "x": 1400, "y": 0, "z": 0, "deliveryId": 1}, {"id": 12, "width": 200, "depth": 100, "height": 600, "order": 11, "x": 1400, "y": 200, "z": 0, "deliveryId": 1}, {"id": 8, "width": 200, "depth": 100, "height": 600, "order": 7, "x": 1400, "y": 400, "z": 0, "deliveryId": 1}, {"id": 13, "width": 200, "depth": 100, "height": 600, "order": 12, "x": 1400, "y": 600, "z": 0, "deliveryId": 1}, {"id": 34, "width": 200, "depth": 100, "height": 600, "order": 33, "x": 1500, "y": 0, "z": 0, "deliveryId": 1}, {"id": 4, "width": 200, "depth": 300, "height": 200, "order": 3, "x": 0, "y": 200, "z": 0, "deliveryId": 1}, {"id": 44, "width": 200, "depth": 600, "height": 200, "order": 43, "x": 0, "y": 200, "z": 200, "deliveryId": 1}, {"id": 16, "width": 200, "depth": 200, "height": 200, "order": 15, "x": 0, "y": 200, "z": 400, "deliveryId": 1}, {"id": 43, "width": 200, "depth": 800, "height": 200, "order": 42, "x": 0, "y": 400, "z": 0, "deliveryId": 1}, {"id": 36, "width": 200, "depth": 800, "height": 200, "order": 35, "x": 0, "y": 400, "z": 200, "deliveryId": 1}, {"id": 37, "width": 200, "depth": 800, "height": 200, "order": 36, "x": 0, "y": 400, "z": 400, "deliveryId": 1}, {"id": 19, "width": 200, "depth": 200, "height": 200, "order": 18, "x": 0, "y": 600, "z": 0, "deliveryId": 1}, {"id": 5, "width": 200, "depth": 300, "height": 200, "order": 4, "x": 200, "y": 200, "z": 400, "deliveryId": 1}, {"id": 29, "width": 200, "depth": 800, "height": 200, "order": 28, "x": 600, "y": 600, "z": 200, "deliveryId": 1}, {"id": 30, "width": 200, "depth": 800, "height": 200, "order": 29, "x": 600, "y": 600, "z": 400, "deliveryId": 1}, {"id": 3, "width": 200, "depth": 400, "height": 200, "order": 2, "x": 300, "y": 200, "z": 0, "deliveryId": 1}, {"id": 27, "width": 200, "depth": 400, "height": 200, "order": 26, "x": 500, "y": 200, "z": 400, "deliveryId": 1}, {"id": 2, "width": 200, "depth": 400, "height": 200, "order": 1, "x": 600, "y": 200, "z": 200, "deliveryId": 1}, {"id": 28, "width": 200, "depth": 400, "height": 200, "order": 27, "x": 600, "y": 600, "z": 0, "deliveryId": 1}, {"id": 41, "width": 200, "depth": 400, "height": 200, "order": 40, "x": 800, "y": 400, "z": 200, "deliveryId": 1}, {"id": 42, "width": 200, "depth": 400, "height": 200, "order": 41, "x": 800, "y": 400, "z": 400, "deliveryId": 1}, {"id": 14, "width": 100, "depth": 200, "height": 200, "order": 13, "x": 0, "y": 600, "z": 200, "deliveryId": 1}, {"id": 15, "width": 200, "depth": 300, "height": 200, "order": 14, "x": 700, "y": 200, "z": 0, "deliveryId": 1}, {"id": 25, "width": 200, "depth": 200, "height": 200, "order": 24, "x": 0, "y": 600, "z": 400, "deliveryId": 1}, {"id": 26, "width": 200, "depth": 200, "height": 200, "order": 25, "x": 800, "y": 400, "z": 0, "deliveryId": 1}
+    ]
+    };
+
+    // first solution:
+
+    const boxesWidthFirst = [];
+    const boxesHeightFirst = [];
+    const boxesDepthFirst = [];
+
+    data.firstPackages.forEach(function(box) {
+      boxesWidthFirst.push(box.width / 100);
+      boxesHeightFirst.push(box.height / 100);
+      boxesDepthFirst.push(box.depth / 100);
+    });
+
+    const xPositionsFirst = [];
+    const yPositionsFirst = [];
+    const zPositionsFirst = [];
+
+    data.firstPackages.forEach(function(box) {
+      if (box.x !== 0) {
+        box.x /= 100;
+      }
+      zPositionsFirst.push(box.x);
+      if (box.y !== 0) {
+        box.y /= 100;
+      }
+      xPositionsFirst.push(box.y);
+      if (box.z !== 0) {
+        box.z /= 100;
+      }
+      yPositionsFirst.push(box.z);
+    });
+
+    // second solution:
+
+    const boxesWidthSecond = [];
+    const boxesHeightSecond = [];
+    const boxesDepthSecond = [];
+
+    data.secondPackages.forEach(function(box) {
+      boxesWidthSecond.push(box.width / 100);
+      boxesHeightSecond.push(box.height / 100);
+      boxesDepthSecond.push(box.depth / 100);
+    });
+
+    const xPositionsSecond = [];
+    const yPositionsSecond = [];
+    const zPositionsSecond = [];
+
+    data.secondPackages.forEach(function(box) {
+      if (box.x !== 0) {
+        box.x /= 100;
+      }
+      zPositionsSecond.push(box.x);
+      if (box.y !== 0) {
+        box.y /= 100;
+      }
+      xPositionsSecond.push(box.y);
+      if (box.z !== 0) {
+        box.z /= 100;
+      }
+      yPositionsSecond.push(box.z);
+    });
     
-    const boxesWidth = [200 / 100, 100 / 100];
-    const boxesHeight = [200 / 100, 200 / 100];
-    const boxesDepth = [400 / 100, 600 / 100];
+    // console.log('xPositionsFirst:', xPositionsFirst);
+    // console.log('yPositionsFirst', yPositionsFirst);
+    // console.log('zPositionsFirst', zPositionsFirst);
     
-    const CONTAINER_HEIGHT = 600 / 100;
+    const containerHeight = data.container.height / 100;
       
     var selectedBox = null;
     var boxes = [];
@@ -23,13 +113,13 @@ const Visualization = () => {
     var boxWidth = 0;
     var boxHeight = 0;
     var boxDepth = 0;
-    const spacing = 0;
+    // const spacing = 0;
 
-    const groundWidth = 800 / 100;
-    const groundHeight = 0.1;
-    const groundDepth = 1600 / 100;
+    const groundWidth = data.container.width / 100;
+    const groundHeight = 0;
+    const groundDepth = data.container.depth / 100;
     // const maxBoxesWidth = Math.floor(groundWidth / (boxWidth + spacing)) - 3;
-    // const maxBoxesHeight = Math.floor(CONTAINER_HEIGHT / (boxHeight + spacing)) - 2;
+    // const maxBoxesHeight = Math.floor(containerHeight / (boxHeight + spacing)) - 2;
     // const maxBoxesDepth = Math.floor(groundDepth / (boxDepth + spacing)) - 2;
 
     //const startX = -((maxBoxesWidth - 1) * (boxWidth + spacing)) / 2;
@@ -42,11 +132,8 @@ const Visualization = () => {
     
     var raycaster = new THREE.Raycaster();
     var mouse = new THREE.Vector2();
-
-    
-
-    
     var renderer = new THREE.WebGLRenderer();
+
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
     ref.current.appendChild(renderer.domElement);
@@ -55,7 +142,6 @@ const Visualization = () => {
     controls.enabledPan = false;
     controls.maxPolarAngle = Math.PI / 2;
 
-    
     class Box extends THREE.Mesh {
       constructor({ width, height, depth, position }) {
         const color = getRandomColor();
@@ -115,15 +201,19 @@ const Visualization = () => {
 
     // Creating boxes and ground
 
-    var numOfBoxes = xPositions.length;
+    var numOfBoxes = xPositionsFirst.length;
     for (let i = 0; i < numOfBoxes; i++) {
-      boxWidth = boxesWidth[i];
-      boxHeight = boxesHeight[i];
-      boxDepth = boxesDepth[i];
-      const positionX = boxWidth/2 + (boxWidth + spacing) * i - groundWidth/2;
-      const positionY = groundHeight/2 + boxHeight/2 + (boxHeight + spacing) * i;
-      const positionZ = boxDepth/2 + (boxDepth + spacing) * i - groundDepth/2;
+      boxWidth = boxesWidthFirst[i];
+      boxHeight = boxesHeightFirst[i];
+      boxDepth = boxesDepthFirst[i];
+      // const positionX = boxWidth/2 + (boxWidth + spacing) * i - groundWidth/2;
+      // const positionY = groundHeight/2 + boxHeight/2 + (boxHeight + spacing) * i;
+      // const positionZ = boxDepth/2 + (boxDepth + spacing) * i - groundDepth/2;
+      const positionX = boxWidth/2 + xPositionsFirst[i] - groundWidth/2;
+      const positionY = boxHeight/2 + yPositionsFirst[i];
+      const positionZ = boxDepth/2 + zPositionsFirst[i] - groundDepth/2;
       const position = new THREE.Vector3(positionX, positionY, positionZ);
+      console.log('position', i, ':', position);
       // const velocity = new THREE.Vector3(0, 0, 0); // Example velocity
 
       const box = new Box({
@@ -179,9 +269,9 @@ const Visualization = () => {
     // Check if there is a collision between box1 and box2
     function boxCollision({ box1, box2 }) {
       // Collision detection with x, y, z axes
-      const xCollision = box1.right >= box2.left && box1.left <= box2.right;
-      const yCollision = box1.top >= box2.bottom && box1.bottom <= box2.top;
-      const zCollision = box1.back >= box2.front && box1.front <= box2.back;
+      const xCollision = box1.right > box2.left && box1.left < box2.right;
+      const yCollision = box1.top > box2.bottom && box1.bottom < box2.top;
+      const zCollision = box1.back > box2.front && box1.front < box2.back;
       return xCollision && yCollision && zCollision;
     }
 
@@ -194,7 +284,7 @@ const Visualization = () => {
         const box = boxes[i];
         if (box.material) {
           box.material.transparent = false;
-          box.material.opacity = box == selectedBox ? 0.6 : 1.0;
+          box.material.opacity = box === selectedBox ? 0.6 : 1.0;
         }
       }
       // Set transparency for intersected boxes
@@ -242,7 +332,7 @@ const Visualization = () => {
           const minX = ground.left + selectedBox.width / 2;
           const maxX = ground.right - selectedBox.width / 2;
           const minY = ground.top + selectedBox.height / 2;
-          const maxY = ground.top + CONTAINER_HEIGHT - selectedBox.height / 2;
+          const maxY = ground.top + containerHeight - selectedBox.height / 2;
           const minZ = ground.front + selectedBox.depth / 2;
           const maxZ = ground.back - selectedBox.depth / 2;
     
@@ -298,7 +388,7 @@ const Visualization = () => {
             const minX = ground.left + selectedBox.width / 2;
             const maxX = ground.right - selectedBox.width / 2;
             const minY = ground.top + selectedBox.height / 2;
-            const maxY = ground.top + CONTAINER_HEIGHT - selectedBox.height / 2;
+            const maxY = ground.top + containerHeight - selectedBox.height / 2;
             const minZ = ground.front + selectedBox.depth / 2;
             const maxZ = ground.back - selectedBox.depth / 2;
 

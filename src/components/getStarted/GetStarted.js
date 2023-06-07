@@ -7,7 +7,7 @@ import { sendLoginDataToServer } from '../Api';
 const GetStarted = () => {
   
   const [loginData, setLoginData] = useState({
-    name: "",
+    email: "",
     password: ""
   });
 
@@ -22,7 +22,7 @@ const GetStarted = () => {
 
   const handleLoginClick = (event) => {
     event.preventDefault();
-    // console.log(loginData);
+    console.log(loginData);
     sendLoginDataToServer(loginData);
     navigate('/uploading');
   };
@@ -35,10 +35,10 @@ const GetStarted = () => {
         <form>
           <div className="form-control">
             <input 
-              type="text" 
-              name="name" 
-              placeholder="Enter your name..."
-              value={loginData.name}
+              type="email" 
+              name="email" 
+              placeholder="Enter your e-mail..."
+              value={loginData.email}
               onChange={handleChange}
             />
             <input 

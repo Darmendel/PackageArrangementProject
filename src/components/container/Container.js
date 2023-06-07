@@ -139,32 +139,24 @@ const Container = () => {
 
     const handleContinueClick = () => {
       let containerData = {};
+      let containerSize = 0;
+      let url = 'https://localhost:7165';
 
       if (selectedContainer === 'custom-container') {
         containerData = customContainerValues;
+        url = 'https://localhost:7165';
+        sendDeliveryDataToServer(url, containerData, csvData);
       } else if (selectedContainer === 'small-container') {
-        containerData = {
-          height: 300,
-          width: 400,
-          length: 800
-        };
+        containerSize = 1;
+        // console.log(JSON.stringify({ containerSize, csvData }));
+        sendDeliveryDataToServer(url, containerSize, csvData);
       } else if (selectedContainer === 'medium-container') {
-        containerData = {
-          height: 600,
-          width: 800,
-          length: 1600
-        };
+        containerSize = 2;
+        sendDeliveryDataToServer(url, containerSize, csvData);
       } else if (selectedContainer === 'large-container') {
-        containerData = {
-          height: 1200,
-          width: 1600,
-          length: 3200
-        };
+        containerSize = 3;
+        sendDeliveryDataToServer(url, containerSize, csvData);
       }
-
-      // Call the sendDeliveryDataToServer function and pass the necessary data
-      //console.log(containerData);
-      sendDeliveryDataToServer(containerData, csvData);
     };
 
     if (isClickable) {

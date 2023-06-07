@@ -1,11 +1,11 @@
-async function sendDeliveryDataToServer(containerData, packageData) {
+async function sendDeliveryDataToServer(url, container, packageData) {
   try {
-    const response = await fetch('https://localhost:7165', {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ containerData, packageData }),
+      body: JSON.stringify({ container, packageData }),
     });
 
     if (response.ok) {

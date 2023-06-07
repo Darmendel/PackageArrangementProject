@@ -9,8 +9,8 @@
         private static UserList SetUsers()
         {
             UserList userList = new UserList();
-            userList.Add(new User { Id = "1", Name = "A", Email = "u1@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
-            //userList.Add(new User { Id = "2", Name = "B", Email = "u2@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
+            userList.Add(new User ("1", "A", "u1@gmail.com", "12345", new List<Delivery>() ));
+            userList.Add(new User ("2", "B", "u2@gmail.com", "12345", new List<Delivery>() ));
             //userList.Add(new User { Id = "3", Name = "C", Email = "u3@gmail.com", Password = "12345", Deliveries = new List<Delivery>() });
             return userList;
         }
@@ -69,9 +69,9 @@
                 PackageList p = new PackageList();
 
                 // cost = 2600
-                p.Add(new Package(id1, deliveryId, "Clothing", "2", "100", "50", "70", "5", "200", "Fifth avn."));
-                p.Add(new Package(id2, deliveryId, "Lamps", "1", "300", "150", "200", "100", "700", "Fifth avn."));
-                p.Add(new Package(id3, deliveryId, "Books", "3", "50", "50", "50", "400", "500", "Fifth avn."));
+                p.Add(new Package(id1, deliveryId, "100", "50", "70", "1"));
+                p.Add(new Package(id2, deliveryId, "300", "150", "200", "2"));
+                p.Add(new Package(id3, deliveryId, "50", "50", "50", "3"));
 
                 EditDelivery(deliveries, deliveryId, p);
                 packageList.Extend(p);

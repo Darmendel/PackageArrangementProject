@@ -3,6 +3,7 @@ from enum import Enum
 from enum import unique
 
 Location = tuple[int, int, int]
+Size = tuple[int, int, int]
 
 
 class Above(Enum):
@@ -31,6 +32,6 @@ class Point(Enum):
 
 @unique
 class Exist(Enum):
-    TRUE = -1
-    FALSE = 0
+    TRUE = -2
+    FALSE = -10
 

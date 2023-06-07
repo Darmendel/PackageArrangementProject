@@ -39,40 +39,48 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Package</returns>
-        public Package ConvertToPackage(RequestCreationOfNewPackage request);
+        //public Package ConvertToPackage(RequestCreationOfNewPackage request);
+
+        /// <summary>
+        /// Converts a request to create a package to a package.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="request"></param>
+        /// <returns>Package</returns>
+        public Package ConvertToPackage(string deliveryId, RequestCreationOfNewPackageInNewDelivery request);
+
+        /// <summary>
+        /// Converts a request to create a package to a package.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="request"></param>
+        /// <returns>Package</returns>
+        public Package ConvertToPackage(string deliveryId, RequestEditPackage request);
+
+        public List<Package> GetPackageList(string deliveryId, List<RequestCreationOfNewPackageInNewDelivery> packages);
 
         /// <summary>
         /// Given a delivery id, adds a new package.
         /// </summary>
         /// <param name="deliveryId"></param>
-        /// <param name="type"></param>
-        /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="weight"></param>
-        /// <param name="cost"></param>
-        /// <param name="address"></param>
+        /// /// <param name="order"></param>
         /// <returns>Package</returns>
-        public Package Create(string deliveryId, string type = null, string amount = null, string width = null, string height = null,
-            string depth = null, string weight = null, string cost = null, string address = null);
+        public Package Create(string deliveryId, string width = null, string height = null, string depth = null, string order = null);
 
         /// <summary>
         /// Updates a package.
         /// </summary>
         /// <param name="packageId"></param>
         /// <param name="deliveryId"></param>
-        /// <param name="type"></param>
-        /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="weight"></param>
-        /// <param name="cost"></param>
-        /// <param name="address"></param>
         /// <returns>Package</returns>
-        public Package Edit(string packageId, string deliveryId, string type = null, string amount = null, string width = null,
-            string height = null, string depth = null, string weight = null, string cost = null, string address = null);
+        public Package Edit(string packageId, string deliveryId, string width = null,
+            string height = null, string depth = null);
 
         /// <summary>
         /// Updates a package list.

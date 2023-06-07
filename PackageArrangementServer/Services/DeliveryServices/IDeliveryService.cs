@@ -39,7 +39,8 @@ namespace PackageArrangementServer.Services
         /// Given a delivery id and a user id, calculates the cost of a delivery.
         /// Returns -1 if there's no such delivery or user.
         /// </summary>
-        /// <param name="delivery"></param>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
         /// <returns>int</returns>
         public int Cost(string deliveryId, string userId);
 
@@ -68,8 +69,35 @@ namespace PackageArrangementServer.Services
         /// <param name="packages"></param>
         /// <param name="container"></param>
         /// <returns>Delivery</returns>
-        public Delivery Create(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage> packages = null,
+        public Delivery Create(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery> packages = null,
             IContainer container = null);
+
+        /// <summary>
+        /// Updates a delivery's package list.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="packages"></param>
+        /// <returns>Delivery</returns>
+        public Delivery Update(string deliveryId, string userId, List<Package>? packages);
+
+        /// <summary>
+        /// Updates a delivery's delivery date.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="deliveryDate"></param>
+        /// <returns>Delivery</returns>
+        public Delivery Update(string deliveryId, string userId, DateTime? deliveryDate);
+
+        /// <summary>
+        /// Updates a delivery's container.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="container"></param>
+        /// <returns>Delivery</returns>
+        public Delivery Update(string deliveryId, string userId, IContainer container);
 
         /// <summary>
         /// Updates a delivery (changes it's list of packages or it's selected container and calculates it's new cost and status).
@@ -88,7 +116,7 @@ namespace PackageArrangementServer.Services
         /// <param name="list"></param>
         /// <param name="delivery"></param>
         /// <returns>List<Delivery></returns>
-        public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery);
+        //public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery);
 
         /// <summary>
         /// Deletes a delivery.
@@ -99,12 +127,37 @@ namespace PackageArrangementServer.Services
         public Delivery Delete(string deliveryId, string userId);
 
         /// <summary>
+        /// Given a size of the container, return the selected container.
+        /// </summary>
+        /// <param name="size">IContainer</param>
+        public IContainer GetContainer(ContainerSize size);
+
+        /// <summary>
+        /// Returns the container that the user have selected.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="userId"></param>
+        /// <returns>IContainer</returns>
+        public IContainer GetContainer(string deliveryId, string userId);
+
+        /// <summary>
+        /// Given dimentions of a container, returns a new container.
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <param name="depth"></param>
+        /// <returns>IContainer</returns>
+        public IContainer CreateContainer(string height, string width, string depth);
+
+        /// <summary>
         /// Given a delivery id and a user id, returns all of the packages of the delivery.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
-        /// <returns></returns>
+        /// <returns>List<Package></returns>
         public List<Package> GetAllPackages(string deliveryId, string userId);
+
+        public List<Package> GetPackageList(string deliveryId, string userId, List<RequestCreationOfNewPackageInNewDelivery> packages);
 
         /// <summary>
         /// Checks if a certain package exists in a delivery.
@@ -137,17 +190,11 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
-        /// <param name="type"></param>
-        /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
-        /// <param name="weight"></param>
-        /// <param name="cost"></param>
-        /// <param name="address"></param>
         /// <returns>Package</returns>
-        public Package CreatePackage(string deliveryId, string userId, string type = null, string amount = null,string width = null,
-            string height = null, string depth = null, string weight = null, string cost = null, string address = null);
+        public Package CreatePackage(string deliveryId, string userId, string width = null, string height = null, string depth = null);
 
         /// <summary>
         /// Updates a package in a delivery.
@@ -156,17 +203,14 @@ namespace PackageArrangementServer.Services
         /// <param name="userId"></param>
         /// <param name="packageId"></param>
         /// <param name="type"></param>
-        /// <param name="amount"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="depth"></param>
         /// <param name="weight"></param>
         /// <param name="cost"></param>
-        /// <param name="address"></param>
         /// <returns>Package</returns>
-        public Package EditPackage(string deliveryId, string userId, string packageId, string type = null,
-            string amount = null, string width = null, string height = null, string depth = null, string weight = null,
-            string cost = null, string address = null);
+        public Package EditPackage(string deliveryId, string userId, string packageId,
+            string width = null, string height = null, string depth = null);
 
         /// <summary>
         /// Updates a package in a delivery.

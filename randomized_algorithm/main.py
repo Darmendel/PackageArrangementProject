@@ -143,8 +143,11 @@ def improvement_alg(pkgs=list[Package], cont_info=Container):
 def start():
     # create boxes
     raw_data = Input("dataset.csv")
-    cont = Container(height=int(raw_data.contdim[0]), width=int(raw_data.contdim[1]), length=int(raw_data.contdim[2]))
     pkgs = create_boxs_from_input(raw_data)
+    cont = Container(height=int(raw_data.contdim[0]),
+                     width=int(raw_data.contdim[1]),
+                     length=int(raw_data.contdim[2]),
+                     pkgs_num=len(pkgs))
     # construction algorithm
     solution = construction_phase(pkgs=pkgs, cont=cont)
     # improvement algorithm:

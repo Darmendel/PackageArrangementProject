@@ -11,7 +11,7 @@
   "profiles": {
     "PackageArrangementServer": {
       "commandName": "Project",
-      "launchBrowser": true,  
+      "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -29,3 +29,5 @@
     }
   }
 }
+
+// http://localhost:5165

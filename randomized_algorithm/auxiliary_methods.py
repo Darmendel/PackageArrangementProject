@@ -5,16 +5,15 @@ import numpy as np
 
 
 def check_feasibility(pos: Location, box_a: Package, list_box: list[Package], cont_dims: Container) -> bool:
-    # x1, y1, z1, size_x, size_y, size_z = pos  # format: point, below_point (because we try a new PP)
-    x1, y1, z1 = pos[0], pos[1], pos[2]
-    dx1, dy1, dz1 = box_a.length, box_a.width, box_a.height
+    x1, y1, z1 = pos
+    dx1, dy1, dz1 = box_a
     max_x1, max_y1, max_z1 = x1 + dx1, y1 + dy1, z1 + dz1
     if max_x1 > cont_dims.length or max_y1 > cont_dims.width or max_z1 > cont_dims.height:  # exceed container size.
         return False
 
     for used_box in list_box:
-        x2, y2, z2 = used_box.location[0], used_box.location[1], used_box.location[2]
-        dx2, dy2, dz2 = used_box.length, used_box.width, used_box.height
+        x2, y2, z2 = used_box.location
+        dx2, dy2, dz2 = used_box
         max_x2, max_y2, max_z2 = x2 + dx2, y2 + dy2, z2 + dz2
         if max_x1 > x2 and x1 < max_x2 \
                 and max_y1 > y2 and y1 < max_y2 \
@@ -53,6 +52,7 @@ def checkXZ(k_pkg: Package, nbox: Package) -> bool:
 def can_take_projection(k_pkg: Package, nbox: Package, side: str) -> bool:
     check_side = {"YX": checkYX, "YZ": checkYZ, "XY": checkYX, "XZ": checkXZ, "ZX": checkXZ, "ZY": checkYZ}
     return check_side[side](k_pkg, nbox)
+
 
 # TODO: fix small bug about the corners.
 # TODO: check to seek if picking the smallest distance produce better results.

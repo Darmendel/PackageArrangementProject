@@ -9,7 +9,7 @@ namespace PackageArrangementServer.Services
             if (packages == null && container == null) return -1;
             int cost = 0;
 
-            if (packages != null)
+            /*if (packages != null)
             {
                 foreach (Package package in packages)
                 {
@@ -23,7 +23,7 @@ namespace PackageArrangementServer.Services
                     }
                     catch (FormatException) { return -1; }
                 }
-            }
+            }*/
 
             if (container != null)
             {

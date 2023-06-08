@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignUp from './components/signUp/SignUp';
 import Uploading from './components/uploading/Uploading';
 import Container from './components/container/Container';
+import Visualization from './components/visualization/Visualization';
 import React from 'react';
 
 
@@ -18,6 +19,7 @@ function App() {
         <Route path='/signUp' element={<SignUp />}></Route>
         <Route path='/uploading' element={<Uploading />}></Route>
         <Route path='/container' element={<Container />}></Route>
+        <Route path='/visualization' element={<Visualization />}></Route>
       </Routes>
     </Router>
   );

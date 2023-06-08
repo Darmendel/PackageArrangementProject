@@ -1,10 +1,32 @@
-import React from "react";
+import {React, useState} from "react";
 import "./GetStarted.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
-import SignUp from "../signUp/SignUp";
+import { sendLoginDataToServer } from '../Api';
 
 const GetStarted = () => {
+  
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: ""
+  });
+
+  const handleChange = (event) => {
+    setLoginData({
+      ...loginData,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const navigate = useNavigate();
+
+  const handleLoginClick = (event) => {
+    event.preventDefault();
+    console.log(loginData);
+    sendLoginDataToServer(loginData);
+    navigate('/uploading');
+  };
+  
   return (
     <section id="getStarted">
       <Navbar />
@@ -12,10 +34,21 @@ const GetStarted = () => {
         <h2>Login to your account</h2>
         <form>
           <div className="form-control">
-            <input type="text" placeholder="Enter your name..." />
-            <input type="password" placeholder="Enter your password..." />
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Enter your e-mail..."
+              value={loginData.email}
+              onChange={handleChange}
+            />
+            <input 
+              type="password" 
+              name="password" 
+              placeholder="Enter your password..." 
+              onChange={handleChange}
+            />
           </div>
-          <Link className="login-lnk" to="/uploading">Login</Link>
+          <button className="login-lnk" onClick={handleLoginClick}>Login</button>
         </form>
         <div className="bottom">
           <h1>Don't have an account yet?</h1>

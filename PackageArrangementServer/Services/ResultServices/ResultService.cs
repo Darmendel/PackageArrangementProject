@@ -26,7 +26,7 @@ namespace PackageArrangementServer.Services.ResultServices
             /// Implement send request to Application
 
             string deliveryId = request.Id;
-            User user = _userService.FindUserByDeliveryId(deliveryId);
+            User user = _userService.Get(request.UserId, "id");
             if (user != null) {
                 DeliveryRequest req = new DeliveryRequest(request.Id, request.Container, request.FirstPackages);
                 req.UserId = user.Id;

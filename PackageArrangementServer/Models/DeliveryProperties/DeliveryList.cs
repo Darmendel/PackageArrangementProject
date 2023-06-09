@@ -46,7 +46,7 @@
                 int index = _deliveries.IndexOf(delivery);
 
                 if (deliveryDate != null) _deliveries[index].DeliveryDate = (DateTime) deliveryDate;
-                if (packages != null) _deliveries[index].Packages = packages;
+                //if (packages != null) _deliveries[index].Packages = packages;
                 if (container != null) _deliveries[index].Container = container;
 
                 /*if (container != null)
@@ -68,28 +68,28 @@
         public void AddPackage(Delivery delivery, Package package)
         {
             if (delivery == null || package == null) return;
-            if (delivery.Packages.Contains(package)) return;
-            delivery.Packages.Add(package);
-            Edit(delivery, packages: delivery.Packages);
+            if (delivery.firstPackages.Contains(package)) return;
+            delivery.firstPackages.Add(package);
+            Edit(delivery, packages: delivery.firstPackages);
         }
 
         public void EditPackage(Delivery delivery, Package package)
         {
             if (delivery == null || package == null) return;
-            if (!delivery.Packages.Contains(package)) return;
+            if (!delivery.firstPackages.Contains(package)) return;
 
-            int index = delivery.Packages.IndexOf(package);
-            delivery.Packages[index] = package;
+            int index = delivery.firstPackages.IndexOf(package);
+            delivery.firstPackages[index] = package;
 
-            Edit(delivery, packages: delivery.Packages);
+            Edit(delivery, packages: delivery.firstPackages);
         }
 
         public void DeletePackage(Delivery delivery, Package package)
         {
             if (delivery == null || package == null) return;
-            if (!delivery.Packages.Contains(package)) return;
-            delivery.Packages.Remove(package);
-            Edit(delivery, packages: delivery.Packages);
+            if (!delivery.firstPackages.Contains(package)) return;
+            delivery.firstPackages.Remove(package);
+            Edit(delivery, packages: delivery.firstPackages);
         }
     }
 }

@@ -6,6 +6,5 @@
         Medium = 2,
         Large = 3,
         General = 4
-        //Invalid = 0
     }
 }

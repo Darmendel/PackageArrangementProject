@@ -16,9 +16,9 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="height"></param>
         /// <param name="width"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// <returns>bool</returns>
-        bool Validate(string height, string width, string depth);
+        bool Validate(string height, string width, string Length);
 
         /// <summary>
         /// Returns the type of the container - small, medium or large.
@@ -53,8 +53,8 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="height"></param>
         /// <param name="width"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// <returns>IContainer</returns>
-        public IContainer Create(string height, string width, string depth);
+        public IContainer Create(string height, string width, string Length);
     }
 }

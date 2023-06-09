@@ -9,7 +9,7 @@
         public PackageList(List<Package> packages)
         {
             this._packages = packages.ConvertAll(p => new Package(
-                p.Id, p.DeliveryId, p.Width, p.Height, p.Depth, p.Order));
+                p.Id, p.DeliveryId, p.Width, p.Height, p.Length, p.Order));
         }
 
         public PackageList()
@@ -38,7 +38,7 @@
         }
 
         public void Edit(Package package, string width = null, string height = null,
-            string depth = null)
+            string Length = null)
         {
             if (package == null) return;
 
@@ -48,7 +48,7 @@
 
                 if (width != null) _packages[index].Width = width;
                 if (height != null) _packages[index].Height = height;
-                if (depth != null) _packages[index].Depth = depth;
+                if (Length != null) _packages[index].Length = Length;
             }
         }
 

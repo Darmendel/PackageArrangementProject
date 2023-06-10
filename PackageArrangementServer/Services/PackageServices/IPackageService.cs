@@ -65,10 +65,10 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryId"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// /// <param name="order"></param>
         /// <returns>Package</returns>
-        public Package Create(string deliveryId, string width = null, string height = null, string depth = null, string order = null);
+        public Package Create(string deliveryId, string width = null, string height = null, string Length = null, string order = null);
 
         /// <summary>
         /// Updates a package.
@@ -77,10 +77,10 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryId"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// <returns>Package</returns>
         public Package Edit(string packageId, string deliveryId, string width = null,
-            string height = null, string depth = null);
+            string height = null, string Length = null);
 
         /// <summary>
         /// Updates a package list.

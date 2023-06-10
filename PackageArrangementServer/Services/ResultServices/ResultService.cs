@@ -18,23 +18,29 @@ namespace PackageArrangementServer.Services.ResultServices
         /// DeliveryArrangement.
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>void</returns>
-        public async void DeliveryArrangement(DeliveryTwoResults request)
+        /// <returns>string</returns>
+        public string DeliveryArrangement(DeliveryTwoResults request)
         {
             /// Implement update delivery status
             /// Implement update delivery in db
             /// Implement send request to Application
 
+            string result = null;
             string deliveryId = request.Id;
-            User user = _userService.FindUserByDeliveryId(deliveryId);
-            if (user != null) {
-                DeliveryRequest req = new DeliveryRequest(request.Id, request.Container, request.FirstPackages);
-                req.UserId = user.Id;
-                Console.WriteLine(request);
-                StringContent message = new StringContent(JsonConvert.SerializeObject(request));
-                HttpResponseMessage response = await sharedClient.PostAsync("delivery", message);
-            }
-            return;
+            string userId = request.UserId;
+
+            if (!_userService.Exists(userId, "id")) return "This User " + userId + " does not exist";
+
+            Delivery delivery = _userService.GetDelivery(userId, deliveryId);
+
+            if (delivery != null)
+            {
+                delivery.firstPackages = request.FirstPackages;
+                delivery.secondPackages = request.SecondPackages;
+                delivery.Status = DeliveryStatus.Ready;
+            } else result = "This delivery id: " + deliveryId + " does not exist";
+            
+            return result;
         }
     }
 }

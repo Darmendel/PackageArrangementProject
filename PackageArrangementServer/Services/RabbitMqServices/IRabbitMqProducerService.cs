@@ -1,4 +1,5 @@
 ﻿using PackageArrangementServer.Models;
+using PackageArrangementServer.Models.Requests.RequestCreation;
 using RabbitMQ.Client;
 
 namespace PackageArrangementServer.Services
@@ -9,10 +10,9 @@ namespace PackageArrangementServer.Services
         /// Sends a message to the rabbitMQ queue.
         /// Returns 1 is succeeded, and 0 otherwise.
         /// </summary>
-        /// <param name="packages"></param>
-        /// <param name="container"></param>
+        /// <param name="deliveryRequest"></param>
         /// <param name="friendqueue"></param>
         /// <returns>int</returns>
-        public int Send(string deliveryId, List<Package> packages, IContainer container, string friendqueue);
+        public int Send(DeliveryRequest deliveryRequest, string friendqueue);
     }
 }

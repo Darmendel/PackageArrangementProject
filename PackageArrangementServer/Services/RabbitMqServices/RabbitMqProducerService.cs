@@ -11,11 +11,16 @@ namespace PackageArrangementServer.Services
 
         public RabbitMqProducerService() { producer = new RabbitMqProducer(); }
 
-        public int Send(string deliveryId, List<Package> packages, IContainer container, string friendqueue)
+        /// <summary>
+        /// Sends a message to the rabbitMQ queue.
+        /// Returns 1 is succeeded, and 0 otherwise.
+        /// </summary>
+        /// <param name="deliveryRequest"></param>
+        /// <param name="friendqueue"></param>
+        /// <returns>int</returns>
+        public int Send(DeliveryRequest deliveryRequest, string friendqueue)
         {
-            if (packages == null || container == null || friendqueue == null) return 0;
-
-            DeliveryRequest deliveryRequest = new DeliveryRequest(deliveryId, container, packages);
+            
             JsonSerializerOptions options = new()
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault

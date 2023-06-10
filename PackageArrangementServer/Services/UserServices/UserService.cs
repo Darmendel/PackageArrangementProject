@@ -139,8 +139,20 @@ namespace PackageArrangementServer.Services
 
         public Delivery GetDelivery(string userId, string deliveryId)
         {
-            if (!Exists(userId, "id")) return null;
-            return deliveryService.Get(deliveryId, userId);
+            Delivery delivery = null;
+            User user = Get(userId, "id");
+            if (user != null)
+            {
+                foreach (Delivery d in user.Deliveries)
+                {
+                    if (d.Id == deliveryId)
+                    {
+                        delivery = d;
+                        break;
+                    }
+                }
+            }
+            return delivery;
         }
 
         /*private int Update(string userId, Delivery delivery, string op)

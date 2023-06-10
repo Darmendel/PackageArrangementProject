@@ -9,7 +9,7 @@ namespace PackageArrangementServer.Services.ResultServices
         /// DeliveryArrangement.
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>void</returns>
-        public void DeliveryArrangement(DeliveryTwoResults request);
+        /// <returns>string</returns>
+        public string DeliveryArrangement(DeliveryTwoResults request);
     }
 }

@@ -4,7 +4,7 @@ namespace PackageArrangementServer.Services
 {
     public class DeliveryServiceHelper : IDeliveryServiceHelper
     {
-        private static int CalculateCost(List<Package> packages = null, IContainer? container = null)
+        private static int CalculateCost(List<Package> packages = null, IContainer container = null)
         {
             if (packages == null && container == null) return -1;
             int cost = 0;

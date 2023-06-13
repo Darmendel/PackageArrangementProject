@@ -22,12 +22,13 @@ namespace PackageArrangementServer.Controllers
         /// </summary>
         /// <param name="req"></param>
         [HttpPost("DeliveryArrangement")]
-        public void Post([FromBody] DeliveryTwoResults req)
+        public string Post([FromBody] DeliveryTwoResults req)
         {
-            resultService.DeliveryArrangement(req);
-            Response.StatusCode = 200;
+            string result = resultService.DeliveryArrangement(req);
+            
+            Response.StatusCode = result == null ? 200 : 400;
             Console.WriteLine(req);
-            return;
+            return result;
         }
     }
 }

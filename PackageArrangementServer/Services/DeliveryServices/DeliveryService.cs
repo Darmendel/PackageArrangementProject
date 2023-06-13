@@ -101,7 +101,7 @@ namespace PackageArrangementServer.Services
             List<Package> packageList = packageService.GetPackageList(deliveryId, packages);
             if (packageList == null) packageList = new List<Package>();
 
-            Delivery delivery = new Delivery(deliveryId, userId, deliveryDate, packageList, container);
+            Delivery delivery = new Delivery(deliveryId, userId, deliveryDate, packageList, packageList, container);
 
             string cost = Cost(delivery).ToString();
             DeliveryStatus status = Status(delivery);
@@ -217,15 +217,22 @@ namespace PackageArrangementServer.Services
             return delivery.Container;
         }
 
-        public IContainer CreateContainer(string height, string width, string depth)
+        public IContainer CreateContainer(string height, string width, string Length)
         {
-            return containerService.Create(height, width, depth);
+            return containerService.Create(height, width, Length);
         }
 
         public List<Package> GetAllPackages(string deliveryId, string userId)
         {
             if (!Exists(deliveryId, userId)) return null;
-            return packageService.GetAllPackages(deliveryId);
+            Delivery delivery = Get(deliveryId, userId);
+            List<Package> lst = new List<Package>();
+
+            foreach (Package package in delivery.firstPackages)
+            {
+                lst.Add(package.Clone());
+            }
+            return lst;
         }
 
         public List<Package> GetPackageList(string deliveryId, string userId,
@@ -254,23 +261,23 @@ namespace PackageArrangementServer.Services
         }
 
         public Package CreatePackage(string deliveryId, string userId, string width = null,
-            string height = null, string depth = null)
+            string height = null, string Length = null)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return null;
 
-            Package package = packageService.Create(deliveryId, width, height, depth);
+            Package package = packageService.Create(deliveryId, width, height, Length);
             deliveryList.AddPackage(delivery, package);
             return package;
         }
 
         public Package EditPackage(string deliveryId, string userId, string packageId, 
-                        string width = null, string height = null, string depth = null)
+                        string width = null, string height = null, string Length = null)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return null;
 
-            Package package = packageService.Edit(packageId, deliveryId, width, height, depth);
+            Package package = packageService.Edit(packageId, deliveryId, width, height, Length);
 
             deliveryList.EditPackage(delivery, package);
             return package;

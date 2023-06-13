@@ -10,20 +10,22 @@ namespace PackageArrangementServer.Models
         public string UserId { get; set; } // define as second key
         public DateTime CreatedDate { get; set; }
         public DateTime DeliveryDate { get; set; }
-        public List<Package> Packages { get; set; }
+        public List<Package> firstPackages { get; set; }
+        public List<Package> secondPackages { get; set; }
         public IContainer? Container { get; set; }
         public string Cost { get; set; }
         public DeliveryStatus Status { get; set; }
 
 
-        public Delivery(string id, string userId, DateTime? deliveryDate = null, List<Package> packages = null,
-            IContainer? container = null)
+        public Delivery(string id, string userId, DateTime? deliveryDate = null, List<Package> fpackages = null,
+            List<Package> spackages = null, IContainer ? container = null)
         {
             this.Id = id;
             this.UserId = userId;
             this.CreatedDate = DateTime.Now;
             this.DeliveryDate = (DateTime) deliveryDate;
-            this.Packages = packages;
+            this.firstPackages = fpackages;
+            this.secondPackages = spackages;
 
             /*int cost = CalculateCost(packages, container);
             if (cost > 0) this.Cost = cost.ToString();
@@ -31,8 +33,7 @@ namespace PackageArrangementServer.Models
 
             this.Cost = 0.ToString();
 
-            if (container != null) this.Container = container;
-            else this.Container = new MediumContainer();
+            this.Container = (container != null) ? container : new MediumContainer();
 
             this.Status = DeliveryStatus.Pending;
         }

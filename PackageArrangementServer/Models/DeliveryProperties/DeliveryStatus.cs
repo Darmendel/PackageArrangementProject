@@ -4,6 +4,7 @@
     {
         NonExisting,
         Pending,
+        Ready,
         Shipped,
         Delivered
         //Canceled

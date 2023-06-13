@@ -139,8 +139,20 @@ namespace PackageArrangementServer.Services
 
         public Delivery GetDelivery(string userId, string deliveryId)
         {
-            if (!Exists(userId, "id")) return null;
-            return deliveryService.Get(deliveryId, userId);
+            Delivery delivery = null;
+            User user = Get(userId, "id");
+            if (user != null)
+            {
+                foreach (Delivery d in user.Deliveries)
+                {
+                    if (d.Id == deliveryId)
+                    {
+                        delivery = d;
+                        break;
+                    }
+                }
+            }
+            return delivery;
         }
 
         /*private int Update(string userId, Delivery delivery, string op)
@@ -169,10 +181,9 @@ namespace PackageArrangementServer.Services
             Delivery delivery = deliveryService.Create(userId, deliveryDate, packages, container);
             if (delivery == null) return null;
 
-            List<Package> packageList = deliveryService.GetPackageList(delivery.Id, userId, packages);
-            if (packageList == null) return null;
+            DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, delivery.firstPackages, userId);
 
-            int res = producerService.Send(delivery.Id, packageList, container, "order_report"); // change null to name of queue
+            int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
             if (res == 0) return null;
 
             //return Update(userId, delivery, "add");
@@ -231,7 +242,9 @@ namespace PackageArrangementServer.Services
             IContainer container = deliveryService.GetContainer(deliveryId, userId);
             if (container == null) return 0;
 
-            int res = producerService.Send(delivery.Id, packages, container, null); // change null to name of queue
+            DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, packages, userId);
+
+            int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
             if (res == 0) return 0;
 
             return 1;
@@ -256,7 +269,9 @@ namespace PackageArrangementServer.Services
             List<Package> packages = deliveryService.GetAllPackages(deliveryId, userId);
             if (packages == null) return 0;
 
-            int res = producerService.Send(delivery.Id, packages, container, null); // change null to name of queue
+            DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, packages, userId);
+
+            int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
             if (res == 0) return 0;
 
             return 1;
@@ -291,9 +306,9 @@ namespace PackageArrangementServer.Services
             return deliveryService.GetContainer(size);
         }
 
-        public IContainer CreateContainer(string height, string width, string depth)
+        public IContainer CreateContainer(string height, string width, string Length)
         {
-            return deliveryService.CreateContainer(height, width, depth);
+            return deliveryService.CreateContainer(height, width, Length);
         }
 
         public List<Package> GetAllPackages(string userId, string deliveryId)
@@ -309,22 +324,22 @@ namespace PackageArrangementServer.Services
         }
 
         public int CreatePackage(string userId, string deliveryId, string width = null,
-            string height = null, string depth = null)
+            string height = null, string Length = null)
         {
             if (!Exists(userId, "id")) return 0;
 
-            Package package = deliveryService.CreatePackage(deliveryId, userId, width, height, depth);
+            Package package = deliveryService.CreatePackage(deliveryId, userId, width, height, Length);
 
             if (package == null) return 0;
             return 1;
         }
 
         public int EditPackage(string userId, string deliveryId, string packageId, 
-            string width = null, string height = null, string depth = null)
+            string width = null, string height = null, string Length = null)
         {
             if (!Exists(userId, "id")) return 0;
 
-            Package package = deliveryService.EditPackage(deliveryId, userId, packageId, width, height, depth);
+            Package package = deliveryService.EditPackage(deliveryId, userId, packageId, width, height, Length);
 
             if (package == null) return 0;
             return 1;

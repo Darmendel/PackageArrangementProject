@@ -145,9 +145,9 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="height"></param>
         /// <param name="width"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// <returns>IContainer</returns>
-        public IContainer CreateContainer(string height, string width, string depth);
+        public IContainer CreateContainer(string height, string width, string Length);
 
         /// <summary>
         /// Given a delivery id and a user id, returns all of the packages of the delivery.
@@ -192,9 +192,9 @@ namespace PackageArrangementServer.Services
         /// <param name="userId"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// <returns>Package</returns>
-        public Package CreatePackage(string deliveryId, string userId, string width = null, string height = null, string depth = null);
+        public Package CreatePackage(string deliveryId, string userId, string width = null, string height = null, string Length = null);
 
         /// <summary>
         /// Updates a package in a delivery.
@@ -205,12 +205,12 @@ namespace PackageArrangementServer.Services
         /// <param name="type"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// <param name="weight"></param>
         /// <param name="cost"></param>
         /// <returns>Package</returns>
         public Package EditPackage(string deliveryId, string userId, string packageId,
-            string width = null, string height = null, string depth = null);
+            string width = null, string height = null, string Length = null);
 
         /// <summary>
         /// Updates a package in a delivery.

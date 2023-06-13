@@ -32,8 +32,8 @@
             IContainer medium = new MediumContainer(); // cost = 850
             IContainer big = new BigContainer(); // cost = 1000
 
-            Delivery del1 = new Delivery("1", "1", tomorrow, new List<Package>(), small);
-            Delivery del2 = new Delivery("2", "1", t1, new List<Package>(), medium);
+            Delivery del1 = new Delivery("1", "1", tomorrow, new List<Package>(), new List<Package>(), small);
+            Delivery del2 = new Delivery("2", "2", t1, new List<Package>(), new List<Package>(), medium);
 
             d1.Add(del1);
             d1.Add(del2);

@@ -5,7 +5,7 @@ namespace PackageArrangementServer.Services
 {
     public class ContainerService : IContainerService
     {
-        public static bool Validate(ContainerSize size)
+        /*public static bool Validate(ContainerSize size)
         {
             if (size == ContainerSize.Small
                 || size == ContainerSize.Medium
@@ -13,11 +13,11 @@ namespace PackageArrangementServer.Services
             return false;
         }
 
-        public static bool Validate(string height, string width, string depth)
+        public static bool Validate(string height, string width, string Length)
         {
             if (height == null || !Regex.IsMatch(height, @"^\d+$")) return false;
             if (width == null || !Regex.IsMatch(width, @"^\d+$")) return false;
-            if (depth == null || !Regex.IsMatch(depth, @"^\d+$")) return false;
+            if (Length == null || !Regex.IsMatch(Length, @"^\d+$")) return false;
 
             return true;
         }
@@ -54,14 +54,14 @@ namespace PackageArrangementServer.Services
             return null;
         }
 
-        public IContainer Create(string height, string width, string depth)
+        public IContainer Create(string height, string width, string Length)
         {
-            if (!Validate(height, width, depth)) return null;
-            return new GeneralContainer(height, width, depth); // need to calculate it's cost!
+            if (!Validate(height, width, Length)) return null;
+            return new GeneralContainer(height, width, Length); // need to calculate it's cost!
         }
 
-        bool IContainerService.Validate(string height, string width, string depth) =>
-            ContainerService.Validate(height, width, depth);
+        bool IContainerService.Validate(string height, string width, string Length) =>
+            ContainerService.Validate(height, width, Length);
 
         bool IContainerService.Validate(ContainerSize size) => ContainerService.Validate(size);
 
@@ -71,7 +71,40 @@ namespace PackageArrangementServer.Services
 
         int IContainerService.Size(IContainer container) => ContainerService.Size(container);
 
-        IContainer IContainerService.Get(ContainerSize size) => ContainerService.Get(size);
+        IContainer IContainerService.Get(ContainerSize size) => ContainerService.Get(size);*/
+        IContainer IContainerService.Create(string height, string width, string Length)
+        {
+            throw new NotImplementedException();
+        }
 
+        IContainer IContainerService.Get(ContainerSize size)
+        {
+            throw new NotImplementedException();
+        }
+
+        int IContainerService.Size(IContainer container)
+        {
+            throw new NotImplementedException();
+        }
+
+        string IContainerService.Type(ContainerSize size)
+        {
+            throw new NotImplementedException();
+        }
+
+        string IContainerService.Type(IContainer container)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IContainerService.Validate(ContainerSize size)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IContainerService.Validate(string height, string width, string Length)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

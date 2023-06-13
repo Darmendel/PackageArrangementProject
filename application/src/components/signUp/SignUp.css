@@ -57,7 +57,7 @@ form input {
   color: orangered;
   font-weight: 500;
   font-size: 1.5rem;
-  margin-left: 7.5rem;
+  margin-left: 8rem;
 }
 
 .back-login:hover {
@@ -66,7 +66,7 @@ form input {
 
 .bottom-sign {
   /* padding: 4rem; */
-  margin-left: 37rem;
+  margin-left: 36rem;
 }
 
 .bottom-sign h1 {

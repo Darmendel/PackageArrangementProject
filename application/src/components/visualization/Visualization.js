@@ -1,13 +1,12 @@
 import React, { useEffect, useRef } from 'react';
+// import Navbar from '../navbar/Navbar';
 import './Visualization.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Visualization = () => {
   const ref = useRef(null);
-
-  useEffect(() => {
-    const data = {"id": 1, 
+  const data = {"id": 1, 
     "container": {
       "height": 600, 
       "width": 800, 
@@ -37,7 +36,18 @@ const Visualization = () => {
       "deliveryId": 1}, 
       {"id": 23, "width": 200, "depth": 800, "height": 200, "order": 22, "x": 0, "y": 0, "z": 200, "deliveryId": 1}, {"id": 31, "width": 200, "depth": 800, "height": 200, "order": 30, "x": 0, "y": 0, "z": 400, "deliveryId": 1}, {"id": 9, "width": 200, "depth": 200, "height": 600, "order": 8, "x": 200, "y": 600, "z": 0, "deliveryId": 1}, {"id": 38, "width": 200, "depth": 200, "height": 600, "order": 37, "x": 800, "y": 0, "z": 0, "deliveryId": 1}, {"id": 18, "width": 800, "depth": 100, "height": 200, "order": 17, "x": 1000, "y": 0, "z": 0, "deliveryId": 1}, {"id": 22, "width": 400, "depth": 200, "height": 200, "order": 21, "x": 1000, "y": 0, "z": 200, "deliveryId": 1}, {"id": 24, "width": 400, "depth": 200, "height": 200, "order": 23, "x": 1000, "y": 0, "z": 400, "deliveryId": 1}, {"id": 32, "width": 800, "depth": 100, "height": 200, "order": 31, "x": 1100, "y": 0, "z": 0, "deliveryId": 1}, {"id": 39, "width": 400, "depth": 200, "height": 200, "order": 38, "x": 1200, "y": 0, "z": 0, "deliveryId": 1}, {"id": 35, "width": 400, "depth": 200, "height": 200, "order": 34, "x": 1200, "y": 0, "z": 200, "deliveryId": 1}, {"id": 40, "width": 400, "depth": 200, "height": 200, "order": 39, "x": 1200, "y": 0, "z": 400, "deliveryId": 1}, {"id": 7, "width": 200, "depth": 100, "height": 600, "order": 6, "x": 1400, "y": 0, "z": 0, "deliveryId": 1}, {"id": 12, "width": 200, "depth": 100, "height": 600, "order": 11, "x": 1400, "y": 200, "z": 0, "deliveryId": 1}, {"id": 8, "width": 200, "depth": 100, "height": 600, "order": 7, "x": 1400, "y": 400, "z": 0, "deliveryId": 1}, {"id": 13, "width": 200, "depth": 100, "height": 600, "order": 12, "x": 1400, "y": 600, "z": 0, "deliveryId": 1}, {"id": 34, "width": 200, "depth": 100, "height": 600, "order": 33, "x": 1500, "y": 0, "z": 0, "deliveryId": 1}, {"id": 4, "width": 200, "depth": 300, "height": 200, "order": 3, "x": 0, "y": 200, "z": 0, "deliveryId": 1}, {"id": 44, "width": 200, "depth": 600, "height": 200, "order": 43, "x": 0, "y": 200, "z": 200, "deliveryId": 1}, {"id": 16, "width": 200, "depth": 200, "height": 200, "order": 15, "x": 0, "y": 200, "z": 400, "deliveryId": 1}, {"id": 43, "width": 200, "depth": 800, "height": 200, "order": 42, "x": 0, "y": 400, "z": 0, "deliveryId": 1}, {"id": 36, "width": 200, "depth": 800, "height": 200, "order": 35, "x": 0, "y": 400, "z": 200, "deliveryId": 1}, {"id": 37, "width": 200, "depth": 800, "height": 200, "order": 36, "x": 0, "y": 400, "z": 400, "deliveryId": 1}, {"id": 19, "width": 200, "depth": 200, "height": 200, "order": 18, "x": 0, "y": 600, "z": 0, "deliveryId": 1}, {"id": 5, "width": 200, "depth": 300, "height": 200, "order": 4, "x": 200, "y": 200, "z": 400, "deliveryId": 1}, {"id": 29, "width": 200, "depth": 800, "height": 200, "order": 28, "x": 600, "y": 600, "z": 200, "deliveryId": 1}, {"id": 30, "width": 200, "depth": 800, "height": 200, "order": 29, "x": 600, "y": 600, "z": 400, "deliveryId": 1}, {"id": 3, "width": 200, "depth": 400, "height": 200, "order": 2, "x": 300, "y": 200, "z": 0, "deliveryId": 1}, {"id": 27, "width": 200, "depth": 400, "height": 200, "order": 26, "x": 500, "y": 200, "z": 400, "deliveryId": 1}, {"id": 2, "width": 200, "depth": 400, "height": 200, "order": 1, "x": 600, "y": 200, "z": 200, "deliveryId": 1}, {"id": 28, "width": 200, "depth": 400, "height": 200, "order": 27, "x": 600, "y": 600, "z": 0, "deliveryId": 1}, {"id": 41, "width": 200, "depth": 400, "height": 200, "order": 40, "x": 800, "y": 400, "z": 200, "deliveryId": 1}, {"id": 42, "width": 200, "depth": 400, "height": 200, "order": 41, "x": 800, "y": 400, "z": 400, "deliveryId": 1}, {"id": 14, "width": 100, "depth": 200, "height": 200, "order": 13, "x": 0, "y": 600, "z": 200, "deliveryId": 1}, {"id": 15, "width": 200, "depth": 300, "height": 200, "order": 14, "x": 700, "y": 200, "z": 0, "deliveryId": 1}, {"id": 25, "width": 200, "depth": 200, "height": 200, "order": 24, "x": 0, "y": 600, "z": 400, "deliveryId": 1}, {"id": 26, "width": 200, "depth": 200, "height": 200, "order": 25, "x": 800, "y": 400, "z": 0, "deliveryId": 1}
     ]
-    };
+  };
+
+  // Sort the packages by ID
+  data.firstPackages.sort((a, b) => a.id - b.id);
+  data.secondPackages.sort((a, b) => a.id - b.id);
+
+  const handleExportSolution = () => {
+    // Logic for exporting the solution
+  };
+
+  useEffect(() => {
+    const SCALE = 100;
 
     // first solution:
 
@@ -46,9 +56,9 @@ const Visualization = () => {
     const boxesDepthFirst = [];
 
     data.firstPackages.forEach(function(box) {
-      boxesWidthFirst.push(box.width / 100);
-      boxesHeightFirst.push(box.height / 100);
-      boxesDepthFirst.push(box.depth / 100);
+      boxesWidthFirst.push(box.width / SCALE);
+      boxesHeightFirst.push(box.height / SCALE);
+      boxesDepthFirst.push(box.depth / SCALE);
     });
 
     const xPositionsFirst = [];
@@ -57,15 +67,15 @@ const Visualization = () => {
 
     data.firstPackages.forEach(function(box) {
       if (box.x !== 0) {
-        box.x /= 100;
+        box.x /= SCALE;
       }
       zPositionsFirst.push(box.x);
       if (box.y !== 0) {
-        box.y /= 100;
+        box.y /= SCALE;
       }
       xPositionsFirst.push(box.y);
       if (box.z !== 0) {
-        box.z /= 100;
+        box.z /= SCALE;
       }
       yPositionsFirst.push(box.z);
     });
@@ -77,9 +87,9 @@ const Visualization = () => {
     const boxesDepthSecond = [];
 
     data.secondPackages.forEach(function(box) {
-      boxesWidthSecond.push(box.width / 100);
-      boxesHeightSecond.push(box.height / 100);
-      boxesDepthSecond.push(box.depth / 100);
+      boxesWidthSecond.push(box.width / SCALE);
+      boxesHeightSecond.push(box.height / SCALE);
+      boxesDepthSecond.push(box.depth / SCALE);
     });
 
     const xPositionsSecond = [];
@@ -88,24 +98,20 @@ const Visualization = () => {
 
     data.secondPackages.forEach(function(box) {
       if (box.x !== 0) {
-        box.x /= 100;
+        box.x /= SCALE;
       }
       zPositionsSecond.push(box.x);
       if (box.y !== 0) {
-        box.y /= 100;
+        box.y /= SCALE;
       }
       xPositionsSecond.push(box.y);
       if (box.z !== 0) {
-        box.z /= 100;
+        box.z /= SCALE;
       }
       yPositionsSecond.push(box.z);
     });
     
-    // console.log('xPositionsFirst:', xPositionsFirst);
-    // console.log('yPositionsFirst', yPositionsFirst);
-    // console.log('zPositionsFirst', zPositionsFirst);
-    
-    const containerHeight = data.container.height / 100;
+    const containerHeight = data.container.height / SCALE;
       
     var selectedBox = null;
     var boxes = [];
@@ -113,23 +119,15 @@ const Visualization = () => {
     var boxWidth = 0;
     var boxHeight = 0;
     var boxDepth = 0;
-    // const spacing = 0;
 
-    const groundWidth = data.container.width / 100;
+    const groundWidth = data.container.width / SCALE;
     const groundHeight = 0;
-    const groundDepth = data.container.depth / 100;
-    // const maxBoxesWidth = Math.floor(groundWidth / (boxWidth + spacing)) - 3;
-    // const maxBoxesHeight = Math.floor(containerHeight / (boxHeight + spacing)) - 2;
-    // const maxBoxesDepth = Math.floor(groundDepth / (boxDepth + spacing)) - 2;
-
-    //const startX = -((maxBoxesWidth - 1) * (boxWidth + spacing)) / 2;
-    //const startY = -((maxBoxesHeight - 1) * (boxHeight + spacing)) / 2;
-    //const startZ = -((maxBoxesDepth - 1) * (boxDepth + spacing)) / 2;1
-
+    const groundDepth = data.container.depth / SCALE;
+  
     var scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xa1930); 
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    
     var raycaster = new THREE.Raycaster();
     var mouse = new THREE.Vector2();
     var renderer = new THREE.WebGLRenderer();
@@ -154,7 +152,6 @@ const Visualization = () => {
         this.depth = depth;
         
         this.position.copy(position);
-        // this.velocity = velocity;
         
         this.bottom = this.position.y - this.height / 2;
         this.top = this.position.y + this.height / 2;
@@ -179,24 +176,7 @@ const Visualization = () => {
       
       update() {
         this.updateSides();
-        
-        // this.position.x += this.velocity.x;
-        // this.position.y += this.velocity.y;
-        // this.position.z += this.velocity.z;
-
-        // this.applyGravity(ground);
       }
-        
-      // applyGravity(ground) {
-
-      //   // Collision detection with the ground
-      //   if (boxCollision({ box1: this, box2: ground })) {
-      //     this.velocity.y = 0;
-      //     this.position.y = ground.top + this.height / 2;
-      //   }
-
-      // }
-
     }
 
     // Creating boxes and ground
@@ -206,21 +186,17 @@ const Visualization = () => {
       boxWidth = boxesWidthFirst[i];
       boxHeight = boxesHeightFirst[i];
       boxDepth = boxesDepthFirst[i];
-      // const positionX = boxWidth/2 + (boxWidth + spacing) * i - groundWidth/2;
-      // const positionY = groundHeight/2 + boxHeight/2 + (boxHeight + spacing) * i;
-      // const positionZ = boxDepth/2 + (boxDepth + spacing) * i - groundDepth/2;
+      
       const positionX = boxWidth/2 + xPositionsFirst[i] - groundWidth/2;
       const positionY = boxHeight/2 + yPositionsFirst[i];
       const positionZ = boxDepth/2 + zPositionsFirst[i] - groundDepth/2;
       const position = new THREE.Vector3(positionX, positionY, positionZ);
       console.log('position', i, ':', position);
-      // const velocity = new THREE.Vector3(0, 0, 0); // Example velocity
 
       const box = new Box({
         width: boxWidth,
         height: boxHeight,
         depth: boxDepth,
-        // velocity: velocity,
         position: position,
       });
       box.castShadow = true;
@@ -248,7 +224,7 @@ const Visualization = () => {
 
     // camera.position.x = -5;
     // camera.position.y = 5;
-    camera.position.z = 13;
+    camera.position.z = 20;
     
     window.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('click', onClick);
@@ -339,10 +315,6 @@ const Visualization = () => {
           intersectionPoint.x = Math.max(Math.min(intersectionPoint.x, maxX), minX);
           intersectionPoint.y = Math.max(Math.min(intersectionPoint.y, maxY), minY);
           intersectionPoint.z = Math.max(Math.min(intersectionPoint.z, maxZ), minZ);
-    
-          // console.log('intersectionPoint.x:', intersectionPoint.x);
-          // console.log('intersectionPoint.y:', intersectionPoint.y);
-          // console.log('intersectionPoint.z:', intersectionPoint.z);
 
           // Check if the intersection point is within the container's boundaries
           if (
@@ -378,12 +350,6 @@ const Visualization = () => {
           if (intersectSelectedBox.length > 0) {
             const intersectionPoint = intersectSelectedBox[0].point;
 
-            // console.log('scene.children:', scene.children);
-            // console.log('Intersects:', intersects);
-            // console.log('intersectSelectedBox:', intersectSelectedBox);
-            // console.log('intersectSelectedBox[0]:', intersectSelectedBox[0]);
-            // console.log('Intersection Point:', intersectionPoint);
-
             // Calculate the allowed boundary for placing the box
             const minX = ground.left + selectedBox.width / 2;
             const maxX = ground.right - selectedBox.width / 2;
@@ -391,13 +357,6 @@ const Visualization = () => {
             const maxY = ground.top + containerHeight - selectedBox.height / 2;
             const minZ = ground.front + selectedBox.depth / 2;
             const maxZ = ground.back - selectedBox.depth / 2;
-
-            // console.log('Min X:', minX);
-            // console.log('Max X:', maxX);
-            // console.log('Min Y:', minY);
-            // console.log('Max Y:', maxY);
-            // console.log('Min Z:', minZ);
-            // console.log('Max Z:', maxZ);
 
             intersectionPoint.x = Math.max(Math.min(intersectionPoint.x, maxX), minX);
             intersectionPoint.y = Math.max(Math.min(intersectionPoint.y, maxY), minY);
@@ -424,6 +383,22 @@ const Visualization = () => {
       }
     }
 
+
+    // Create a div element for the button
+    const buttonContainer = document.createElement("div");
+    buttonContainer.style.position = "absolute";
+    buttonContainer.style.bottom = "50px"; 
+    buttonContainer.style.right = "50px"; 
+    buttonContainer.style.backgroundColor = "orangered";
+    ref.current.appendChild(buttonContainer);
+
+    // Create the button and append it to the button container
+    const exportButton = document.createElement("button");
+    exportButton.className = "export-button";
+    exportButton.innerHTML = "Export Solution";
+    exportButton.addEventListener("click", handleExportSolution);
+    buttonContainer.appendChild(exportButton);
+
   
     return () => {
       // Clean up Three.js scene here
@@ -431,7 +406,11 @@ const Visualization = () => {
     
   }, []);
 
-  return <div ref={ref}></div>;
+  return (
+    <div>
+      <div className="visualization-container" ref={ref}></div>
+    </div>
+  );
 };
 
 export default Visualization;

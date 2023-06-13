@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './Uploading.css';
 import Navbar from '../navbar/Navbar';
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import Papa from "papaparse";
 
 
 const Uploading = () => {
+  const tableRef = useRef(null); // Reference to the table element
   const [csvData, setCsvData] = useState([]);
   const [editableRowIndex, setEditableRowIndex] = useState(-1);
   const [newPackage, setNewPackage] = useState({
@@ -34,7 +35,7 @@ const Uploading = () => {
     setEditableRowIndex(rowIndex);
   }
 
-  function handleSaveClick(rowIndex) {
+  function handleSaveClick() {
     setEditableRowIndex(-1);
   }
 
@@ -46,6 +47,26 @@ const Uploading = () => {
     const newData = [...csvData];
     newData.splice(rowIndex, 1);
     setCsvData(newData);
+  }
+
+  function handleAddClick(e) {
+    e.preventDefault();
+    const newData = [...csvData, newPackage];
+    setCsvData(newData);
+    setNewPackage({
+      UnpackOrder: '',
+      Height: '',
+      Width: '',
+      Length: ''
+    });
+
+    // Scroll to the last row in the table
+    if (tableRef.current) {
+      const table = tableRef.current;
+      const rows = table.getElementsByTagName('tr');
+      const lastRow = rows[rows.length - 1];
+      lastRow.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   return (
@@ -67,7 +88,7 @@ const Uploading = () => {
                 name='unpackOrder'
                 required='required'
                 placeholder='Enter unpackOrder'
-                value={newPackage.unpackOrder}
+                value={newPackage.UnpackOrder}
                 onChange={(e) =>
                   setNewPackage({ ...newPackage, UnpackOrder: e.target.value })
                 }
@@ -102,18 +123,9 @@ const Uploading = () => {
                   setNewPackage({ ...newPackage, Length: e.target.value })
                 }
               />
-              <button className='add-button' onClick={(e) => {
-                e.preventDefault();
-                setCsvData([newPackage, ...csvData]);
-                setNewPackage({
-                  UnpackOrder: '',
-                  Height: '',
-                  Width: '',
-                  Length: ''
-                });
-              }}>Add</button>
+              <button className='add-button' onClick={handleAddClick}>Add</button>
               <Link 
-                className="continue-lnk" 
+                className="continue-lnk-top" 
                 // pass the csvData as a query parameter in the URL when navigating to 
                 // the Container page
                 to={{ pathname: "/container", 
@@ -122,7 +134,7 @@ const Uploading = () => {
               </Link>
             </form>
             
-            <table>
+            <table ref={tableRef}>
               <thead>
                 <tr>
                   {Object.keys(csvData[0]).map((header, index) => (
@@ -177,6 +189,14 @@ const Uploading = () => {
                   ))}            
               </tbody>
             </table>
+            <Link 
+            className="continue-lnk-bottom" 
+            // pass the csvData as a query parameter in the URL when navigating to 
+            // the Container page
+            to={{ pathname: "/container", 
+            search: `?csvData=${encodeURIComponent(JSON.stringify(csvData))}` }}>
+            Continue
+          </Link>
           </div>
         }
       </div>

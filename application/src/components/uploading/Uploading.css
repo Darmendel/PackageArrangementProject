@@ -124,7 +124,7 @@ td.actions div {
     gap: 5px;
 }
 
-.continue-lnk {
+.continue-lnk-top {
     border: solid white;
     padding: 0.5rem;
     color: #0a1930;
@@ -133,6 +133,23 @@ td.actions div {
     font-weight: 500;
     margin-left: 300px;
 }
+
+.continue-lnk-bottom {
+    display: block;
+    text-align: center;
+    margin-top: 2rem;
+    font-weight: 500;
+    font-size: 1.6rem;
+    color: #0a1930;
+    background-color: orangered;
+    border: solid white;
+    border-radius: 5px;
+    padding: 0.5rem;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+  
   
 .continue-lnk:hover {
     border: solid;

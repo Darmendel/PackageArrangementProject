@@ -7,11 +7,9 @@ import { sendFormDataToServer } from '../Api';
 const SignUp = () => {
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    idNumber: "",
-    email: "",
-    password: ""
+    "email": "",
+    "name": "",
+    "password": ""
   });
 
   const handleChange = (event) => {
@@ -25,7 +23,7 @@ const SignUp = () => {
 
   const handleSignClick = (event) => {
     event.preventDefault();
-    // console.log(formData);
+    console.log(formData);
     sendFormDataToServer(formData);
     navigate('/getStarted');
   };
@@ -38,28 +36,12 @@ const SignUp = () => {
         <h2>Please fill in the following details:</h2>
         <form>
           <div className="form-control-sign">
-            First name:
+            Name:
             <input
               type="text"
-              name="firstName"
+              name="name"
               placeholder="Enter your first name..."
-              value={formData.firstName}
-              onChange={handleChange}
-            />
-            Last name:
-            <input
-              type="text"
-              name="lastName"
-              placeholder="Enter your last name..."
-              value={formData.lastName}
-              onChange={handleChange}
-            />
-            ID number:
-            <input
-              type="number"
-              name="idNumber"
-              placeholder="Enter your ID number..."
-              value={formData.idNumber}
+              value={formData.name}
               onChange={handleChange}
             />
             E-mail:

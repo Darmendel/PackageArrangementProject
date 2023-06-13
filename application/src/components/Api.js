@@ -1,3 +1,27 @@
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
+async function sendFormDataToServer(formData) {
+  try {
+    const response = await fetch('https://localhost:7165/api/User/SignUp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    console.log('response:', response);
+  
+    if (response.ok) {
+      console.log('data sent to the server successfully!');
+    } else {
+      console.error('Failed to send data to the server.');
+    }
+  } catch (error) {
+    console.error('Error while sending UserData to the server:', error);
+  }
+}
+
 async function sendDeliveryDataToServer(url, container, packageData) {
   try {
     const response = await fetch(url, {
@@ -18,29 +42,9 @@ async function sendDeliveryDataToServer(url, container, packageData) {
   }
 }
 
-async function sendFormDataToServer(formData) {
-  try {
-    const response = await fetch('https://localhost:7165', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ formData }),
-    });
-
-    if (response.ok) {
-      console.log('UserData sent to the server successfully!');
-    } else {
-      console.error('Failed to send UserData to the server.');
-    }
-  } catch (error) {
-    console.error('Error while sending UserData to the server:', error);
-  }
-}
-
 async function sendLoginDataToServer(loginData) {
   try {
-    const response = await fetch('https://localhost:7165', {
+    const response = await fetch('https://localhost:7165/api/User/Login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,0 +1,80 @@
+section#signUp {
+  color: #000000;
+  background-size: cover;
+  background-attachment: fixed;
+  background-color: #0a1930;
+  padding-top: 0rem;
+}
+  
+.signUp h2 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.4;
+  text-transform: uppercase;
+  margin: 1.5rem 0;
+  padding-bottom: 1rem;
+  padding-top: 6.1rem;
+  color: white;
+  text-align: left;
+  padding-left: 25rem;
+}
+
+form > * {
+  width: 100%;
+  max-width: 50rem;
+  margin: 2rem auto;
+  color: white;
+  padding-left: 10rem;
+}
+
+form input {
+  padding: 1rem;
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 5px 5px 5px 5px;
+  color: #fff;
+  outline: none;
+  width: 60%;
+  font-size: 1.6rem;
+}
+
+.sign-lnk {
+  border: solid;
+  padding: 0.5rem;
+  color: #0a1930;
+  background-color: orangered;
+  border-radius: 5px 5px 5px 5px;
+  font-weight: 500;
+  margin-left: 41rem;
+}
+
+.sign-lnk:hover {
+  border: solid;
+  color: white;
+}
+
+.back-login {
+  color: orangered;
+  font-weight: 500;
+  font-size: 1.5rem;
+  margin-left: 7.5rem;
+}
+
+.back-login:hover {
+  box-shadow: inset;
+}
+
+.bottom-sign {
+  /* padding: 4rem; */
+  margin-left: 37rem;
+}
+
+.bottom-sign h1 {
+  color: white;
+  font-weight: 400;
+}
+
+.form-control-sign {
+  display: grid;
+  font-size: large;
+}

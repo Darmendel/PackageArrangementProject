@@ -4,7 +4,7 @@ from itertools import permutations
 import package
 from constants import *
 
-
+# check updates.
 class Input:
 
     def __init__(self, file_name, file_path=None):  # file path might not be used.

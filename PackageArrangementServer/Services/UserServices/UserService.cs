@@ -26,7 +26,7 @@ namespace PackageArrangementServer.Services
             List<User> usersList = new List<User>();
 
             foreach (var us in users) 
-                usersList.Add(new User(us.Key, us.Object));
+                usersList.Add(new User(us.Key, us.Object, DeliveryService.GetAllDeliveries(us.Key)));
          
             return new UserList(usersList);
 
@@ -134,25 +134,12 @@ namespace PackageArrangementServer.Services
         public List<Delivery> GetAllDeliveries(string id)
         {
             if (!Exists(id, "id")) return null;
-            return deliveryService.GetAllDeliveries(id);
+            return DeliveryService.GetAllDeliveries(id);
         }
 
         public Delivery GetDelivery(string userId, string deliveryId)
         {
-            Delivery delivery = null;
-            User user = Get(userId, "id");
-            if (user != null)
-            {
-                foreach (Delivery d in user.Deliveries)
-                {
-                    if (d.Id == deliveryId)
-                    {
-                        delivery = d;
-                        break;
-                    }
-                }
-            }
-            return delivery;
+            return deliveryService.Get(deliveryId, userId);
         }
 
         /*private int Update(string userId, Delivery delivery, string op)
@@ -181,7 +168,7 @@ namespace PackageArrangementServer.Services
             Delivery delivery = deliveryService.Create(userId, deliveryDate, packages, container);
             if (delivery == null) return null;
 
-            DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, delivery.firstPackages, userId);
+            DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, delivery.FirstPackages, userId);
 
             int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
             if (res == 0) return null;

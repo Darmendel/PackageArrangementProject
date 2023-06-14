@@ -1,0 +1,32 @@
+{
+	"Id": "648595984f238653fd8754fc",
+	"Container": {
+		"Height": "400",
+		"Width": "600",
+		"Length": "1400",
+		"Cost": "700"
+	},
+	"FirstPackages": [{
+		"Id": "196",
+		"DeliveryId": "648595984f238653fd8754fc",
+		"Width": "5",
+		"Height": "6",
+		"Length": "7",
+		"Order": "1",
+                "X": "1",
+	        "Y": "2",
+	        "Z": "3"
+	}],
+	  "SecondPackages": [{
+		"Id": "196",
+		"DeliveryId": "648595984f238653fd8754fc",
+		"Width": "5",
+		"Height": "6",
+		"Length": "7",
+		"Order": "1",
+		"X": "1",
+		"Y": "2",
+		"Z": "3"
+	  }],
+	"UserId": "-NWSG59p56SkI3cELux0"
+}

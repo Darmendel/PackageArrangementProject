@@ -10,6 +10,11 @@
             _deliveries = new List<Delivery>();
         }
 
+        public DeliveryList(List<Delivery> deliveries)
+        {
+            _deliveries = deliveries;
+        }
+
         public List<Delivery> Deliveries { get { return _deliveries; } } // need to fix - return a copy
 
         //public bool IsEmpty { get { return _deliveries.Count == 0; } }
@@ -68,28 +73,28 @@
         public void AddPackage(Delivery delivery, Package package)
         {
             if (delivery == null || package == null) return;
-            if (delivery.firstPackages.Contains(package)) return;
-            delivery.firstPackages.Add(package);
-            Edit(delivery, packages: delivery.firstPackages);
+            if (delivery.FirstPackages.Contains(package)) return;
+            delivery.FirstPackages.Add(package);
+            Edit(delivery, packages: delivery.FirstPackages);
         }
 
         public void EditPackage(Delivery delivery, Package package)
         {
             if (delivery == null || package == null) return;
-            if (!delivery.firstPackages.Contains(package)) return;
+            if (!delivery.FirstPackages.Contains(package)) return;
 
-            int index = delivery.firstPackages.IndexOf(package);
-            delivery.firstPackages[index] = package;
+            int index = delivery.FirstPackages.IndexOf(package);
+            delivery.FirstPackages[index] = package;
 
-            Edit(delivery, packages: delivery.firstPackages);
+            Edit(delivery, packages: delivery.FirstPackages);
         }
 
         public void DeletePackage(Delivery delivery, Package package)
         {
             if (delivery == null || package == null) return;
-            if (!delivery.firstPackages.Contains(package)) return;
-            delivery.firstPackages.Remove(package);
-            Edit(delivery, packages: delivery.firstPackages);
+            if (!delivery.FirstPackages.Contains(package)) return;
+            delivery.FirstPackages.Remove(package);
+            Edit(delivery, packages: delivery.FirstPackages);
         }
     }
 }

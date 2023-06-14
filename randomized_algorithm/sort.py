@@ -10,10 +10,6 @@ class BaseSort:
         raise NotImplementedError()
 
 
-# # box format: 'Customer ,Height', 'Width', 'Length', 'Value', 'Volume', 'Priority', 'Above', 'Position', 'taxa
-# priority, customer code - stability matters
-
-
 # TODO fix to decreasing order and not increasing order.
 class MergeSort(BaseSort):
 
@@ -30,7 +26,7 @@ class MergeSort(BaseSort):
                      fis[i].__getattribute__(sec2) > sec[j].__getattribute__(sec2)):
                 merged.append(fis[i])
                 i += 1
-            elif fis[i].__getattribute__(fis1) < sec[j].__getattribute__(fis1) or\
+            elif fis[i].__getattribute__(fis1) < sec[j].__getattribute__(fis1) or \
                     (fis[i].__getattribute__(fis1) == sec[j].__getattribute__(fis1) and
                      fis[i].__getattribute__(sec2) < sec[j].__getattribute__(sec2)):
                 merged.append(sec[j])
@@ -93,4 +89,3 @@ class SortedFactory:
                           "customer_height": MergeSort(),
                           "customer_area": MergeSort()
                           }
-

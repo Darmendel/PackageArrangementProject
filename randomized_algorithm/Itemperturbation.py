@@ -2,7 +2,7 @@ import random
 from package import Package
 from item_sorting import ItemSorting
 
-
+# pertube_main  new
 class ItemPerturbation:
     def __init__(self, sorted_items: ItemSorting):
         option_dict = {2: self.func_1_b, 3: self.randomize_list}
@@ -69,7 +69,7 @@ class ItemPerturbation:
             return [a, b]
         return [sort_by]
 
-    def randomize_list(self):  # parameter can either get volume/weight
+    def randomize_list(self):
 
         for i in range(len(self.perturbed_items) - 2, 1, -1):
             self.ratio_swap(i - 1, i, self.parameter_list(self.sort_by))

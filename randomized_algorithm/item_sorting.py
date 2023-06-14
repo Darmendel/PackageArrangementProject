@@ -5,9 +5,7 @@ from package import Package
 
 class ItemSorting:
 
-
     def __init__(self, pkgs: list[Package]):
-
         self.items = pkgs
         self.sort_way = SF()
         self.sort_option = None

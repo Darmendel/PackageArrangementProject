@@ -6,14 +6,14 @@ import numpy as np
 
 def check_feasibility(pos: Location, box_a: Package, list_box: list[Package], cont_dims: Container) -> bool:
     x1, y1, z1 = pos
-    dx1, dy1, dz1 = box_a
+    dx1, dy1, dz1 = box_a.size
     max_x1, max_y1, max_z1 = x1 + dx1, y1 + dy1, z1 + dz1
-    if max_x1 > cont_dims.length or max_y1 > cont_dims.width or max_z1 > cont_dims.height:  # exceed container size.
+    if max_x1 > cont_dims.length or max_y1 > cont_dims.width or max_z1 > cont_dims.height:
         return False
-
+    #   or not cont_dims.check_base(pkg=box_a, pos=pos):  # exceed container size, or not enough packages.
     for used_box in list_box:
         x2, y2, z2 = used_box.location
-        dx2, dy2, dz2 = used_box
+        dx2, dy2, dz2 = used_box.size
         max_x2, max_y2, max_z2 = x2 + dx2, y2 + dy2, z2 + dz2
         if max_x1 > x2 and x1 < max_x2 \
                 and max_y1 > y2 and y1 < max_y2 \

@@ -52,3 +52,12 @@ for val, line in enumerate(data):
             print(f"e2_x: {y2}, y2: {e2_y} ")
             print(f"e2_x: {z2}, z2: {e2_z} ")
             print(val, index)
+
+# input[1,2,3,4,5]
+# [1] - 1
+# [2], [1,2,3] -2
+# [3], [2,3,4]- 3
+# [4], [3,4,5] -1
+# [5] - 1
+# output[1,2,2,1,1]
+

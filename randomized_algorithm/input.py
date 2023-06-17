@@ -106,6 +106,7 @@ class InputJson:
                                      ])
             self.shipment_number = int(contents["Id"])
             self.cost = int(container_dict["Cost"])
+            self.userId = contents["UserId"]
             self.pkgs = []
             for index_, pkg in enumerate(contents["Packages"]):
                 self.pkgs.append(Package(customer=int(pkg["Order"]),

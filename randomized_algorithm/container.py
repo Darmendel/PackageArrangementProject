@@ -36,13 +36,13 @@ class Container:
                 "X": str(pkg.location[0]),
                 "Y": str(pkg.location[1]),
                 "Z": str(pkg.location[2]),
-                "DeliveryId": str(self.shipment_number)
+
             }
             pkgs_json.append(pack_item)
         return pkgs_json
 
     def __init__(self, height: int, width: int, length: int, pkgs_num: int, shipment_number: int = 0,
-                 weight_limit: int = 5000, cost: int = 0, size: int = 1):
+                 weight_limit: int = 5000, cost: int = 0, size: int = 1, userid: int = 0):
         self.height = height
         self.width = width
         self.length = length
@@ -56,6 +56,7 @@ class Container:
         # self.taken_space[0: self.length, 0: self.width, 0:1] = Used.YES.value  # basis
         self.cost = cost
         self.size = size
+        self.userid = userid
 
     # update weight & occupied space.
     def update_taken_space(self, pkg: Package) -> None:
@@ -156,8 +157,7 @@ class Container:
                                                                     "Width": str(self.width),
                                                                     "Depth": str(self.length),
                                                                     "Cost": str(self.cost)},
-                          "FirstPackages": [], "SecondPackages": []}
-
+                          "FirstPackages": [], "SecondPackages": [], "UserId": str(self.userid)}
 
         data_construct["FirstPackages"] = copy.deepcopy(self.list_dict_packages(pkgs=self.pkgs_construct))
         data_construct["SecondPackages"] = copy.deepcopy(self.list_dict_packages(pkgs=self.pkgs_improve))

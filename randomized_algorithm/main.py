@@ -462,7 +462,8 @@ def start(boxes_json):
                      width=int(raw_data.contdim[1]),
                      length=int(raw_data.contdim[2]),
                      shipment_number=raw_data.shipment_number,
-                     pkgs_num=len(pkgs))
+                     pkgs_num=len(pkgs),
+                     userid=raw_data.userId)
     copy_list = copy.deepcopy(pkgs)
     # construction algorithm
     # solution = construction_phase(pkgs=pkgs, cont=cont)

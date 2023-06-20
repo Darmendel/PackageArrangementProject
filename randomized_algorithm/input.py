@@ -97,22 +97,22 @@ class Input:
 
 class InputJson:
     def __init__(self, file_name):
-        with open(file_name, 'r') as json_file:
-            contents = json.loads(json_file.read())
-            container_dict = contents["Container"]
-            self.contdim = np.array([int(container_dict["Height"]),
-                                     int(container_dict["Width"]),
-                                     int(container_dict["Length"])
-                                     ])
-            self.shipment_number = int(contents["Id"])
-            self.cost = int(container_dict["Cost"])
-            self.userId = contents["UserId"]
-            self.pkgs = []
-            for index_, pkg in enumerate(contents["Packages"]):
-                self.pkgs.append(Package(customer=int(pkg["Order"]),
-                                         length=int(pkg["Length"]),
-                                         width=int(pkg["Width"]),
-                                         height=int(pkg["Height"]),
-                                         unique_idx=int(pkg["DeliveryId"]),
-                                         index=index_
-                                         ))
+        #    with open(file_name, 'r') as json_file:
+        contents = file_name
+        container_dict = contents["Container"]
+        self.contdim = np.array([int(container_dict["Height"]),
+                                 int(container_dict["Width"]),
+                                 int(container_dict["Length"])
+                                 ])
+        self.shipment_number = contents["Id"]
+        self.cost = int(container_dict["Cost"])
+        self.userId = contents["UserId"]
+        self.pkgs = []
+        for index_, pkg in enumerate(contents["Packages"]):
+            self.pkgs.append(Package(customer=int(pkg["Order"]),
+                                     length=int(pkg["Length"]),
+                                     width=int(pkg["Width"]),
+                                     height=int(pkg["Height"]),
+                                     unique_idx=pkg["DeliveryId"],
+                                     index=index_
+                                     ))

@@ -9,7 +9,6 @@ from item_sorting import ItemSorting as Its
 from Itemperturbation import ItemPerturbation as Itp
 from auxiliary_methods import *
 from legacy_code import Algorithm as Alg
-from lucky_sol import *
 import copy
 from improvement_alg_methods import *
 import numpy as np
@@ -134,14 +133,17 @@ def construction_phase(pkgs: list[Package], cont: Container) -> list[Package]:
     for i in range(CONSTRUCTION_ITERATIONS):  # 3000
         print(f"The number of iteration {i}")
         sorted_items = Its(pkgs)
-        items_perturbed = Itp(sorted_items).perturbed_items
-        for j, i in enumerate(items_perturbed):
-            temp_dict = {val: None for val in i.cur_pos}
-            temp_dict["L"], temp_dict["W"], temp_dict["H"] = i.length, i.width, i.height
-            i.length = temp_dict[i.cur_pos[0]]
-            i.width = temp_dict[i.cur_pos[1]]
-            i.height = temp_dict[i.cur_pos[2]]
-            i.size = i.length, i.width, i.height
+        if len(sorted_items.items) > 5:
+            items_perturbed = Itp(sorted_items).perturbed_items
+            for j, i in enumerate(items_perturbed):
+                temp_dict = {val: None for val in i.cur_pos}
+                temp_dict["L"], temp_dict["W"], temp_dict["H"] = i.length, i.width, i.height
+                i.length = temp_dict[i.cur_pos[0]]
+                i.width = temp_dict[i.cur_pos[1]]
+                i.height = temp_dict[i.cur_pos[2]]
+                i.size = i.length, i.width, i.height
+        else:
+            items_perturbed = sorted_items.items
 
         constructed_solution = construction(pkgs=items_perturbed, cont=cont)
         # constructed_solution, ratio, add_list = bottom_left(container_dims=cont, box_dims=items_perturbed)
@@ -205,8 +207,11 @@ def step_1(pkgs: list[Package], cont_info: Container):
 
 def M_1(conflict: ndarray):
     j = np.argmax(np.sum(conflict, axis=0))
-    i = random.choice(
-        list(np.where(conflict[:, j][conflict[:, j] > 0] == random.choice((conflict[:, j][conflict[:, j] > 0])))))
+    try:
+        i = random.choice(
+            list(np.where(conflict[:, j][conflict[:, j] > 0] == random.choice((conflict[:, j][conflict[:, j] > 0])))))
+    except IndexError:
+        return 0, 0
     return i[random.randint(0, len(i) - 1)], j
 
 
@@ -226,9 +231,20 @@ def M_3(density: ndarray, empty: ndarray):
 
 
 def step_2(conf: ndarray, dens: ndarray, emp: ndarray):
-    first_approach = M_1(conflict=conf)
-    second_approach = M_2(density=dens)
-    third_approach = M_3(density=dens, empty=emp)
+    try:
+        first_approach = M_1(conflict=conf)
+    except IndexError:
+        first_approach = 0
+    try:
+        second_approach = M_2(density=dens)
+    except IndexError:
+        second_approach = 0
+    try:
+        third_approach = M_3(density=dens, empty=emp)
+    except IndexError:
+        third_approach = 0
+
+
     return first_approach, second_approach, third_approach
 
 
@@ -447,16 +463,9 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
 
 
 def start(boxes_json):
-    # create boxes
-    # file_name = "dataset.csv"
-    # file_name = "input.json"
-    file_name = boxes_json
-    if "csv" in file_name:
-        raw_data = Input(file_name)
-        pkgs = create_boxs_from_input(raw_data)  # depends on the csv file.
-    elif "json" in file_name:
-        raw_data = InputJson(file_name)
-        pkgs = raw_data.pkgs
+
+    raw_data = InputJson(boxes_json)
+    pkgs = raw_data.pkgs
 
     cont = Container(height=int(raw_data.contdim[0]),
                      width=int(raw_data.contdim[1]),
@@ -488,4 +497,4 @@ def start(boxes_json):
     # print(improved_solution)
 
 
-start(boxes_json='input.json')
+# start(boxes_json='input.json')

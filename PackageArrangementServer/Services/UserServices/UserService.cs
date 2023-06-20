@@ -14,8 +14,8 @@ namespace PackageArrangementServer.Services
 
         public UserService(IDeliveryService ds, IRabbitMqProducerService ps)
         {
-            this.deliveryService = ds;
-            this.producerService = ps;
+            deliveryService = ds;
+            producerService = ps;
             //userList = new UserList();
             //userList = StaticData.GetUsers();
         }
@@ -36,6 +36,11 @@ namespace PackageArrangementServer.Services
         {
             try { return (await client.Child("Users").PostAsync(request)).Key; }
             catch (Exception ex) { return null;}
+        }
+
+        public void SetUserList(UserList userList)
+        {
+            UserService.userList = userList;
         }
 
 

@@ -13,5 +13,11 @@
             Container = new GeneralContainer(
                 con.Container.Height, con.Container.Width, con.Container.Length);
         }
+
+        public RequestCreationOfNewDeliveryCustomContainer(DateTime dateTime, List<RequestCreationOfNewPackageInNewDelivery> packages, GeneralContainer container) { 
+            DeliveryDate = dateTime;
+            Packages = packages;
+            Container = container;
+        }
     }
 }

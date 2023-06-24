@@ -33,12 +33,13 @@ channel.start_consuming()
 
 
 
-############ for testing
+########### for testing
+# import main
 # def temp(payload):
 #     main.start(boxes_json=payload)
 #
-
-
+#
+#
 # if __name__ == "__main__":
 #     d = {
 #     "Id": "100",

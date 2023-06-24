@@ -2,7 +2,7 @@ import requests
 import json
 
 # BASE = " http://127.0.0.1:5000/"
-BASE = "https://localhost:7165/"
+
 
 # def send_information_to_server(json_solution):
 #     with open(f"{json_solution}", 'r') as json_file:
@@ -16,6 +16,9 @@ BASE = "https://localhost:7165/"
 #     send_information_to_server(json_solution="output_construct.json")
 #     print("----------------------------------------------------------------")
 #     send_information_to_server(json_solution="output_improve.json")
+
+
+BASE = "https://localhost:7165/"
 
 
 def send_information_to_server(json_solution):

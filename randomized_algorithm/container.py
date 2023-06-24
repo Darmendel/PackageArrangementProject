@@ -77,16 +77,14 @@ class Container:
     #     return True if used_base / (pkg.length * pkg.width) > BASE_RATIO else False
 
     def move_along_x_axis(self, pkg: Package) -> None:
-        i = 1
+        i = 0
         self.erase_taken_space(pkg=pkg)
-        if pkg.location[0] > 0:
-            pass
         while (pkg.location[0] - i > 0 and np.all(
-                self.taken_space[pkg.location[0] - i: pkg.location[0] + pkg.length - i
-                , pkg.location[1]: pkg.location[1] + pkg.width,
+                self.taken_space[pkg.location[0] - i - 1: pkg.location[0] - i,
+                pkg.location[1]: pkg.location[1] + pkg.width,
                 pkg.location[2]: pkg.location[2] + pkg.height] == Used.NO.value)):
             i += 1
-        i -= 1
+        i -= 0
         if i > 0:
             print(f"check x axis {i}")
 
@@ -96,14 +94,14 @@ class Container:
         self.update_taken_space(pkg=pkg)  # new space occupied
 
     def move_along_y_axis(self, pkg: Package) -> None:
-        i = 1
+        i = 0
         self.erase_taken_space(pkg=pkg)
-        while (pkg.location[1] - i >= 0 and np.all(
+        while (pkg.location[1] - i > 0 and np.all(
                 self.taken_space[pkg.location[0]: pkg.location[0] + pkg.length,
-                pkg.location[1] - i: pkg.location[1] + pkg.width - i,
+                pkg.location[1] - i - 1: pkg.location[1] - i,
                 pkg.location[2]: pkg.location[2] + pkg.height] == Used.NO.value)):
             i += 1
-        i -= 1
+        i -= 0
         if i > 0:
             print(f"check y axis {i}")
 
@@ -113,19 +111,19 @@ class Container:
         self.update_taken_space(pkg=pkg)  # new space occupied
 
     def move_along_z_axis(self, pkg: Package) -> None:
-        i = 1
+        i = 0
         self.erase_taken_space(pkg=pkg)
-        while (pkg.location[2] - i >= 0 and np.all(
+        while (pkg.location[2] - i > 0 and np.all(
                 self.taken_space[pkg.location[0]: pkg.location[0] + pkg.length,
                 pkg.location[1]: pkg.location[1] + pkg.width,
-                pkg.location[2] - i: pkg.location[2] + pkg.height - i] == Used.NO.value)):
+                pkg.location[2] - i - 1: pkg.location[2] - i] == Used.NO.value)):
             i += 1
-        i -= 1
+        i -= 0
         if i > 0:
             print(f"check z axis {i}")
 
         t = list(pkg.location)
-        t[1] -= i
+        t[2] -= i
         pkg.location = tuple(t)
         self.update_taken_space(pkg=pkg)  # new space occupied
 

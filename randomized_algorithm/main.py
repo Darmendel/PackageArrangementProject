@@ -1,4 +1,5 @@
 import copy
+import math
 import random
 from itertools import permutations
 from input import Input, InputJson
@@ -13,43 +14,43 @@ import copy
 from improvement_alg_methods import *
 import numpy as np
 import alg_send
-import signal
+import os
+import threading
 
-CONSTRUCTION_ITERATIONS = 10
-IMPROVEMENTALG_ITERATIONS = 1
+CONSTRUCTION_ITERATIONS = 100000
+STOP_CONSTRUCTION, STOP_IMPROVEMENT = False, False
+IMPROVEMENTALG_ITERATIONS = 100000
 
 FINAL_CONSTRUCTION_PACKAGING = []
 FINAL_IMPROVEMENT_PACKAGING = []
 
 
 class TimeLimit:
-    # Define the function to handle the timeout
     def __init__(self, run_time_alg, alg_function, pkgs, container_dim, real_pkgs=None):
         self.timeout_duration = run_time_alg
         self.alg_function = alg_function
         self.pkgs = pkgs
         self.cont_dim = container_dim
         self.real_pkgs = real_pkgs
+        self.timer = None
 
-    def timeout_handler(self, signum, frame):
-        raise TimeoutError("Execution time exceeded.")
-
-    # # Set the desired timeout duration in seconds
-    # timeout_duration = 3  # 10 seconds
-
-    def set_signal_and_alarm(self):
-        # Set the signal handler
-        signal.signal(signal.SIGALRM, self.timeout_handler)
-
-        # Set the alarm
-        signal.alarm(self.timeout_duration)
+    def timer_ends(self):
+        global STOP_CONSTRUCTION, STOP_IMPROVEMENT
+        if not STOP_CONSTRUCTION:
+            STOP_CONSTRUCTION = True
+        else:
+            STOP_IMPROVEMENT = True
+        # raise TimeoutError("Execution time exceeded")
 
     def run_algorithm(self):
-        self.set_signal_and_alarm()
+        self.timer = threading.Timer(self.timeout_duration, self.timer_ends)
+        self.timer.start()
         try:
             if not self.real_pkgs:
-                return self.alg_function(self.pkgs, self.cont_dim)
-            return self.alg_function(self.pkgs, self.cont_dim, self.real_pkgs)
+                result = self.alg_function(self.pkgs, self.cont_dim)
+            else:
+                result = self.alg_function(self.pkgs, self.cont_dim, self.real_pkgs)
+            return result
 
         except TimeoutError:
             if not self.real_pkgs:
@@ -57,7 +58,7 @@ class TimeLimit:
             return FINAL_IMPROVEMENT_PACKAGING
 
         finally:
-            signal.alarm(0)
+            self.timer.cancel()
 
 
 def construction(pkgs: list[Package], cont: Container) -> (list[Package], Container):
@@ -131,6 +132,9 @@ def construction_phase(pkgs: list[Package], cont: Container) -> list[Package]:
     best_sol = None
     cur_num, count_v = 0, 0
     for i in range(CONSTRUCTION_ITERATIONS):  # 3000
+        if STOP_CONSTRUCTION:
+            break
+
         print(f"The number of iteration {i}")
         sorted_items = Its(pkgs)
         if len(sorted_items.items) > 5:
@@ -243,7 +247,6 @@ def step_2(conf: ndarray, dens: ndarray, emp: ndarray):
         third_approach = M_3(density=dens, empty=emp)
     except IndexError:
         third_approach = 0
-
 
     return first_approach, second_approach, third_approach
 
@@ -370,9 +373,27 @@ def step_4(items_left: list[Package], alg: ImprovedAlg, original_list: list[Pack
     return multi_drop_sol
 
 
+# def decrease_size_gcd(pkgs_packed: list[Package], container_dims: Container) -> (list[Package], int):
+#     gcd = math.gcd(math.gcd(container_dims.length, container_dims.width), container_dims.height)
+#     for pkg in pkgs_packed:
+#         gcd = math.gcd(math.gcd(math.gcd(pkg.location[0], pkg.location[1]), pkg.location[2]), gcd)
+#     container_dims.size = container_dims.length / gcd, container_dims.width / gcd, container_dims.height / gcd
+#     for pkg in pkgs_packed:
+#         pkg.size = pkg.size[0] / gcd, pkg.size[1] / gcd, pkg.size[2] / gcd
+#         pkg.location = pkg.location[0] / gcd, pkg.location[1] / gcd, pkg.location[2] / gcd
+#     return container_dims, pkgs_packed, gcd
+#
+#
+# def increase_size_gcd(gcd: int, pkgs_packed: list[Package], container_dims: Container) -> (list[Package],
+# int): container_dims.size = container_dims.length[0] * gcd, container_dims.width[1] * gcd, container_dims.height[2]
+# * gcd for pkg in pkgs_packed: pkg.size = pkg.size[0] * gcd, pkg.size[1] * gcd, pkg.size[2] * gcd pkg.location =
+# pkg.location[0] * gcd, pkg.location[1] * gcd, pkg.location[2] * gcd return pkgs_packed
+
+
 #  TODO first sort by x, then move all elements alont the x axis(same for y and z).
 #  TODO push all possible packages.
 def step_5(pkgs_not_packed: list[Package], pkgs_packed: list[Package], container_dims: Container) -> list[Package]:
+
     for pkg in pkgs_packed:
         container_dims.update_taken_space(pkg=pkg)
     pkgs_packed.sort(key=lambda s_pkg: s_pkg.location[0])  # sort via x.
@@ -396,6 +417,8 @@ def step_5(pkgs_not_packed: list[Package], pkgs_packed: list[Package], container
     pkgs_packed.sort(key=lambda s_pkg: s_pkg.location[2], reverse=True)
     final_points.append(step_5_initialize_points(pkgs=pkgs_packed))
 
+
+
     # final_pkgs = step_4_reconstruction(pkgs=pkgs_not_packed, cont=container_dims, init_point=final_points,
     #                                    constructed_sol=pkgs_packed)
 
@@ -414,6 +437,8 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
     volume, max_vol = 0, 0
     best_multi_drop_sol, temp_sol = [], []
     for i in range(IMPROVEMENTALG_ITERATIONS):
+        if STOP_IMPROVEMENT:
+            break
         improve_alg, c, d, e = step_1(pkgs=pkgs, cont_info=cont_info)
         # erase
         # check(improve_alg)
@@ -431,7 +456,9 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
                                 container_dim=cont_info)
             pkgs_not_packed = [pkg for pkg in real_pkgs if pkg.index not in [idx.index for idx in pkgs_added]]
             pkgs_copied = copy.deepcopy(pkgs_added)
-            # pkgs_added = step_5(pkgs_not_packed=pkgs_not_packed, pkgs_packed=pkgs_copied, container_dims=cont_info)
+            if max_vol <= volume:
+                temp_sol = copy.deepcopy(pkgs_copied)
+            pkgs_added = step_5(pkgs_not_packed=pkgs_not_packed, pkgs_packed=pkgs_copied, container_dims=cont_info)
 
             for t in pkgs_added:
                 volume += t.volume
@@ -440,8 +467,6 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
                 max_vol = volume
                 best_multi_drop_sol = copy.deepcopy(pkgs_added)
                 FINAL_IMPROVEMENT_PACKAGING = copy.deepcopy(pkgs_added)
-
-                temp_sol = copy.deepcopy(pkgs_copied)
 
             volume = 0
             pkgs_added, pkgs_copied = [], []
@@ -463,7 +488,6 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
 
 
 def start(boxes_json):
-
     raw_data = InputJson(boxes_json)
     pkgs = raw_data.pkgs
 
@@ -476,17 +500,17 @@ def start(boxes_json):
     copy_list = copy.deepcopy(pkgs)
     # construction algorithm
     # solution = construction_phase(pkgs=pkgs, cont=cont)
-    s1 = TimeLimit(run_time_alg=10, alg_function=construction_phase, pkgs=pkgs, container_dim=cont)
+    s1 = TimeLimit(run_time_alg=5, alg_function=construction_phase, pkgs=pkgs, container_dim=cont)
     solution = s1.run_algorithm()
     cont.pkgs_construct = copy.deepcopy(solution)
     # improvement algorithm:
-    improved_solution = improvement_alg(pkgs=solution, cont_info=cont, real_pkgs=copy_list)
-    # s2 = TimeLimit(run_time_alg=45,
-    #                alg_function=improvement_alg,
-    #                pkgs=solution,
-    #                container_dim=cont,
-    #                real_pkgs=copy_list)
-    # improved_solution = s2.run_algorithm()
+    # improved_solution = improvement_alg(pkgs=solution, cont_info=cont, real_pkgs=copy_list)
+    s2 = TimeLimit(run_time_alg=20,
+                   alg_function=improvement_alg,
+                   pkgs=solution,
+                   container_dim=cont,
+                   real_pkgs=copy_list)
+    improved_solution = s2.run_algorithm()
     cont.pkgs_improve = copy.deepcopy(improved_solution)
     final_json = cont.convert_to_json()
     # only when connecting to server:
@@ -495,6 +519,5 @@ def start(boxes_json):
     # # Erase bellow
     # print(solution)
     # print(improved_solution)
-
 
 # start(boxes_json='input.json')

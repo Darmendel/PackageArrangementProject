@@ -47,51 +47,83 @@
 # t = TimeLimit(run_time_alg=5, alg_function=activate_func)
 # t.run_algorithm()
 
+#
+#
+# import csv
+# import json
+#
+# csv_file = 'dataset.csv'
+# json_file = 'input.json'
+#
+# container_data = {}
+# package_data = []
+#
+# with open(csv_file, 'r') as file:
+#     reader = csv.reader(file)
+#     rows = list(reader)
+#
+# # Extract container information
+# container_height = rows[1][1]
+# container_width = rows[1][2]
+# container_length = rows[1][3]
+#
+# container_data["Height"] = container_height
+# container_data["Width"] = container_width
+# container_data["Length"] = container_length
+# container_data["Cost"] = "700"
+#
+# # Extract package information
+# for row in rows[4:]:
+#     if row[0] != '':
+#         package = {
+#
+#             "DeliveryId": "10",
+#             "Width": row[2],
+#             "Height": row[1],
+#             "Length": row[3],
+#             "Order": row[0]
+#         }
+#         package_data.append(package)
+#
+# # Create JSON structure
+# json_data = {
+#     "Id": "100",
+#     "Container": container_data,
+#     "Packages": package_data
+# }
+#
+# # Write JSON to file
+# with open(json_file, 'w') as file:
+#     json.dump(json_data, file, indent=4)
 
 
-import csv
-import json
+#
+# import os
+# import threading
+# delay_time = 1   # delay time in seconds
+#
+# def my_potentially_never_ending_call():
+#     for i in range(1222222222222):
+#         pass
+#     return "ff"
+# def watchdog():
+#   print('Watchdog expired. Exiting...')
+#
+#
+# alarm = threading.Timer(delay_time, watchdog)
+# alarm.start()
+# x = my_potentially_never_ending_call()
+# alarm.cancel()
+# print(x)
+import math
 
-csv_file = 'dataset.csv'
-json_file = 'input.json'
+gc = 0
+length = 1000
+l = [100, 200, 300, 400, 700, 650]
+gc = math.gcd(length, l[0])
+for i in range(1, len(l) - 2):
+    gc = math.gcd(gc, l[i + 1])
+print(type(gc))
 
-container_data = {}
-package_data = []
 
-with open(csv_file, 'r') as file:
-    reader = csv.reader(file)
-    rows = list(reader)
 
-# Extract container information
-container_height = rows[1][1]
-container_width = rows[1][2]
-container_length = rows[1][3]
-
-container_data["Height"] = container_height
-container_data["Width"] = container_width
-container_data["Length"] = container_length
-container_data["Cost"] = "700"
-
-# Extract package information
-for row in rows[4:]:
-    if row[0] != '':
-        package = {
-
-            "DeliveryId": "10",
-            "Width": row[2],
-            "Height": row[1],
-            "Length": row[3],
-            "Order": row[0]
-        }
-        package_data.append(package)
-
-# Create JSON structure
-json_data = {
-    "Id": "100",
-    "Container": container_data,
-    "Packages": package_data
-}
-
-# Write JSON to file
-with open(json_file, 'w') as file:
-    json.dump(json_data, file, indent=4)

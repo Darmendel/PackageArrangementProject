@@ -9,19 +9,6 @@ import io
 BASE_RATIO = 0.8
 
 
-# def list_dict_packages(pkgs: list[Package]) -> list[dict]:
-#     pkgs_json = []
-#     for pkg in pkgs:
-#         pack_item = {
-#             "Width": pkg.width,
-#             "Length": pkg.length,
-#             "Height": pkg.height,
-#             "Unique_Idx": pkg.unique_idx
-#         }
-#         pkgs_json.append(pack_item)
-#     return pkgs_json
-
-
 class Container:
 
     def list_dict_packages(self, pkgs: list[Package]) -> list[dict]:
@@ -61,13 +48,11 @@ class Container:
 
     # update weight & occupied space.
     def update_taken_space(self, pkg: Package) -> None:
-        self.taken_space[pkg.location[0]: pkg.location[0] + pkg.length,
-        pkg.location[1]: pkg.location[1] + pkg.width,
+        self.taken_space[pkg.location[0]: pkg.location[0] + pkg.length, pkg.location[1]: pkg.location[1] + pkg.width,
         pkg.location[2]: pkg.location[2] + pkg.height] = Used.YES.value
 
     def erase_taken_space(self, pkg: Package) -> None:
-        self.taken_space[pkg.location[0]: pkg.location[0] + pkg.length,
-        pkg.location[1]: pkg.location[1] + pkg.width,
+        self.taken_space[pkg.location[0]: pkg.location[0] + pkg.length, pkg.location[1]: pkg.location[1] + pkg.width,
         pkg.location[2]: pkg.location[2] + pkg.height] = Used.NO.value
 
     # def check_base(self, pkg: Package, pos: Location) -> bool:
@@ -81,11 +66,10 @@ class Container:
         i = 0
         self.erase_taken_space(pkg=pkg)
         while (pkg.location[0] - i > 0 and np.all(
-                self.taken_space[pkg.location[0] - i - 1: pkg.location[0] - i,
-                pkg.location[1]: pkg.location[1] + pkg.width,
+                self.taken_space[pkg.location[0] - i - 1: pkg.location[0] - i, pkg.location[1]: pkg.location[1] +
+                                                                                                pkg.width,
                 pkg.location[2]: pkg.location[2] + pkg.height] == Used.NO.value)):
             i += 1
-        i -= 0
         if i > 0:
             print(f"check x axis {i}")
 
@@ -102,7 +86,6 @@ class Container:
                 pkg.location[1] - i - 1: pkg.location[1] - i,
                 pkg.location[2]: pkg.location[2] + pkg.height] == Used.NO.value)):
             i += 1
-        i -= 0
         if i > 0:
             print(f"check y axis {i}")
 
@@ -119,7 +102,6 @@ class Container:
                 pkg.location[1]: pkg.location[1] + pkg.width,
                 pkg.location[2] - i - 1: pkg.location[2] - i] == Used.NO.value)):
             i += 1
-        i -= 0
         if i > 0:
             print(f"check z axis {i}")
 
@@ -133,24 +115,6 @@ class Container:
                                                pos[1]: pos[1] + pkg.width + 1,
                                                pos[2]: pos[2] + 1] == Used.YES.value)) else False
 
-    # def convert_to_json(self):
-    #     data_construct = {"ShipmentNumber": self.shipment_number, "packages": []}
-    #     data_improve = {"ShipmentNumber": self.shipment_number, "packages": []}
-    #
-    #     data_construct["packages"] = copy.deepcopy(list_dict_packages(pkgs=self.pkgs_construct))
-    #     data_improve["packages"] = copy.deepcopy(list_dict_packages(pkgs=self.pkgs_improve))
-    #     print(len(data_improve))
-    #     json_construct = json.dumps(data_construct)
-    #     json_improve = json.dumps(data_improve)
-    #     print(f"{len(json_construct)}, {json_construct}")
-    #     print(f"{len(json_improve)}, {json_improve}")
-    #
-    #     with open("output_construct.json", "w") as json_const:
-    #         json_const.write(json_construct)
-    #
-    #     with open("output_improve.json", "w") as json_improv:
-    #         json_improv.write(json_improve)
-
     def convert_to_json(self):
         data_construct = {"Id": self.shipment_number, "Container": {"Height": str(self.height),
                                                                     "Width": str(self.width),
@@ -160,12 +124,5 @@ class Container:
                           "SecondPackages": copy.deepcopy(self.list_dict_packages(pkgs=self.pkgs_improve)),
                           "UserId": str(self.userid)}
 
-        # print(len(data_improve))
         json_construct = json.dumps(data_construct)
-
-        # json_improve = json.dumps(data_improve)
-        # print(f"{len(json_construct)}, {json_construct}")
-        # print(f"{len(json_improve)}, {json_improve}")
-        # with open("output_construct.json", "w") as json_const:
-        #     json_const.write(json_construct)
         return io.StringIO(json_construct)

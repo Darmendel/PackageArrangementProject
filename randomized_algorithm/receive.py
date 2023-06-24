@@ -28,12 +28,9 @@ channel.basic_consume(on_message_callback=callback, queue=queue_name)
 print("waiting for messages")
 channel.start_consuming()
 
-
-
-
-########## for testing
+######### for testing
 # import main
-
+#
 #
 # def temp(payload):
 #     main.start(boxes_json=payload)

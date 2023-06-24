@@ -75,26 +75,6 @@ class Input:
                 i.append(all_pos)
 
 
-# class InputJson:
-#     def __init__(self, file_name):
-#         with open(file_name, 'r') as json_file:
-#             contents = json.loads(json_file.read())
-#             container_dict = contents["container"]
-#             self.contdim = np.array([container_dict["Height"],
-#                                      container_dict["Width"
-#                                      ], container_dict["Length"]])
-#             self.shipment_number = container_dict["ShipmentNumber"]
-#             self.pkgs = []
-#             for index_, pkg in enumerate(contents["packages"]):
-#                 self.pkgs.append(Package(customer=pkg["Unpack order"],
-#                                          length=pkg["Length"],
-#                                          width=pkg["Width"],
-#                                          height=pkg["Height"],
-#                                          unique_idx=pkg["Unique_Idx"],
-#                                          index=index_
-#                                          ))
-
-
 class InputJson:
     def __init__(self, file_name):
         #    with open(file_name, 'r') as json_file:

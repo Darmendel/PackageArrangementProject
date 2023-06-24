@@ -17,9 +17,9 @@ import alg_send
 import os
 import threading
 
-CONSTRUCTION_ITERATIONS = 100000
+CONSTRUCTION_ITERATIONS = 1000000
 STOP_CONSTRUCTION, STOP_IMPROVEMENT = False, False
-IMPROVEMENTALG_ITERATIONS = 100000
+IMPROVEMENTALG_ITERATIONS = 1000000
 
 FINAL_CONSTRUCTION_PACKAGING = []
 FINAL_IMPROVEMENT_PACKAGING = []
@@ -40,7 +40,6 @@ class TimeLimit:
             STOP_CONSTRUCTION = True
         else:
             STOP_IMPROVEMENT = True
-        # raise TimeoutError("Execution time exceeded")
 
     def run_algorithm(self):
         self.timer = threading.Timer(self.timeout_duration, self.timer_ends)
@@ -150,7 +149,7 @@ def construction_phase(pkgs: list[Package], cont: Container) -> list[Package]:
             items_perturbed = sorted_items.items
 
         constructed_solution = construction(pkgs=items_perturbed, cont=cont)
-        # constructed_solution, ratio, add_list = bottom_left(container_dims=cont, box_dims=items_perturbed)
+
         v = 0
         s = 0
 
@@ -159,19 +158,12 @@ def construction_phase(pkgs: list[Package], cont: Container) -> list[Package]:
             s += 1
         if sec_size < s:
             sec_size = s
-        # Erase
-        # if sec_size >= 43:
-        #     print(f"check, box number {sec_size}")
+
         if volume <= v:
             volume = v
             best_sol = copy.deepcopy(constructed_solution)
             FINAL_CONSTRUCTION_PACKAGING = copy.deepcopy(best_sol)
-        # ERASE
-        # if v == 764000000:
-        #     count_v += 1
-        #     siz = len(constructed_solution)
-        # if v == 768000000:
-        #     print("check")
+
         for pkg in items_perturbed:
             pkg.location = None
 
@@ -390,8 +382,7 @@ def step_4(items_left: list[Package], alg: ImprovedAlg, original_list: list[Pack
 # pkg.location[0] * gcd, pkg.location[1] * gcd, pkg.location[2] * gcd return pkgs_packed
 
 
-#  TODO first sort by x, then move all elements alont the x axis(same for y and z).
-#  TODO push all possible packages.
+# full implementation of the algorithm from 2007.
 def step_5(pkgs_not_packed: list[Package], pkgs_packed: list[Package], container_dims: Container) -> list[Package]:
     y = len(pkgs_packed)
     for pkg in pkgs_packed:
@@ -418,7 +409,7 @@ def step_5(pkgs_not_packed: list[Package], pkgs_packed: list[Package], container
     final_points.append(step_5_initialize_points(pkgs=pkgs_packed))
     z = len(pkgs_packed)
     if y != z:
-       pass
+        pass
 
     # final_pkgs = step_4_reconstruction(pkgs=pkgs_not_packed, cont=container_dims, init_point=final_points,
     #                                    constructed_sol=pkgs_packed)
@@ -441,12 +432,7 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
         if STOP_IMPROVEMENT:
             break
         improve_alg, c, d, e = step_1(pkgs=pkgs, cont_info=cont_info)
-        # erase
-        # check(improve_alg)
         chosen_box = step_2(c, d, e)
-        # erase
-        # box_to_remove_ = chosen_box[0]
-        # call b function.
         real_index = improve_alg.real_index[chosen_box[0]]
         old_pkgs, pkgs_removed = step_3(pkgs=pkgs, improve_alg=improve_alg, box_to_remove=real_index)
         if old_pkgs and pkgs_removed:
@@ -457,11 +443,9 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
                                 container_dim=cont_info)
             pkgs_not_packed = [pkg for pkg in real_pkgs if pkg.index not in [idx.index for idx in pkgs_added]]
             pkgs_copied = copy.deepcopy(pkgs_added)
-            if max_vol <= volume:
-                temp_sol = copy.deepcopy(pkgs_copied)
+
+            x = copy.deepcopy(pkgs_copied)
             pkgs_added = step_5(pkgs_not_packed=pkgs_not_packed, pkgs_packed=pkgs_copied, container_dims=cont_info)
-
-
 
             for t in pkgs_added:
                 volume += t.volume
@@ -470,7 +454,7 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
                 max_vol = volume
                 best_multi_drop_sol = copy.deepcopy(pkgs_added)
                 FINAL_IMPROVEMENT_PACKAGING = copy.deepcopy(pkgs_added)
-
+                temp_sol = copy.deepcopy(x)
             volume = 0
             pkgs_added, pkgs_copied = [], []
 
@@ -503,12 +487,12 @@ def start(boxes_json):
     copy_list = copy.deepcopy(pkgs)
     # construction algorithm
     # solution = construction_phase(pkgs=pkgs, cont=cont)
-    s1 = TimeLimit(run_time_alg=2, alg_function=construction_phase, pkgs=pkgs, container_dim=cont)
+    s1 = TimeLimit(run_time_alg=5, alg_function=construction_phase, pkgs=pkgs, container_dim=cont)
     solution = s1.run_algorithm()
     cont.pkgs_construct = copy.deepcopy(solution)
     # improvement algorithm:
     # improved_solution = improvement_alg(pkgs=solution, cont_info=cont, real_pkgs=copy_list)
-    s2 = TimeLimit(run_time_alg=40,
+    s2 = TimeLimit(run_time_alg=25,
                    alg_function=improvement_alg,
                    pkgs=solution,
                    container_dim=cont,
@@ -518,9 +502,5 @@ def start(boxes_json):
     final_json = cont.convert_to_json()
     # only when connecting to server:
     alg_send.send_to_server(json_file=final_json)
-
-    # # Erase bellow
-    # print(solution)
-    # print(improved_solution)
 
 # start(boxes_json='input.json')

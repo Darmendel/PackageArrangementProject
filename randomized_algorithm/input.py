@@ -113,6 +113,6 @@ class InputJson:
                                      length=int(pkg["Length"]),
                                      width=int(pkg["Width"]),
                                      height=int(pkg["Height"]),
-                                     unique_idx=pkg["DeliveryId"],
+                                     unique_idx=pkg["Id"],
                                      index=index_
                                      ))

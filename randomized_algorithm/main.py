@@ -393,7 +393,7 @@ def step_4(items_left: list[Package], alg: ImprovedAlg, original_list: list[Pack
 #  TODO first sort by x, then move all elements alont the x axis(same for y and z).
 #  TODO push all possible packages.
 def step_5(pkgs_not_packed: list[Package], pkgs_packed: list[Package], container_dims: Container) -> list[Package]:
-
+    y = len(pkgs_packed)
     for pkg in pkgs_packed:
         container_dims.update_taken_space(pkg=pkg)
     pkgs_packed.sort(key=lambda s_pkg: s_pkg.location[0])  # sort via x.
@@ -416,8 +416,9 @@ def step_5(pkgs_not_packed: list[Package], pkgs_packed: list[Package], container
     final_points.append(step_5_initialize_points(pkgs=pkgs_packed))
     pkgs_packed.sort(key=lambda s_pkg: s_pkg.location[2], reverse=True)
     final_points.append(step_5_initialize_points(pkgs=pkgs_packed))
-
-
+    z = len(pkgs_packed)
+    if y != z:
+       pass
 
     # final_pkgs = step_4_reconstruction(pkgs=pkgs_not_packed, cont=container_dims, init_point=final_points,
     #                                    constructed_sol=pkgs_packed)
@@ -460,6 +461,8 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
                 temp_sol = copy.deepcopy(pkgs_copied)
             pkgs_added = step_5(pkgs_not_packed=pkgs_not_packed, pkgs_packed=pkgs_copied, container_dims=cont_info)
 
+
+
             for t in pkgs_added:
                 volume += t.volume
 
@@ -500,12 +503,12 @@ def start(boxes_json):
     copy_list = copy.deepcopy(pkgs)
     # construction algorithm
     # solution = construction_phase(pkgs=pkgs, cont=cont)
-    s1 = TimeLimit(run_time_alg=5, alg_function=construction_phase, pkgs=pkgs, container_dim=cont)
+    s1 = TimeLimit(run_time_alg=2, alg_function=construction_phase, pkgs=pkgs, container_dim=cont)
     solution = s1.run_algorithm()
     cont.pkgs_construct = copy.deepcopy(solution)
     # improvement algorithm:
     # improved_solution = improvement_alg(pkgs=solution, cont_info=cont, real_pkgs=copy_list)
-    s2 = TimeLimit(run_time_alg=20,
+    s2 = TimeLimit(run_time_alg=40,
                    alg_function=improvement_alg,
                    pkgs=solution,
                    container_dim=cont,

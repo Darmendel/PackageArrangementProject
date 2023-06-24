@@ -72,12 +72,14 @@
 # container_data["Length"] = container_length
 # container_data["Cost"] = "700"
 #
+#
 # # Extract package information
 # for row in rows[4:]:
 #     if row[0] != '':
 #         package = {
 #
 #             "DeliveryId": "10",
+#             "Id": "17",
 #             "Width": row[2],
 #             "Height": row[1],
 #             "Length": row[3],
@@ -95,7 +97,7 @@
 # # Write JSON to file
 # with open(json_file, 'w') as file:
 #     json.dump(json_data, file, indent=4)
-
+#
 
 #
 # import os
@@ -115,15 +117,15 @@
 # x = my_potentially_never_ending_call()
 # alarm.cancel()
 # print(x)
-import math
-
-gc = 0
-length = 1000
-l = [100, 200, 300, 400, 700, 650]
-gc = math.gcd(length, l[0])
-for i in range(1, len(l) - 2):
-    gc = math.gcd(gc, l[i + 1])
-print(type(gc))
+# import math
+#
+# gc = 0
+# length = 1000
+# l = [100, 200, 300, 400, 700, 650]
+# gc = math.gcd(length, l[0])
+# for i in range(1, len(l) - 2):
+#     gc = math.gcd(gc, l[i + 1])
+# print(type(gc))
 
 
 

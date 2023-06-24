@@ -29,6 +29,7 @@ class Container:
         for pkg in pkgs:
             pack_item = {
                 "Id": str(pkg.unique_idx),
+                "DeliveryId": str(self.shipment_number),
                 "Width": str(pkg.width),
                 "Depth": str(pkg.length),
                 "Height": str(pkg.height),
@@ -155,10 +156,10 @@ class Container:
                                                                     "Width": str(self.width),
                                                                     "Depth": str(self.length),
                                                                     "Cost": str(self.cost)},
-                          "FirstPackages": [], "SecondPackages": [], "UserId": str(self.userid)}
+                          "FirstPackages": copy.deepcopy(self.list_dict_packages(pkgs=self.pkgs_construct)),
+                          "SecondPackages": copy.deepcopy(self.list_dict_packages(pkgs=self.pkgs_improve)),
+                          "UserId": str(self.userid)}
 
-        data_construct["FirstPackages"] = copy.deepcopy(self.list_dict_packages(pkgs=self.pkgs_construct))
-        data_construct["SecondPackages"] = copy.deepcopy(self.list_dict_packages(pkgs=self.pkgs_improve))
         # print(len(data_improve))
         json_construct = json.dumps(data_construct)
 

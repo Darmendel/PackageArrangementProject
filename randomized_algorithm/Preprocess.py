@@ -3,9 +3,6 @@ import random
 PREPROCESS_ITERATIONS = 3
 
 
-# TODO: add solutions possibly.
-# TODO: add taxability which is  defined as a  max function between {volume, weight}
-
 # send the input in constructor.
 
 class Preprocess:

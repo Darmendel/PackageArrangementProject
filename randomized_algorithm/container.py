@@ -18,7 +18,7 @@ class Container:
                 "Id": str(pkg.unique_idx),
                 "DeliveryId": str(self.shipment_number),
                 "Width": str(pkg.width),
-                "Depth": str(pkg.length),
+                "Length": str(pkg.length),
                 "Height": str(pkg.height),
                 "Order": str(pkg.customer),
                 "X": str(pkg.location[0]),
@@ -118,7 +118,7 @@ class Container:
     def convert_to_json(self):
         data_construct = {"Id": self.shipment_number, "Container": {"Height": str(self.height),
                                                                     "Width": str(self.width),
-                                                                    "Depth": str(self.length),
+                                                                    "Length": str(self.length),
                                                                     "Cost": str(self.cost)},
                           "FirstPackages": copy.deepcopy(self.list_dict_packages(pkgs=self.pkgs_construct)),
                           "SecondPackages": copy.deepcopy(self.list_dict_packages(pkgs=self.pkgs_improve)),

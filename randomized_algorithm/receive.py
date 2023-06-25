@@ -28,7 +28,8 @@ channel.basic_consume(on_message_callback=callback, queue=queue_name)
 print("waiting for messages")
 channel.start_consuming()
 
-######### for testing
+#
+# ######## for testing
 # import main
 #
 #
@@ -393,5 +394,268 @@ channel.start_consuming()
 #         ],
 #         "UserId": "648595984f238653fd8754fc"
 #     }
+#     d1 = {
+#         "Id": "648595984f238653fd8754fc",
+#         "Container": {
+#             "Height": "400",
+#             "Width": "600",
+#             "Length": "1400",
+#             "Cost": "700"
+#         },
+#         "Packages": [{
+#             "Id": "196",
+#             "DeliveryId": "648595984f238653fd8754fc",
+#             "Width": "5",
+#             "Height": "6",
+#             "Length": "7",
+#             "Order": "1"
+#         }],
+#         "UserId": "-NWSG59p56SkI3cELux0"
+#     }
 #
-#     temp(payload=d)
+#     d2 = {
+#         "Id": "100",
+#         "Container": {
+#             "Height": "300",
+#             "Width": "1000",
+#             "Length": "1600",
+#             "Cost": "700"
+#         },
+#         "Packages": [
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "100",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "1"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "2"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "400",
+#                 "Order": "3"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "400",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "4"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "400",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "5"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "300",
+#                 "Order": "6"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "7"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "300",
+#                 "Order": "8"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "9"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "100",
+#                 "Order": "10"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "100",
+#                 "Order": "11"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "100",
+#                 "Order": "12"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "1000",
+#                 "Height": "300",
+#                 "Length": "100",
+#                 "Order": "13"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "100",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "14"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "300",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "15"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "400",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "16"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "17"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "400",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "18"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "600",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "19"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "20"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "400",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "21"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "400",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "22"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "800",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "23"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "100",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "24"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "100",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "25"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "26"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "27"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "200",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "28"
+#             },
+#             {
+#                 "DeliveryId": "10",
+#                 "Id": "17",
+#                 "Width": "100",
+#                 "Height": "300",
+#                 "Length": "200",
+#                 "Order": "29"
+#             }
+#         ],
+#         "UserId": "fudigfpwq12234"
+#     }
+#
+#     temp(payload=d2)

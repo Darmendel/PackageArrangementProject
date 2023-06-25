@@ -48,56 +48,56 @@
 # t.run_algorithm()
 
 #
-#
-# import csv
-# import json
-#
-# csv_file = 'dataset.csv'
-# json_file = 'input.json'
-#
-# container_data = {}
-# package_data = []
-#
-# with open(csv_file, 'r') as file:
-#     reader = csv.reader(file)
-#     rows = list(reader)
-#
-# # Extract container information
-# container_height = rows[1][1]
-# container_width = rows[1][2]
-# container_length = rows[1][3]
-#
-# container_data["Height"] = container_height
-# container_data["Width"] = container_width
-# container_data["Length"] = container_length
-# container_data["Cost"] = "700"
-#
-#
-# # Extract package information
-# for row in rows[4:]:
-#     if row[0] != '':
-#         package = {
-#
-#             "DeliveryId": "10",
-#             "Id": "17",
-#             "Width": row[2],
-#             "Height": row[1],
-#             "Length": row[3],
-#             "Order": row[0]
-#         }
-#         package_data.append(package)
-#
-# # Create JSON structure
-# json_data = {
-#     "Id": "100",
-#     "Container": container_data,
-#     "Packages": package_data
-# }
-#
-# # Write JSON to file
-# with open(json_file, 'w') as file:
-#     json.dump(json_data, file, indent=4)
-#
+
+import csv
+import json
+
+csv_file = 'Test.csv'
+json_file = 'input1.json'
+
+container_data = {}
+package_data = []
+
+with open(csv_file, 'r') as file:
+    reader = csv.reader(file)
+    rows = list(reader)
+
+# Extract container information
+container_height = rows[1][1]
+container_width = rows[1][2]
+container_length = rows[1][3]
+
+container_data["Height"] = container_height
+container_data["Width"] = container_width
+container_data["Length"] = container_length
+container_data["Cost"] = "700"
+
+
+# Extract package information
+for row in rows[4:]:
+    if row[0] != '':
+        package = {
+
+            "DeliveryId": "10",
+            "Id": "17",
+            "Width": row[2],
+            "Height": row[1],
+            "Length": row[3],
+            "Order": row[0]
+        }
+        package_data.append(package)
+
+# Create JSON structure
+json_data = {
+    "Id": "100",
+    "Container": container_data,
+    "Packages": package_data
+}
+
+# Write JSON to file
+with open(json_file, 'w') as file:
+    json.dump(json_data, file, indent=4)
+
 
 #
 # import os
@@ -127,5 +127,8 @@
 #     gc = math.gcd(gc, l[i + 1])
 # print(type(gc))
 
+# works in pensioner, always pick one ball out of 100. bingo -  100 numbers, 1 - 100,
+# 3 * 3 numbers each.
+# input random function, max, min
 
 

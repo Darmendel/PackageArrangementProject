@@ -91,6 +91,7 @@ class SmallCuboid:
                     print("a")
                     if self.overlapping_percentage(pkg) == 0:
                         print("check add")
+
                 if self.overlapping_percentage(pkg) != 0:
                     penalty_sum += np.sum(matrix_conflict, axis=0)[col] * self.overlapping_percentage(pkg)
                     occupied_percentage += self.overlapping_percentage(pkg)

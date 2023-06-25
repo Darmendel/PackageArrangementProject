@@ -483,22 +483,27 @@ def start(boxes_json):
                      length=int(raw_data.contdim[2]),
                      shipment_number=raw_data.shipment_number,
                      pkgs_num=len(pkgs),
-                     userid=raw_data.userId)
+                     userid=raw_data.userId,
+                     cost=raw_data.cost)
     copy_list = copy.deepcopy(pkgs)
     # construction algorithm
     # solution = construction_phase(pkgs=pkgs, cont=cont)
-    s1 = TimeLimit(run_time_alg=5, alg_function=construction_phase, pkgs=pkgs, container_dim=cont)
+    s1 = TimeLimit(run_time_alg=0.01, alg_function=construction_phase, pkgs=pkgs, container_dim=cont)
     solution = s1.run_algorithm()
     cont.pkgs_construct = copy.deepcopy(solution)
     # improvement algorithm:
     # improved_solution = improvement_alg(pkgs=solution, cont_info=cont, real_pkgs=copy_list)
-    s2 = TimeLimit(run_time_alg=25,
+    s2 = TimeLimit(run_time_alg=20,
                    alg_function=improvement_alg,
                    pkgs=solution,
                    container_dim=cont,
                    real_pkgs=copy_list)
-    improved_solution = s2.run_algorithm()
+    try:
+        improved_solution = s2.run_algorithm()
+    except:
+        improved_solution = []
     cont.pkgs_improve = copy.deepcopy(improved_solution)
+
     final_json = cont.convert_to_json()
     # only when connecting to server:
     alg_send.send_to_server(json_file=final_json)

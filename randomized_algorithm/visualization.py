@@ -7,7 +7,7 @@ colors = [(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)) for
 with open("outputmdclpf.txt", 'r') as f:
     data = f.readlines()
 
-rx, ry, rz = 1600, 800, 600
+rx, ry, rz = 1600, 1000, 300
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 

@@ -244,10 +244,11 @@ namespace PackageArrangementServer.Controllers
         /// <param name="req"></param>
         /// <returns>string</returns>
         [HttpPost("{userId}/deliveries/custompackage")]
-        public string Post(string userId, [FromBody] RequestCreationOfNewDeliveryCustomContainer req)
+        public string Post(string userId, [FromBody] RequestCreationDeliveryCustomContainer req)
         {
             string id;
-            id = userService.CreateDelivery(userId, req);
+            RequestCreationOfNewDeliveryCustomContainer newReq = new RequestCreationOfNewDeliveryCustomContainer(req);
+            id = userService.CreateDelivery(userId, newReq);
             Response.StatusCode = id != null ? 200 : 404;
             return id;
         }
@@ -260,7 +261,7 @@ namespace PackageArrangementServer.Controllers
         public void Post(string userId, [FromBody] RequestCreationOfNewPackage req)
         {
             if (userService.CreatePackage(userId, req.DeliveryId, req.Width, req.Height,
-                req.Depth) > 0)
+                req.Length) > 0)
                 Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;
@@ -343,11 +344,11 @@ namespace PackageArrangementServer.Controllers
         /// <param name="deliveryId"></param>
         /// <param name="height"></param>
         /// <param name="width"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         [HttpPut("{userId}/deliveries/{deliveryId}/container/special-request")]
-        public void PutContainer(string userId, string deliveryId, string height, string width, string depth)
+        public void PutContainer(string userId, string deliveryId, string height, string width, string Length)
         {
-            IContainer container = userService.CreateContainer(height, width, depth);
+            IContainer container = userService.CreateContainer(height, width, Length);
             if (container == null) Response.StatusCode = 400;
             else
             {
@@ -368,7 +369,7 @@ namespace PackageArrangementServer.Controllers
         public void Put(string userId, string deliveryId, string packageId, [FromBody] RequestEditPackage req)
         {
             if (userService.EditPackage(userId, deliveryId, packageId, req.Width, req.Height,
-                req.Depth) > 0)
+                req.Length) > 0)
                 Response.StatusCode = 204;
             else Response.StatusCode = 400;
             return;

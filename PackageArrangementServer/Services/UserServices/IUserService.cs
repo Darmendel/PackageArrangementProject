@@ -232,9 +232,9 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="height"></param>
         /// <param name="width"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// <returns>IContainer</returns>
-        public IContainer CreateContainer(string height, string width, string depth);
+        public IContainer CreateContainer(string height, string width, string Length);
 
         /// <summary>
         /// Returns a list of all packages in a user's delivery.
@@ -261,10 +261,10 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryId"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// <returns>int</returns>
         public int CreatePackage(string userId, string deliveryId, string width = null,
-            string height = null, string depth = null);
+            string height = null, string Length = null);
 
         /// <summary>
         /// Updates a package in a user's delivery.
@@ -275,10 +275,10 @@ namespace PackageArrangementServer.Services
         /// <param name="packageId"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="depth"></param>
+        /// <param name="Length"></param>
         /// <returns>int</returns>
         public int EditPackage(string userId, string deliveryId, string packageId,
-            string width = null, string height = null, string depth = null);
+            string width = null, string height = null, string Length = null);
 
         /// <summary>
         /// Deletes a package from a user's delivery.

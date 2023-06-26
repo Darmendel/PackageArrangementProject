@@ -4,7 +4,7 @@ namespace PackageArrangementServer.Services
 {
     public class DeliveryServiceHelper : IDeliveryServiceHelper
     {
-        private static int CalculateCost(List<Package> packages = null, IContainer? container = null)
+        private static int CalculateCost(List<Package> packages = null, IContainer container = null)
         {
             if (packages == null && container == null) return -1;
             int cost = 0;
@@ -41,7 +41,7 @@ namespace PackageArrangementServer.Services
         public static int Cost(Delivery delivery)
         {
             if (delivery == null) return -1;
-            return CalculateCost(delivery.Packages, delivery.Container);
+            return CalculateCost(delivery.firstPackages, delivery.Container);
         }
 
         public static int Cost(List<Package> packages = null, IContainer? container = null)

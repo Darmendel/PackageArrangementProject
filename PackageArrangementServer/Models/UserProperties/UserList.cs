@@ -52,7 +52,7 @@
             if (user == null || delivery == null) return;
             if (user.Deliveries.Contains(delivery)) return;
             user.Deliveries.Add(delivery);
-            Edit(user, deliveries: user.Deliveries);
+            //Edit(user, deliveries: user.Deliveries);
         }
 
         public void EditDelivery(User user, Delivery delivery)

@@ -7,8 +7,8 @@ import { sendLoginDataToServer } from '../Api';
 const GetStarted = () => {
   
   const [loginData, setLoginData] = useState({
-    email: "",
-    password: ""
+    "email": "",
+    "password": ""
   });
 
   const handleChange = (event) => {

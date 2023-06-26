@@ -42,12 +42,12 @@ const Visualization = () => {
   data.firstPackages.sort((a, b) => a.id - b.id);
   data.secondPackages.sort((a, b) => a.id - b.id);
 
-  const handleExportSolution = () => {
-    // Logic for exporting the solution
-  };
+  
 
   useEffect(() => {
     const SCALE = 100;
+    var solution1Visible = false;
+    var solution2Visible = false;
 
     // first solution:
 
@@ -111,6 +111,8 @@ const Visualization = () => {
       yPositionsSecond.push(box.z);
     });
     
+    var numOfBoxes1 = xPositionsFirst.length;
+    var numOfBoxes2 = xPositionsSecond.length;
     const containerHeight = data.container.height / SCALE;
       
     var selectedBox = null;
@@ -120,6 +122,7 @@ const Visualization = () => {
     var boxHeight = 0;
     var boxDepth = 0;
 
+    var ground = null;
     const groundWidth = data.container.width / SCALE;
     const groundHeight = 0;
     const groundDepth = data.container.depth / SCALE;
@@ -179,40 +182,145 @@ const Visualization = () => {
       }
     }
 
-    // Creating boxes and ground
 
-    var numOfBoxes = xPositionsFirst.length;
-    for (let i = 0; i < numOfBoxes; i++) {
-      boxWidth = boxesWidthFirst[i];
-      boxHeight = boxesHeightFirst[i];
-      boxDepth = boxesDepthFirst[i];
-      
-      const positionX = boxWidth/2 + xPositionsFirst[i] - groundWidth/2;
-      const positionY = boxHeight/2 + yPositionsFirst[i];
-      const positionZ = boxDepth/2 + zPositionsFirst[i] - groundDepth/2;
-      const position = new THREE.Vector3(positionX, positionY, positionZ);
-      console.log('position', i, ':', position);
 
-      const box = new Box({
-        width: boxWidth,
-        height: boxHeight,
-        depth: boxDepth,
-        position: position,
-      });
-      box.castShadow = true;
-      scene.add(box);
-      boxes.push(box);
-    }
+    const handleExportSolution = () => {
+      // Combine the data from firstPackages and secondPackages
+      const combinedData = [...data.firstPackages, ...data.secondPackages];
 
-    const ground = new Box({
-      width: groundWidth,
-      height: groundHeight,
-      depth: groundDepth,
-      position: new THREE.Vector3(0, 0, 0),
-    });
+      // Extract the keys to include in the CSV
+      const keysToInclude = Object.keys(combinedData[0]).filter(
+        key => key !== "id" && key !== "deliveryId"
+      );
 
-    ground.receiveShadow = true;
-    scene.add(ground);
+      // Convert the combined data to CSV format
+      const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [
+        "firstPackages",
+        keysToInclude.join(","),
+        ...data.firstPackages.map(row =>
+          keysToInclude.map(key => {
+            if (["x", "y", "z"].includes(key)) {
+              return String(row[key] * 100);
+            }
+            return String(row[key]);
+          }).join(",")
+        ),
+        "",
+        "secondPackages",
+        keysToInclude.join(","),
+        ...data.secondPackages.map(row =>
+          keysToInclude.map(key => {
+            if (["x", "y", "z"].includes(key)) {
+              return String(row[key] * 100);
+            }
+            return String(row[key]);
+          }).join(",")
+        )
+      ].join("\n");
+
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href = encodeURI(csvContent);
+      link.download = "Solution.csv";
+
+      // Simulate a click on the link to trigger the download
+      link.click();
+    };
+
+    const showSolution1 = () => {
+      if (!solution1Visible) {
+        if (solution2Visible) {
+          hideSolution2();
+        }
+        createGround()
+        for (let i = 0; i < numOfBoxes1; i++) {
+          boxWidth = boxesWidthFirst[i];
+          boxHeight = boxesHeightFirst[i];
+          boxDepth = boxesDepthFirst[i];
+          
+          const positionX = boxWidth/2 + xPositionsFirst[i] - groundWidth/2;
+          const positionY = boxHeight/2 + yPositionsFirst[i];
+          const positionZ = boxDepth/2 + zPositionsFirst[i] - groundDepth/2;
+          const position = new THREE.Vector3(positionX, positionY, positionZ);
+          // console.log('position', i, ':', position);
+
+          const box = new Box({
+            width: boxWidth,
+            height: boxHeight,
+            depth: boxDepth,
+            position: position,
+          });
+          box.castShadow = true;
+          scene.add(box);
+          boxes.push(box);
+        }
+        solution1Visible = true;
+      }
+    };
+
+    const hideSolution1 = () => {
+      if (solution1Visible) {
+        for (let i = 0; i < numOfBoxes1; i++) {
+          const box = boxes[i];
+          scene.remove(box);
+        }
+        boxes.splice(0, numOfBoxes1);
+        solution1Visible = false;
+        // console.log('scene.children:', scene.children);
+      }
+    };
+
+    const showSolution2 = () => {
+      if (!solution2Visible) {
+        if (solution1Visible) {
+          hideSolution1();
+        }
+        createGround()
+        for (let i = 0; i < numOfBoxes2; i++) {
+          boxWidth = boxesWidthSecond[i];
+          boxHeight = boxesHeightSecond[i];
+          boxDepth = boxesDepthSecond[i];
+          
+          const positionX = boxWidth/2 + xPositionsSecond[i] - groundWidth/2;
+          const positionY = boxHeight/2 + yPositionsSecond[i];
+          const positionZ = boxDepth/2 + zPositionsSecond[i] - groundDepth/2;
+          const position = new THREE.Vector3(positionX, positionY, positionZ);
+          // console.log('position', i, ':', position);
+
+          const box = new Box({
+            width: boxWidth,
+            height: boxHeight,
+            depth: boxDepth,
+            position: position,
+          });
+          box.castShadow = true;
+          scene.add(box);
+          boxes.push(box);
+        }
+        solution2Visible = true;
+      }
+    };
+
+    const hideSolution2 = () => {
+      if (solution2Visible) {
+        for (let i = 0; i < numOfBoxes2; i++) {
+          const box = boxes[i];
+          scene.remove(box);
+        }
+        boxes.splice(0, numOfBoxes2);
+        solution2Visible = false;
+      }
+    };
+
+    // // Creating the boxes of the first solution
+    // createFirstSolution();
+    
+    // // Creating the ground
+    // createGround();
+    
+    
 
     // const light = new THREE.DirectionalLight(0xffffffff, 1);
     // light.position.set(3, 3, 3);
@@ -232,6 +340,17 @@ const Visualization = () => {
     animate();
 
     
+    function createGround() {
+        ground = new Box({
+        width: groundWidth,
+        height: groundHeight,
+        depth: groundDepth,
+        position: new THREE.Vector3(0, 0, 0),
+      });
+  
+      ground.receiveShadow = true;
+      scene.add(ground);
+    }
 
     function getRandomColor() {
       const letters = '0123456789ABCDEF';
@@ -384,20 +503,50 @@ const Visualization = () => {
     }
 
 
-    // Create a div element for the button
-    const buttonContainer = document.createElement("div");
-    buttonContainer.style.position = "absolute";
-    buttonContainer.style.bottom = "50px"; 
-    buttonContainer.style.right = "50px"; 
-    buttonContainer.style.backgroundColor = "orangered";
-    ref.current.appendChild(buttonContainer);
+    // Create a div element for the export button
+    const exportContainer = document.createElement("div");
+    exportContainer.style.position = "absolute";
+    exportContainer.style.bottom = "75px"; 
+    exportContainer.style.right = "100px"; 
+    exportContainer.style.backgroundColor = "orangered";
+    ref.current.appendChild(exportContainer);
 
-    // Create the button and append it to the button container
+    // Create the export button and append it to the export container
     const exportButton = document.createElement("button");
     exportButton.className = "export-button";
     exportButton.innerHTML = "Export Solution";
     exportButton.addEventListener("click", handleExportSolution);
-    buttonContainer.appendChild(exportButton);
+    exportContainer.appendChild(exportButton);
+
+    // Create a div element for the solution1 button
+    const solution1Container = document.createElement("div");
+    solution1Container.style.position = "absolute";
+    solution1Container.style.top = "50px"; 
+    solution1Container.style.right = "300px"; 
+    solution1Container.style.backgroundColor = "orangered";
+    ref.current.appendChild(solution1Container);
+
+    // Create the solution1 button and append it to the solution1 container
+    const solution1Button = document.createElement("button");
+    solution1Button.className = "solution1-button";
+    solution1Button.innerHTML = "Solution 1";
+    solution1Button.addEventListener("click", showSolution1);
+    solution1Container.appendChild(solution1Button);
+
+    // Create a div element for the solution2 button
+    const solution2Container = document.createElement("div");
+    solution2Container.style.position = "absolute";
+    solution2Container.style.top = "50px"; 
+    solution2Container.style.right = "200px"; 
+    solution2Container.style.backgroundColor = "orangered";
+    ref.current.appendChild(solution2Container);
+
+    // Create the solution2 button and append it to the solution2 container
+    const solution2Button = document.createElement("button");
+    solution2Button.className = "solution2-button";
+    solution2Button.innerHTML = "Solution 2";
+    solution2Button.addEventListener("click", showSolution2);
+    solution2Container.appendChild(solution2Button);
 
   
     return () => {

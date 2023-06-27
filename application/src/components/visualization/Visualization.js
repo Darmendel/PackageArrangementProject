@@ -48,6 +48,8 @@ const Visualization = () => {
     const SCALE = 100;
     var solution1Visible = false;
     var solution2Visible = false;
+    var list1Visible = false;
+    var list2Visible = false;
 
     // first solution:
 
@@ -61,11 +63,31 @@ const Visualization = () => {
       boxesDepthFirst.push(box.depth / SCALE);
     });
 
+    const boxesIdFirst = [];
+
+    data.firstPackages.forEach(function(box) {
+      boxesIdFirst.push(box.id);
+    })
+
+    const boxesOrderFirst = [];
+
+    data.firstPackages.forEach(function(box) {
+      boxesOrderFirst.push(box.order);
+    })
+
     const xPositionsFirst = [];
     const yPositionsFirst = [];
     const zPositionsFirst = [];
 
+    // save the values before scaling by 100
+    const xPositionsFirstOriginal = [];
+    const yPositionsFirstOriginal = [];
+    const zPositionsFirstOriginal = [];
+
     data.firstPackages.forEach(function(box) {
+      zPositionsFirstOriginal.push(box.x);
+      xPositionsFirstOriginal.push(box.y);
+      yPositionsFirstOriginal.push(box.z);
       if (box.x !== 0) {
         box.x /= SCALE;
       }
@@ -92,11 +114,31 @@ const Visualization = () => {
       boxesDepthSecond.push(box.depth / SCALE);
     });
 
+    const boxesIdSecond = [];
+
+    data.secondPackages.forEach(function(box) {
+      boxesIdSecond.push(box.id);
+    })
+
+    const boxesOrderSecond = [];
+
+    data.secondPackages.forEach(function(box) {
+      boxesOrderSecond.push(box.order);
+    })
+
     const xPositionsSecond = [];
     const yPositionsSecond = [];
     const zPositionsSecond = [];
 
+    // save the values before scaling by 100
+    const xPositionsSecondOriginal = [];
+    const yPositionsSecondOriginal = [];
+    const zPositionsSecondOriginal = [];
+
     data.secondPackages.forEach(function(box) {
+      zPositionsSecondOriginal.push(box.x);
+      xPositionsSecondOriginal.push(box.y);
+      yPositionsSecondOriginal.push(box.z);
       if (box.x !== 0) {
         box.x /= SCALE;
       }
@@ -144,12 +186,16 @@ const Visualization = () => {
     controls.maxPolarAngle = Math.PI / 2;
 
     class Box extends THREE.Mesh {
-      constructor({ width, height, depth, position }) {
+      constructor({ Id, width, height, depth, position, originalPosition, order }) {
         const color = getRandomColor();
         const material = new THREE.MeshStandardMaterial({ color: color });
 
         super(new THREE.BoxGeometry(width, height, depth), material);
         
+        this.Id = Id;
+        this.order = order;
+        this.originalPosition = originalPosition;
+
         this.height = height;
         this.width = width;
         this.depth = depth;
@@ -244,32 +290,47 @@ const Visualization = () => {
           const positionY = boxHeight/2 + yPositionsFirst[i];
           const positionZ = boxDepth/2 + zPositionsFirst[i] - groundDepth/2;
           const position = new THREE.Vector3(positionX, positionY, positionZ);
-          // console.log('position', i, ':', position);
+
+          const originalPositionX = xPositionsFirstOriginal[i]; 
+          const originalPositionY = yPositionsFirstOriginal[i];
+          const originalPositionZ = zPositionsFirstOriginal[i];
+          const originalPosition = new THREE.Vector3(originalPositionX, originalPositionY, originalPositionZ);
+          
+          const id = boxesIdFirst[i];
+          const order = boxesOrderFirst[i];
 
           const box = new Box({
+            Id: id, 
             width: boxWidth,
             height: boxHeight,
             depth: boxDepth,
             position: position,
+            originalPosition: originalPosition,
+            order: order
           });
           box.castShadow = true;
           scene.add(box);
           boxes.push(box);
         }
         solution1Visible = true;
+        if (!list1Visible) {
+          if(list2Visible) {
+            hideList2();
+          }
+          createList();
+          list1Visible = true;
+        }
       }
     };
 
     const hideSolution1 = () => {
-      if (solution1Visible) {
-        for (let i = 0; i < numOfBoxes1; i++) {
-          const box = boxes[i];
-          scene.remove(box);
-        }
-        boxes.splice(0, numOfBoxes1);
-        solution1Visible = false;
-        // console.log('scene.children:', scene.children);
+      for (let i = 0; i < numOfBoxes1; i++) {
+        const box = boxes[i];
+        scene.remove(box);
       }
+      boxes.splice(0, numOfBoxes1);
+      solution1Visible = false;
+      // console.log('scene.children:', scene.children);
     };
 
     const showSolution2 = () => {
@@ -287,31 +348,46 @@ const Visualization = () => {
           const positionY = boxHeight/2 + yPositionsSecond[i];
           const positionZ = boxDepth/2 + zPositionsSecond[i] - groundDepth/2;
           const position = new THREE.Vector3(positionX, positionY, positionZ);
-          // console.log('position', i, ':', position);
+          
+          const originalPositionX = xPositionsSecondOriginal[i]; 
+          const originalPositionY = yPositionsSecondOriginal[i];
+          const originalPositionZ = zPositionsSecondOriginal[i];
+          const originalPosition = new THREE.Vector3(originalPositionX, originalPositionY, originalPositionZ);
+
+          const id = boxesIdSecond[i];
+          const order = boxesOrderSecond[i];
 
           const box = new Box({
+            Id: id,
             width: boxWidth,
             height: boxHeight,
             depth: boxDepth,
             position: position,
+            originalPosition: originalPosition,
+            order: order
           });
           box.castShadow = true;
           scene.add(box);
           boxes.push(box);
         }
         solution2Visible = true;
+        if (!list2Visible) {
+          if(list1Visible) {
+            hideList1();
+          }
+          createList();
+          list2Visible = true;
+        }
       }
     };
 
     const hideSolution2 = () => {
-      if (solution2Visible) {
-        for (let i = 0; i < numOfBoxes2; i++) {
-          const box = boxes[i];
-          scene.remove(box);
-        }
-        boxes.splice(0, numOfBoxes2);
-        solution2Visible = false;
+      for (let i = 0; i < numOfBoxes2; i++) {
+        const box = boxes[i];
+        scene.remove(box);
       }
+      boxes.splice(0, numOfBoxes2);
+      solution2Visible = false;
     };
 
     // // Creating the boxes of the first solution
@@ -341,11 +417,13 @@ const Visualization = () => {
 
     
     function createGround() {
-        ground = new Box({
+      ground = new Box({
+        id: null,
         width: groundWidth,
         height: groundHeight,
         depth: groundDepth,
         position: new THREE.Vector3(0, 0, 0),
+        order: null
       });
   
       ground.receiveShadow = true;
@@ -502,19 +580,127 @@ const Visualization = () => {
       }
     }
 
+    function createList() {
+      // Create a div element with the class name "box-list"
+      const boxListDiv = document.createElement("div");
+      boxListDiv.className = "box-list";
+      boxListDiv.style.position = "absolute";
+      boxListDiv.style.color = "white";
+      boxListDiv.style.top = "50px";
+      boxListDiv.style.left = "50px";
+      ref.current.appendChild(boxListDiv);
+
+      // Create an h1 element
+      const h1 = document.createElement("h1");
+      h1.innerHTML = "Packages:";
+      boxListDiv.appendChild(h1);
+
+      // Create a line break element
+      const lineBreak = document.createElement("br");
+      boxListDiv.appendChild(lineBreak);
+
+      // Create a ul element
+      const ul = document.createElement("ul");
+      ul.style.position = "absolute";
+      ul.style.overflowY = "auto"; 
+      ul.style.maxHeight = "400px"; 
+      ul.style.direction = "rtl"; 
+
+      // Render the list of boxes
+      boxes.forEach((box, index) => {
+        const boxNumber = index + 1;
+
+        // Create a button element for box
+        const boxButton = document.createElement("button");
+        boxButton.innerHTML = `Box ${boxNumber}`;
+        boxButton.style.alignItems = "left";
+        boxButton.style.backgroundColor = "orangered";
+        boxButton.style.borderRadius = "5px 5px 5px 5px";
+        boxButton.style.marginBottom = "10px"; 
+        boxButton.addEventListener("click", () => {
+          displayBoxInfo(box);
+        });
+        ul.appendChild(boxButton);
+      });
+
+      // Append the ul element to the box list div
+      boxListDiv.appendChild(ul);
+    }
+
+    function displayBoxInfo(box) {
+      // Create a div to hold the box information
+      const boxInfoDiv = document.createElement("div");
+      boxInfoDiv.style.position = "absolute";
+      boxInfoDiv.style.top = "100px";
+      boxInfoDiv.style.left = "200px";
+      boxInfoDiv.style.backgroundColor = "white";
+      boxInfoDiv.style.padding = "10px";
+      boxInfoDiv.style.fontSize = "20px";
+      boxInfoDiv.style.borderRadius = "5px 5px 5px 5px";
+
+      // Create a paragraph for each box property
+      const properties = ["order", "width", "depth", "height", "x", "y", "z"];
+      properties.forEach((property) => {
+        const p = document.createElement("p");
+        if(["order"].includes(property)) {
+          p.innerHTML = `${property}: ${box[property]}`;
+        } else if (["width", "depth", "height"].includes(property)) {
+          // Multiply width, depth, and height by 100
+          p.innerHTML = `${property}: ${box[property] * 100}`;
+        } else if(["x"].includes(property)) {
+          p.innerHTML = `${property}: ${box.originalPosition.x}`;
+        } else if(["y"].includes(property)) {
+          p.innerHTML = `${property}: ${box.originalPosition.y}`;
+        } else {
+          p.innerHTML = `${property}: ${box.originalPosition.z}`;
+        }
+        boxInfoDiv.appendChild(p);
+      });
+
+      // Add the box info div to the document body
+      document.body.appendChild(boxInfoDiv);
+    }
+
+    function hideList1() {
+      document.querySelector('.box-list h1').remove();
+      // Select all button elements within the ul element
+      const buttonElements = document.querySelectorAll('.box-list ul button');
+    
+      // Remove each li element
+      buttonElements.forEach((button) => {
+        button.remove();
+      });
+    
+      list1Visible = false;
+    }
+
+    function hideList2() {
+      document.querySelector('.box-list h1').remove();
+      // Select all li elements within the ul element
+      const buttonElements = document.querySelectorAll('.box-list ul button');
+    
+      // Remove each li element
+      buttonElements.forEach((button) => {
+        button.remove();
+      });
+    
+      list2Visible = false;
+    }
 
     // Create a div element for the export button
     const exportContainer = document.createElement("div");
     exportContainer.style.position = "absolute";
     exportContainer.style.bottom = "75px"; 
     exportContainer.style.right = "100px"; 
-    exportContainer.style.backgroundColor = "orangered";
     ref.current.appendChild(exportContainer);
 
     // Create the export button and append it to the export container
     const exportButton = document.createElement("button");
     exportButton.className = "export-button";
     exportButton.innerHTML = "Export Solution";
+    exportButton.style.backgroundColor = "orangered";
+    exportButton.style.borderRadius = "5px 5px 5px 5px";
+    exportButton.style.padding = "10px";
     exportButton.addEventListener("click", handleExportSolution);
     exportContainer.appendChild(exportButton);
 
@@ -522,14 +708,16 @@ const Visualization = () => {
     const solution1Container = document.createElement("div");
     solution1Container.style.position = "absolute";
     solution1Container.style.top = "50px"; 
-    solution1Container.style.right = "300px"; 
-    solution1Container.style.backgroundColor = "orangered";
+    solution1Container.style.left = "550px"; 
     ref.current.appendChild(solution1Container);
 
     // Create the solution1 button and append it to the solution1 container
     const solution1Button = document.createElement("button");
     solution1Button.className = "solution1-button";
     solution1Button.innerHTML = "Solution 1";
+    solution1Button.style.backgroundColor = "orangered";
+    solution1Button.style.borderRadius = "5px 5px 5px 5px";
+    solution1Button.style.padding = "10px";
     solution1Button.addEventListener("click", showSolution1);
     solution1Container.appendChild(solution1Button);
 
@@ -537,17 +725,18 @@ const Visualization = () => {
     const solution2Container = document.createElement("div");
     solution2Container.style.position = "absolute";
     solution2Container.style.top = "50px"; 
-    solution2Container.style.right = "200px"; 
-    solution2Container.style.backgroundColor = "orangered";
+    solution2Container.style.right = "550px"; 
     ref.current.appendChild(solution2Container);
 
     // Create the solution2 button and append it to the solution2 container
     const solution2Button = document.createElement("button");
     solution2Button.className = "solution2-button";
     solution2Button.innerHTML = "Solution 2";
+    solution2Button.style.backgroundColor = "orangered";
+    solution2Button.style.borderRadius = "5px 5px 5px 5px";
+    solution2Button.style.padding = "10px";
     solution2Button.addEventListener("click", showSolution2);
     solution2Container.appendChild(solution2Button);
-
   
     return () => {
       // Clean up Three.js scene here
@@ -556,8 +745,8 @@ const Visualization = () => {
   }, []);
 
   return (
-    <div>
-      <div className="visualization-container" ref={ref}></div>
+    <div className="visualization-container">
+      <div className="visualization" ref={ref}></div>
     </div>
   );
 };

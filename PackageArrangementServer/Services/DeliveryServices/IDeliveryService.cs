@@ -9,7 +9,7 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>List<Delivery></returns>
-        public List<Delivery> GetAllDeliveries(string userId);
+        public static List<Delivery> GetAllDeliveries(string userId) { return null; }
 
         /// <summary>
         /// Checks if a certain delivery exists.
@@ -71,6 +71,15 @@ namespace PackageArrangementServer.Services
         /// <returns>Delivery</returns>
         public Delivery Create(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackageInNewDelivery> packages = null,
             IContainer container = null);
+
+        /// <summary>
+        /// Updates a delivery.
+        /// </summary>
+        /// <param name="deliveryId"></param>
+        /// <param name="delivery"></param>
+        /// <returns>Updates delivery in DB</returns>
+        public void Update(string deliveryId, Delivery delivery);
+
 
         /// <summary>
         /// Updates a delivery's package list.

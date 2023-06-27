@@ -1,5 +1,8 @@
-﻿namespace PackageArrangementServer.Models
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace PackageArrangementServer.Models
 {
+    [BsonDiscriminator("GeneralContainer")]
     public class GeneralContainer : IContainer
     {
         public GeneralContainer(string height, string width, string length)

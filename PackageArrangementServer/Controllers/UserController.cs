@@ -27,9 +27,19 @@ namespace PackageArrangementServer.Controllers
         //[ValidateAntiForgeryToken] 
         public string Post([FromBody] LoginRequest req)
         {
-            string id = userService.Login(req);
-            Response.StatusCode = id != null ?  200 : 401;
-            return id;
+            try
+            {
+                string id = userService.Login(req);
+                Response.StatusCode = id != null ? 200 : 401;
+                return id;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
+                return null;
+            }
+            
         }
 
 
@@ -41,9 +51,18 @@ namespace PackageArrangementServer.Controllers
         //[ValidateAntiForgeryToken]
         public void Post([FromBody] RegisterRequest req)
         {
-            if (userService.SignUpUser(req) == true) Response.StatusCode = 201;
-            else Response.StatusCode = 400;
-            return;
+            try
+            {
+                if (userService.SignUpUser(req) == true) Response.StatusCode = 201;
+                else Response.StatusCode = 400;
+                return;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
+                return;
+            }
+            
         }
 
 
@@ -102,14 +121,23 @@ namespace PackageArrangementServer.Controllers
         [HttpGet("{userId}/deliveries")]
         public List<Delivery> GetDeliveries(string userId)
         {
-            List<Delivery> deliveries = userService.GetAllDeliveries(userId);
-            if (deliveries == null)
+            try
             {
-                Response.StatusCode = 404;
+                List<Delivery> deliveries = userService.GetAllDeliveries(userId);
+                if (deliveries == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                Response.StatusCode = 200;
+                return deliveries;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Response.StatusCode = 400;
                 return null;
             }
-            Response.StatusCode = 200;
-            return deliveries;
+            
         }
 
         /// <summary>
@@ -121,14 +149,23 @@ namespace PackageArrangementServer.Controllers
         [HttpGet("{userId}/deliveries/{deliveryId}")]
         public Delivery GetDelivery(string userId, string deliveryId)
         {
-            Delivery delivery = userService.GetDelivery(userId, deliveryId);
-            if (delivery == null)
+            try
             {
-                Response.StatusCode = 404;
+                Delivery delivery = userService.GetDelivery(userId, deliveryId);
+                if (delivery == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                Response.StatusCode = 200;
+                return delivery;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Response.StatusCode = 400;
                 return null;
             }
-            Response.StatusCode = 200;
-            return delivery;
+            
         }
 
         /// <summary>
@@ -160,15 +197,24 @@ namespace PackageArrangementServer.Controllers
         [HttpGet("{userId}/deliveries/{deliveryId}/status")]
         public DeliveryStatus? GetDeliveryStatus(string userId, string deliveryId)
         {
-            DeliveryStatus status = userService.GetDeliveryStatus(userId, deliveryId);
-            if (status == DeliveryStatus.NonExisting)
+            try
             {
-                Response.StatusCode = 404;
+                DeliveryStatus status = userService.GetDeliveryStatus(userId, deliveryId);
+                if (status == DeliveryStatus.NonExisting)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+
+                Response.StatusCode = 200;
+                return status;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Response.StatusCode = 400;
                 return null;
             }
-
-            Response.StatusCode = 200;
-            return status;
+            
         }
 
         /// <summary>
@@ -232,10 +278,19 @@ namespace PackageArrangementServer.Controllers
         [HttpPost("{userId}/deliveries")]
         public string Post(string userId, [FromBody] RequestCreationOfNewDelivery req)
         {
-            string id;
-            id = userService.CreateDelivery(userId, req.DeliveryDate, req.Packages, req.containerSize);
-            Response.StatusCode = id != null ? 200 : 404;
-            return id;
+            try
+            {
+                string id;
+                id = userService.CreateDelivery(userId, req.DeliveryDate, req.Packages, req.containerSize);
+                Response.StatusCode = id != null ? 200 : 404;
+                return id;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
+                return null;
+            }
+            
         }
 
         /// <summary>
@@ -246,11 +301,20 @@ namespace PackageArrangementServer.Controllers
         [HttpPost("{userId}/deliveries/custompackage")]
         public string Post(string userId, [FromBody] RequestCreationDeliveryCustomContainer req)
         {
-            string id;
-            RequestCreationOfNewDeliveryCustomContainer newReq = new RequestCreationOfNewDeliveryCustomContainer(req);
-            id = userService.CreateDelivery(userId, newReq);
-            Response.StatusCode = id != null ? 200 : 404;
-            return id;
+            try
+            {
+                string id;
+                RequestCreationOfNewDeliveryCustomContainer newReq = new RequestCreationOfNewDeliveryCustomContainer(req);
+                id = userService.CreateDelivery(userId, newReq);
+                Response.StatusCode = id != null ? 200 : 404;
+                return id;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
+                return null;
+            }
         }
 
         /// <summary>

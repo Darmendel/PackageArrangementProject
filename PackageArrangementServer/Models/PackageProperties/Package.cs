@@ -1,12 +1,14 @@
 ﻿using System.Text.Json.Serialization;
 
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace PackageArrangementServer.Models
 {
+    [BsonIgnoreExtraElements]
+
     public class Package
     {
-        [Key]
         public string Id { get; set; }
         public string DeliveryId { get; set; } // define as second key
         public string Width { get; set; }

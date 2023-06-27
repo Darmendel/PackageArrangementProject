@@ -7,12 +7,14 @@ namespace PackageArrangementServer.Services.ResultServices
     public class ResultService : IResultService
     {
         IUserService _userService;
+        IDeliveryService _deliveryService;
         private static HttpClient sharedClient = new()
         {
             BaseAddress = new Uri("http://localhost:5555"),
         };
 
-        public ResultService(IUserService userService) { _userService = userService; }
+        public ResultService(IUserService userService, IDeliveryService deliveryService) 
+        { _userService = userService; _deliveryService = deliveryService; }
 
         /// <Handles delivery arrangement>
         /// DeliveryArrangement.
@@ -35,9 +37,10 @@ namespace PackageArrangementServer.Services.ResultServices
 
             if (delivery != null)
             {
-                delivery.firstPackages = request.FirstPackages;
-                delivery.secondPackages = request.SecondPackages;
+                delivery.FirstPackages = request.FirstPackages;
+                delivery.SecondPackages = request.SecondPackages;
                 delivery.Status = DeliveryStatus.Ready;
+                _deliveryService.Update(deliveryId, delivery);
             } else result = "This delivery id: " + deliveryId + " does not exist";
             
             return result;

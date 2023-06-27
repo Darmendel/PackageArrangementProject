@@ -30,5 +30,14 @@ namespace PackageArrangementServer.Models
             Password = reg.Password;
             Deliveries = new List<Delivery>();
         }
+
+        public User(string id, RegisterRequest reg, List<Delivery> deliveries)
+        {
+            Id = id;
+            Name = reg.Name;
+            Email = reg.Email;
+            Password = reg.Password;
+            Deliveries = deliveries;
+        }
     }
 }

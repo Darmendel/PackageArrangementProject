@@ -10,5 +10,9 @@ namespace PackageArrangementServer.Services
         {
             base.SetUserList(ul);
         }
+        public UserServiceMock(IDeliveryService ds, IRabbitMqProducerService ps) : base(ds, ps)
+        {
+            base.SetUserList(new UserList());
+        }
     }
 }

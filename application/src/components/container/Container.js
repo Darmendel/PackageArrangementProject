@@ -1,10 +1,51 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import "./Container.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from '../navbar/Navbar';
-import { sendDeliveryDataToServer } from '../Api';
 
 const Container = () => {
+
+  const useDeliveryDataToServer = () => {
+    const navigate = useNavigate();
+  
+    const sendDeliveryDataToServer = async (type, date, container, packages, userId) => {
+      // console.log('check userid in sendDeliveryDataToServer:', userId);
+      // console.log('date:', date);
+      try {
+        let url = null;
+        if (type === 'fixed') {
+          url = 'https://localhost:7165/api/User/' + userId + '/deliveries';
+        } else {
+          url = 'https://localhost:7165/api/User/' + userId + '/deliveries/custompackage';
+        }
+        // console.log('url:', url);
+        console.log('body:', JSON.stringify({ date, packages, container }));
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: "cors",
+          body: JSON.stringify({ date, packages, container }),
+        });
+  
+        console.log('response:', response);
+        const deliveryId = await response.text();
+        console.log('deliveryId:', deliveryId);
+  
+        if (response.ok) {
+          console.log('DeliveryData sent to the server successfully!');
+        } else {
+          console.error('Failed to send DeliveryData to the server.');
+        }
+      } catch (error) {
+        console.error('Error while sending DeliveryData to the server:', error);
+      }
+    };
+  
+    return sendDeliveryDataToServer;
+  }
+
   const location = useLocation();
   const [selectedContainer, setSelectedContainer] = useState("");
   const [customContainerValues, setCustomContainerValues] = useState({
@@ -12,15 +53,19 @@ const Container = () => {
     width: "",
     length: ""
   });
-  const [csvData, setCsvData] = useState([]);
+  const [packages, setPackages] = useState([]);
+  const userIdRef = useRef(null); // Create a ref to store userId
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const csvDataParam = searchParams.get("csvData");
-    if (csvDataParam) {
-      const parsedCsvData = JSON.parse(decodeURIComponent(csvDataParam));
-      setCsvData(parsedCsvData);
+    const packagesParam = searchParams.get("packages");
+    // console.log('packagesParam:', packagesParam);
+    const userId = searchParams.get("userId");
+    if (packagesParam) {
+      const parsedCsvData = JSON.parse(decodeURIComponent(packagesParam));
+      setPackages(parsedCsvData);
     }
+    userIdRef.current = userId; // Assign the value to the ref
   }, [location.search]);
 
   const handleContainerClick = (containerId) => {
@@ -128,6 +173,8 @@ const Container = () => {
     return null;
   };
 
+  const sendDeliveryDataToServer = useDeliveryDataToServer();
+
   const renderContinueButton = () => {
     let isClickable = false;
 
@@ -138,24 +185,28 @@ const Container = () => {
     }
 
     const handleContinueClick = () => {
+      const currentDate = new Date(); // Get the current date and time
+      const deliveryDate = currentDate.toISOString(); // Convert the date to a string format
       let containerData = {};
       let containerSize = 0;
-      let url = 'https://localhost:7165';
-
+      let type = null;
       if (selectedContainer === 'custom-container') {
         containerData = customContainerValues;
-        url = 'https://localhost:7165';
-        sendDeliveryDataToServer(url, containerData, csvData);
+        type = 'custom';
+        sendDeliveryDataToServer(type, deliveryDate, containerData, packages, userIdRef.current);
       } else if (selectedContainer === 'small-container') {
         containerSize = 1;
-        // console.log(JSON.stringify({ containerSize, csvData }));
-        sendDeliveryDataToServer(url, containerSize, csvData);
+        type = 'fixed';
+        sendDeliveryDataToServer(type, deliveryDate, containerSize, packages, userIdRef.current);
       } else if (selectedContainer === 'medium-container') {
         containerSize = 2;
-        sendDeliveryDataToServer(url, containerSize, csvData);
+        type = 'fixed';
+        console.log('deliveryDate, packages, containerSize:', JSON.stringify({ deliveryDate, packages, containerSize }));
+        sendDeliveryDataToServer(type, deliveryDate, containerSize, packages, userIdRef.current);
       } else if (selectedContainer === 'large-container') {
         containerSize = 3;
-        sendDeliveryDataToServer(url, containerSize, csvData);
+        type = 'fixed';
+        sendDeliveryDataToServer(type, deliveryDate, containerSize, packages, userIdRef.current);
       }
     };
 
@@ -166,7 +217,7 @@ const Container = () => {
             className={"continue-container-clickable"}
             disabled={false} 
             to="/visualization"
-            onClick={handleContinueClick} // Call the function on button click
+            onClick={handleContinueClick} 
           >
             Continue
           </Link>

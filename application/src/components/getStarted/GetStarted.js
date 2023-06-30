@@ -2,9 +2,43 @@ import {React, useState} from "react";
 import "./GetStarted.css";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
-import { sendLoginDataToServer } from '../Api';
 
-const GetStarted = () => {
+const GetStarted = ({ handleLoginSuccess }) => {
+
+  const useLoginDataToServer = () => {
+    const navigate = useNavigate();
+    const [userId, setUserId] = useState(null);
+  
+    const sendLoginDataToServer = async (loginData) => {
+      try {
+        const response = await fetch('https://localhost:7165/api/User/Login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: "cors",
+          body: JSON.stringify(loginData),
+        });
+  
+        const userId = await response.text();
+  
+        console.log('response:', response);
+  
+        if (response.ok) {
+          setUserId(userId);
+          navigate('/uploading');
+          handleLoginSuccess(userId);
+        } else {
+          console.error('Failed to send LoginData to the server.');
+          alert("One or more of the details you entered are incorrect. Please try again.");
+        }
+      } catch (error) {
+        console.error('Error while sending LoginData to the server:', error);
+      }
+    };
+  
+    return {sendLoginDataToServer, userId};
+  }
   
   const [loginData, setLoginData] = useState({
     "email": "",
@@ -18,13 +52,12 @@ const GetStarted = () => {
     });
   };
 
-  const navigate = useNavigate();
+  const { sendLoginDataToServer } = useLoginDataToServer();
 
   const handleLoginClick = (event) => {
     event.preventDefault();
     console.log(loginData);
     sendLoginDataToServer(loginData);
-    navigate('/uploading');
   };
   
   return (

@@ -2,9 +2,40 @@ import {React, useState} from "react";
 import "./SignUp.css";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
-import { sendFormDataToServer } from '../Api';
 
 const SignUp = () => {
+
+  const useFormDataToServer = () => {
+    const navigate = useNavigate();
+  
+    const sendFormDataToServer = async (formData) => {
+      try {
+        const response = await fetch('https://localhost:7165/api/User/SignUp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: "cors",
+          body: JSON.stringify(formData),
+        });
+  
+        console.log('response:', response);
+  
+        if (response.ok) {
+          console.log('FormData sent to the server successfully!');
+          alert("The registration was successful!");
+          navigate('/getStarted');
+        } else {
+          console.error('Failed to send FormData to the server.');
+          alert("This email address is already in use.");
+        }
+      } catch (error) {
+        console.error('Error while sending FormData to the server:', error);
+      }
+    };
+  
+    return sendFormDataToServer;
+  };
 
   const [formData, setFormData] = useState({
     "email": "",
@@ -19,13 +50,12 @@ const SignUp = () => {
     });
   };
 
-  const navigate = useNavigate();
+  const sendFormDataToServer = useFormDataToServer(); 
 
   const handleSignClick = (event) => {
     event.preventDefault();
     console.log(formData);
     sendFormDataToServer(formData);
-    navigate('/getStarted');
   };
 
     

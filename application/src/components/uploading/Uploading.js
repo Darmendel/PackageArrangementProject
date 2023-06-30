@@ -5,29 +5,44 @@ import { Link } from "react-router-dom";
 import Papa from "papaparse";
 
 
-const Uploading = () => {
+const Uploading = ({ userId }) => {
   const tableRef = useRef(null); // Reference to the table element
-  const [csvData, setCsvData] = useState([]);
+  const [packages, setPackages] = useState([]);
   const [editableRowIndex, setEditableRowIndex] = useState(-1);
   const [newPackage, setNewPackage] = useState({
-    UnpackOrder: '',
-    Height: '',
-    Width: '',
-    Length: ''
-  });
+    order: '', 
+    height: '', 
+    width: '', 
+    length: ''
+  });  
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (e) => {
       const parsedData = parseCSV(e.target.result);
-      setCsvData(parsedData);
+      setPackages(parsedData);
     };
     reader.readAsText(file);
   }
 
-  function parseCSV(csvData) {
-    const parsedData = Papa.parse(csvData, { header: true }).data;
+  function parseCSV(packages) {
+    // Split the packages string into an array of lines
+    const lines = packages.split('\n');
+    // Remove carriage returns from each line
+    const cleanedLines = lines.map(line => line.replace('\r', ''));
+    // Remove empty lines at the beginning or end of the array
+    while (cleanedLines.length > 0 && cleanedLines[0].trim() === '') {
+      cleanedLines.shift();
+    }
+    
+    while (cleanedLines.length > 0 && cleanedLines[cleanedLines.length - 1].trim() === '') {
+      cleanedLines.pop();
+    }
+    // Join the lines back into a string
+    const cleanedPackages = cleanedLines.join('\n');
+    // Parse the cleaned packages data
+    const parsedData = Papa.parse(cleanedPackages, { header: true }).data;
     return parsedData;
   }
 
@@ -44,22 +59,29 @@ const Uploading = () => {
   }
 
   function handleDeleteClick(rowIndex) {
-    const newData = [...csvData];
+    const newData = [...packages];
     newData.splice(rowIndex, 1);
-    setCsvData(newData);
+    setPackages(newData);
   }
 
   function handleAddClick(e) {
     e.preventDefault();
-    const newData = [...csvData, newPackage];
-    setCsvData(newData);
+    const { order, height, width, length } = newPackage;
+    const newPackageObject = {
+      order, 
+      height, 
+      width, 
+      length 
+    };
+    const newData = [...packages, newPackageObject];
+    setPackages(newData);
     setNewPackage({
-      UnpackOrder: '',
-      Height: '',
-      Width: '',
-      Length: ''
+      order: '', 
+      height: '', 
+      width: '', 
+      length: '' 
     });
-
+  
     // Scroll to the last row in the table
     if (tableRef.current) {
       const table = tableRef.current;
@@ -69,17 +91,26 @@ const Uploading = () => {
     }
   }
 
+  function convertPackages(packages) {
+    return packages.map(({ "Unpack order": order, Height, Width, Length }) => ({
+      order: order,
+      height: Height,
+      width: Width,
+      length: Length
+    }));
+  }
+
   return (
     <div className='uploading'>
       <div className='nav-upload'><Navbar /></div>
       <div className='table-wrapper'>
-        {csvData.length === 0 &&
+        {packages.length === 0 &&
           <h1 htmlFor="csvInput" style={{ display: "block" }}>
             Enter CSV File: 
-            <input className='input-csv' type="file" onChange={handleFileUpload} />
+            <input className='input-csv' type="file" accept='.csv' onChange={handleFileUpload} />
           </h1>
         }
-        {csvData.length > 0 &&
+        {packages.length > 0 &&
           <div>
             <h2>Adding a new package:</h2>
             <form className='add-line'>
@@ -126,10 +157,10 @@ const Uploading = () => {
               <button className='add-button' onClick={handleAddClick}>Add</button>
               <Link 
                 className="continue-lnk-top" 
-                // pass the csvData as a query parameter in the URL when navigating to 
+                // pass the packages as a query parameter in the URL when navigating to 
                 // the Container page
                 to={{ pathname: "/container", 
-                search: `?csvData=${encodeURIComponent(JSON.stringify(csvData))}` }}>
+                search: `?packages=${encodeURIComponent(JSON.stringify(convertPackages(packages)))}&userId=${encodeURIComponent(userId)}`}}>
                 Continue
               </Link>
             </form>
@@ -137,14 +168,14 @@ const Uploading = () => {
             <table ref={tableRef}>
               <thead>
                 <tr>
-                  {Object.keys(csvData[0]).map((header, index) => (
+                  {Object.keys(packages[0]).map((header, index) => (
                     <th key={index}>{header}</th>
                   ))}
                   <th className="actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {csvData
+                {packages
                   .filter((row) => Object.values(row).some((value) => value !== ''))
                   .map((row, rowIndex) => (
                     <tr key={rowIndex}>
@@ -156,9 +187,9 @@ const Uploading = () => {
                               type="text"
                               defaultValue={value}
                               onBlur={(e) => {
-                                const newData = [...csvData];
+                                const newData = [...packages];
                                 newData[rowIndex][field] = e.target.value;
-                                setCsvData(newData);
+                                setPackages(newData);
                               }}
                               style={{ color: "black" }}
                             />
@@ -191,10 +222,10 @@ const Uploading = () => {
             </table>
             <Link 
             className="continue-lnk-bottom" 
-            // pass the csvData as a query parameter in the URL when navigating to 
+            // pass the packages as a query parameter in the URL when navigating to 
             // the Container page
             to={{ pathname: "/container", 
-            search: `?csvData=${encodeURIComponent(JSON.stringify(csvData))}` }}>
+            search: `?packages=${encodeURIComponent(JSON.stringify(convertPackages(packages)))}&userId=${encodeURIComponent(userId)}`}}>
             Continue
           </Link>
           </div>

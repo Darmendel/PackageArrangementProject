@@ -1,17 +1,23 @@
 ﻿using PackageArrangementServer.Services;
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace PackageArrangementServer.Models
 {
-    public class Delivery
+    [BsonIgnoreExtraElements]
+    public class Delivery 
     {
-        [Key]
+        
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+        //[BsonElement("UserId")]
         public string UserId { get; set; } // define as second key
         public DateTime CreatedDate { get; set; }
         public DateTime DeliveryDate { get; set; }
-        public List<Package> firstPackages { get; set; }
-        public List<Package> secondPackages { get; set; }
+        public List<Package> FirstPackages { get; set; }
+        public List<Package> SecondPackages { get; set; }
         public IContainer? Container { get; set; }
         public string Cost { get; set; }
         public DeliveryStatus Status { get; set; }
@@ -24,8 +30,8 @@ namespace PackageArrangementServer.Models
             this.UserId = userId;
             this.CreatedDate = DateTime.Now;
             this.DeliveryDate = (DateTime) deliveryDate;
-            this.firstPackages = fpackages;
-            this.secondPackages = spackages;
+            this.FirstPackages = fpackages;
+            this.SecondPackages = spackages;
 
             /*int cost = CalculateCost(packages, container);
             if (cost > 0) this.Cost = cost.ToString();

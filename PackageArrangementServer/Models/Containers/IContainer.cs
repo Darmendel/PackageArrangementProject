@@ -8,5 +8,9 @@
         public string Length { get; set; }
         public string Cost { get; set; }
 
+        public bool Equals(IContainer other)
+        {
+            return Height.Equals(other.Height) && Width.Equals(other.Width) && Length.Equals(other.Length);
+        }
     }
 }

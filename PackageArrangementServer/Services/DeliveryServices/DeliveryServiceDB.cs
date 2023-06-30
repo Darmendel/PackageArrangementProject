@@ -6,28 +6,56 @@ using PackageArrangementServer.Models.DeliveryProperties;
 
 namespace PackageArrangementServer.Services
 {
-    public class DeliveryService : IDeliveryService
+    public class DeliveryServiceDB : IDeliveryService
     {
         private IContainerService containerService;
         private IPackageService packageService;
         private IDeliveryServiceHelper helper;
-        
-        private static DeliveryList deliveryList = new DeliveryList();
 
-        public DeliveryService(IContainerService cs, IPackageService ps, IDeliveryServiceHelper dsh)
+        private static DeliveryList deliveryList;
+        private readonly IMongoCollection<Delivery> _deliveriesCollection;
+
+        public DeliveryServiceDB(IContainerService cs, IPackageService ps, IDeliveryServiceHelper dsh,
+            IOptions<DeliveriesDatabase> deliveriesDatabaseSettings)
         {
+            var mongoClient = new MongoClient(
+            deliveriesDatabaseSettings.Value.ConnectionString);
+
+            var mongoDatabase = mongoClient.GetDatabase(
+                deliveriesDatabaseSettings.Value.DatabaseName);
+
+            _deliveriesCollection = mongoDatabase.GetCollection<Delivery>(
+                deliveriesDatabaseSettings.Value.DeliveriesCollectionName);
+
             this.containerService = cs;
             this.packageService = ps;
             this.helper = dsh;
+
+            //deliveryList = new DeliveryList();
+            deliveryList = new DeliveryList(GetAsync().Result);
         }
 
+        public async Task<List<Delivery>> GetAsync() =>
+        await _deliveriesCollection.Find(_ => true).ToListAsync();
+
+        public async Task<Delivery?> GetAsync(string id) =>
+            await _deliveriesCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+
+        public async Task CreateAsync(Delivery newDelivery) =>
+            await _deliveriesCollection.InsertOneAsync(newDelivery);
+
+        public async Task UpdateAsync(string id, Delivery updatedDelivery) =>
+            await _deliveriesCollection.ReplaceOneAsync(x => x.Id == id, updatedDelivery);
+
+        public async Task RemoveAsync(string id) =>
+            await _deliveriesCollection.DeleteOneAsync(x => x.Id == id);
 
         public static List<Delivery> GetAllDeliveries(string userId)
         {
             if (string.IsNullOrEmpty(userId)) return null;
             List<Delivery> lst = new List<Delivery>();
 
-            foreach (Delivery delivery in DeliveryService.deliveryList.Deliveries)
+            foreach (Delivery delivery in DeliveryServiceDB.deliveryList.Deliveries)
             {
                 if (delivery.UserId == userId) lst.Add(delivery);
             }
@@ -38,7 +66,7 @@ namespace PackageArrangementServer.Services
 
         public bool Exists(string deliveryId, string userId)
         {
-            if (string.IsNullOrEmpty (deliveryId) || string.IsNullOrEmpty(userId)) return false;
+            if (string.IsNullOrEmpty(deliveryId) || string.IsNullOrEmpty(userId)) return false;
 
             List<Delivery> deliveries = GetAllDeliveries(userId);
             if (deliveries == null) return false;
@@ -52,7 +80,7 @@ namespace PackageArrangementServer.Services
 
         public bool Exists(string deliveryId)
         {
-            foreach (Delivery delivery in DeliveryService.deliveryList.Deliveries)
+            foreach (Delivery delivery in DeliveryServiceDB.deliveryList.Deliveries)
                 if (delivery.Id == deliveryId) return true;
             return false;
         }
@@ -118,12 +146,16 @@ namespace PackageArrangementServer.Services
             delivery.Cost = cost;
             delivery.Status = status;
 
-            DeliveryService.deliveryList.Add(delivery);
+            DeliveryServiceDB.deliveryList.Add(delivery);
+            Task x = CreateAsync(delivery);
+            x.Wait();
+            Console.WriteLine(x.IsCompleted);
             return delivery;
         }
         public void Update(string deliveryId, Delivery delivery)
         {
-            ;
+            Task x = UpdateAsync(deliveryId, delivery);
+            x.Wait();
         }
         public Delivery Update(string deliveryId, string userId, List<Package>? p)
         {
@@ -143,40 +175,6 @@ namespace PackageArrangementServer.Services
             return Edit(deliveryId, userId, container: c);
         }
 
-        /*private Package ConvertToPackage(string deliveryId, RequestEditPackage request)
-        {
-            return packageService.ConvertToPackage(deliveryId, request);
-        }*/
-
-        /*private List<Package> GetPackageList(string deliveryId, List<RequestEditPackage> packages)
-        {
-            if (packages == null) return null;
-            List<Package> packageList = new List<Package>();
-
-            foreach (RequestEditPackage package in packages)
-            {
-                Package p = ConvertToPackage(deliveryId, package);
-                if (p != null) packageList.Add(p);
-            }
-            return packageList;
-        }*/
-
-        // cost and deliveryStatus might be needed to reavluate and changed.
-        /*public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null,
-            List<RequestEditPackage>? packages = null, IContainer container = null)
-        {
-            Delivery delivery = Get(deliveryId, userId);
-            if (delivery == null) return null;
-
-            List<Package> packageList = GetPackageList(deliveryId, packages);
-            if (packageList == null) packageList = new List<Package>();
-
-            string cost = Cost(deliveryId, userId).ToString();
-            DeliveryStatus status = Status(deliveryId, userId);
-
-            DeliveryService.deliveryList.Edit(delivery, deliveryDate, packageList, container, cost, status);
-            return Get(deliveryId, userId);
-        }*/
 
         public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null,
             List<Package>? packages = null, IContainer container = null)
@@ -186,12 +184,12 @@ namespace PackageArrangementServer.Services
 
             if (deliveryDate == null) deliveryDate = delivery.DeliveryDate;
             if (packages == null) packages = GetAllPackages(deliveryId, userId);
-            if (container == null) container = delivery.Container;  
+            if (container == null) container = delivery.Container;
 
             string cost = Cost(deliveryId, userId).ToString();
             DeliveryStatus status = Status(deliveryId, userId);
 
-            DeliveryService.deliveryList.Edit(delivery, deliveryDate, packages, container, cost, status);
+            DeliveryServiceDB.deliveryList.Edit(delivery, deliveryDate, packages, container, cost, status);
             return Get(deliveryId, userId);
         }
 
@@ -213,7 +211,7 @@ namespace PackageArrangementServer.Services
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return null;
-            DeliveryService.deliveryList.Remove(delivery);
+            DeliveryServiceDB.deliveryList.Remove(delivery);
             return delivery;
         }
 
@@ -283,7 +281,7 @@ namespace PackageArrangementServer.Services
             return package;
         }
 
-        public Package EditPackage(string deliveryId, string userId, string packageId, 
+        public Package EditPackage(string deliveryId, string userId, string packageId,
                         string width = null, string height = null, string Length = null)
         {
             Delivery delivery = Get(deliveryId, userId);

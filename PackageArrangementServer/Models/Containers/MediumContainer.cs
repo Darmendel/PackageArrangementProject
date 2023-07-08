@@ -1,5 +1,8 @@
-﻿namespace PackageArrangementServer.Models
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace PackageArrangementServer.Models
 {
+    [BsonDiscriminator("MediumContainer")]
     public class MediumContainer : IContainer
     {
         public MediumContainer()

@@ -175,8 +175,8 @@ namespace PackageArrangementServer.Services
 
             DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, delivery.FirstPackages, userId);
 
-            int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
-            if (res == 0) return null;
+            //int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
+            //if (res == 0) return null;
 
             //return Update(userId, delivery, "add");
             userList.AddDelivery(user, delivery);

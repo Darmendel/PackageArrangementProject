@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./AboutUs.css";
 import { GrCircleInformation } from "react-icons/gr";
-import { Navbar } from "react-bootstrap";
-
 
 const AboutUs = () => {
   return (

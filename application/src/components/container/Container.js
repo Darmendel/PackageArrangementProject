@@ -3,22 +3,26 @@ import "./Container.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from '../navbar/Navbar';
 
-const Container = () => {
+const Container = ({ handleGetData }) => {
+
+  const userIdRef = useRef(null); // Create a ref to store userId
+  const [userId, setUserId] = useState(null);
+  const [deliveryId, setDeliveryId] = useState(null);
+  const [deliveryStatus, setDeliveryStatus] = useState(null);
+  const [intervalId, setIntervalId] = useState(null);
 
   const useDeliveryDataToServer = () => {
     const navigate = useNavigate();
   
     const sendDeliveryDataToServer = async (type, date, container, packages, userId) => {
-      // console.log('check userid in sendDeliveryDataToServer:', userId);
-      // console.log('date:', date);
       try {
+        setUserId(userId);
         let url = null;
         if (type === 'fixed') {
           url = 'https://localhost:7165/api/User/' + userId + '/deliveries';
         } else {
           url = 'https://localhost:7165/api/User/' + userId + '/deliveries/custompackage';
         }
-        // console.log('url:', url);
         console.log('body:', JSON.stringify({ date, packages, container }));
         const response = await fetch(url, {
           method: 'POST',
@@ -31,10 +35,12 @@ const Container = () => {
   
         console.log('response:', response);
         const deliveryId = await response.text();
+        setDeliveryId(deliveryId);
         console.log('deliveryId:', deliveryId);
   
         if (response.ok) {
           console.log('DeliveryData sent to the server successfully!');
+          navigate('/waiting');
         } else {
           console.error('Failed to send DeliveryData to the server.');
         }
@@ -46,6 +52,114 @@ const Container = () => {
     return sendDeliveryDataToServer;
   }
 
+  const useDeliveryStatusFromServer = () => {
+
+    const getDeliveryStatusFromServer = async () => {
+      try {
+        console.log('userId:', userId);
+        console.log('deliveryId:', deliveryId);
+
+        const url = 'https://localhost:7165/api/User/' + userId + '/deliveries/' + deliveryId + '/status';
+        
+        console.log('body:', JSON.stringify({ userId, deliveryId }));
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: "cors",
+        });
+  
+        if (response.ok) {
+          console.log('DeliveryStatus accepted from the server successfully!');
+          console.log('response:', response);
+          const deliveryStatus = await response.text();
+          setDeliveryStatus(deliveryStatus);
+          console.log('deliveryStatus:', deliveryStatus);
+          if (deliveryStatus === '2') {
+            stopCheckingDeliveryStatus(); // Stop checking delivery status
+            getDeliveryDataFromServer();
+          }
+        } else {
+          console.error('Failed to accept DeliveryStatus from the server.');
+        }
+      } catch (error) {
+        console.error('Error while accepting DeliveryStatus from the server:', error);
+      }
+    };
+
+    const startCheckingDeliveryStatus = () => {
+      // Start checking the delivery status every 5 seconds
+      const intervalId = setInterval(() => {
+        getDeliveryStatusFromServer();
+      }, 5000);
+      setIntervalId(intervalId);
+    };
+  
+    const stopCheckingDeliveryStatus = () => {
+      // Clear the interval
+      if (intervalId) {
+        clearInterval(intervalId);
+        setIntervalId(null);
+      }
+    };
+  
+    return { startCheckingDeliveryStatus, stopCheckingDeliveryStatus };
+  }
+
+  const useDeliveryDataFromServer = () => {
+
+    const [deliveryData, setDeliveryData] = useState(null);
+    const navigate = useNavigate();
+  
+    const getDeliveryDataFromServer = async () => {
+      try {
+        console.log('userId:', userId);
+        console.log('deliveryId:', deliveryId);
+
+        let url = 'https://localhost:7165/api/User/' + userId + '/deliveries/' + deliveryId;
+      
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: "cors",
+        });
+  
+        console.log('response:', response);
+        const deliveryData = await response.text();
+        console.log('deliveryData:', deliveryData);
+  
+        if (response.ok) {
+          console.log('DeliveryData accepted from the server successfully!');
+          setDeliveryData(deliveryData);
+          navigate('/visualization');
+          handleGetData(deliveryData);
+        } else {
+          console.error('Failed to accept DeliveryData from the server.');
+        }
+      } catch (error) {
+        console.error('Error while accepting DeliveryData from the server:', error);
+      }
+    };
+  
+    return { getDeliveryDataFromServer, deliveryData };
+  }
+
+  const { startCheckingDeliveryStatus, stopCheckingDeliveryStatus } = useDeliveryStatusFromServer();
+  const { getDeliveryDataFromServer } = useDeliveryDataFromServer();
+  
+  useEffect(() => {
+    // Start checking the delivery status when the component mounts
+    startCheckingDeliveryStatus(userIdRef.current, deliveryId);
+  
+    // Clean up the interval when the component unmounts
+    return () => {
+      stopCheckingDeliveryStatus();
+    };
+  }, [startCheckingDeliveryStatus, stopCheckingDeliveryStatus, userIdRef, deliveryId]);
+  
   const location = useLocation();
   const [selectedContainer, setSelectedContainer] = useState("");
   const [customContainerValues, setCustomContainerValues] = useState({
@@ -54,8 +168,7 @@ const Container = () => {
     length: ""
   });
   const [packages, setPackages] = useState([]);
-  const userIdRef = useRef(null); // Create a ref to store userId
-
+  
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const packagesParam = searchParams.get("packages");
@@ -201,7 +314,6 @@ const Container = () => {
       } else if (selectedContainer === 'medium-container') {
         containerSize = 2;
         type = 'fixed';
-        console.log('deliveryDate, packages, containerSize:', JSON.stringify({ deliveryDate, packages, containerSize }));
         sendDeliveryDataToServer(type, deliveryDate, containerSize, packages, userIdRef.current);
       } else if (selectedContainer === 'large-container') {
         containerSize = 3;
@@ -216,7 +328,7 @@ const Container = () => {
           <Link 
             className={"continue-container-clickable"}
             disabled={false} 
-            to="/visualization"
+            // to="/waiting"
             onClick={handleContinueClick} 
           >
             Continue
@@ -307,10 +419,9 @@ const Container = () => {
         </div>
       </div>
       {renderContinueButton()}
+      {deliveryStatus}
     </div>
   );
 };
 
 export default Container;
-
-

@@ -1,51 +1,60 @@
 import React, { useEffect, useRef } from 'react';
-// import Navbar from '../navbar/Navbar';
 import './Visualization.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const SCALE = 100;
 
-const Visualization = () => {
+const Visualization = ({ deliveryData }) => {
+  // console.log('deliveryData in beginning:', deliveryData);
   const ref = useRef(null);
-  const data = {
-    "Id": "648595984f238653fd8754fc",
-    "Container": {
-      "Height": "400",
-      "Width": "600",
-      "Length": "1400",
-      "Cost": "700"
-    },
-    "FirstPackages": [{
-      "Id": "196",
-      "DeliveryId": "648595984f238653fd8754fc",
-      "Width": "5",
-      "Height": "6",
-      "Length": "7",
-      "Order": "1",
-      "X": "1",
-      "Y": "2",
-      "Z": "3"
-    }],
-      "SecondPackages": [{
-      "Id": "196",
-      "DeliveryId": "648595984f238653fd8754fc",
-      "Width": "5",
-      "Height": "6",
-      "Length": "7",
-      "Order": "1",
-      "X": "1",
-      "Y": "2",
-      "Z": "3"
-      }],
-    "UserId": "-NWSG59p56SkI3cELux0"
-  };
+  const selectedBox = useRef(null);
+  const originalPos = useRef(null);
+
+  const data = deliveryData;
 
   // Sort the packages by ID
-  data.FirstPackages.sort((a, b) => a.Id - b.Id);
-  data.SecondPackages.sort((a, b) => a.Id - b.Id);
+  data.firstPackages.sort((a, b) => a.id - b.id);
+  data.secondPackages.sort((a, b) => a.id - b.id);
 
-  
+  // var selectedBox = null;
+
+  const cancelBoxSelection = () => {
+    // Reset the box's position to its original position
+    if (originalPos.current) {
+      selectedBox.current.position.copy(originalPos.current);
+    }
+    const cancelButton = document.getElementById("cancel-button");
+    if (cancelButton) {
+      cancelButton.remove(); // Remove the cancel button from the DOM
+    }
+    selectedBox.current = null; // Deselect the box
+  };
+
+  const renderCancelButton = () => {
+    if (selectedBox.current) {
+      var cancelButton = document.getElementById("cancel-button");
+      if (!cancelButton) {
+        // Create the cancel button and append it to the cancel container
+        const cancelContainer = document.createElement("div");
+        cancelContainer.id = "cancel-container";
+        cancelContainer.style.position = "absolute";
+        cancelContainer.style.top = "50px";
+        cancelContainer.style.left = "250px";
+        ref.current.appendChild(cancelContainer);
+
+        cancelButton = document.createElement("button");
+        cancelButton.id = "cancel-button";
+        cancelButton.innerHTML = "Deselect box";
+        cancelButton.style.color = "orangered";
+        cancelButton.style.backgroundColor = "white";
+        cancelButton.style.borderRadius = "5px 5px 5px 5px";
+        cancelButton.style.padding = "10px";
+        cancelButton.addEventListener("click", () => cancelBoxSelection());
+        cancelContainer.appendChild(cancelButton);
+      }
+    }
+  };
 
   useEffect(() => {
     var solution1Visible = false;
@@ -59,22 +68,22 @@ const Visualization = () => {
     const boxesHeightFirst = [];
     const boxesDepthFirst = [];
 
-    data.FirstPackages.forEach(function(box) {
-      boxesWidthFirst.push(box.Width / SCALE);
-      boxesHeightFirst.push(box.Height / SCALE);
-      boxesDepthFirst.push(box.Length / SCALE);
+    data.firstPackages.forEach(function(box) {
+      boxesWidthFirst.push(box.width / SCALE);
+      boxesHeightFirst.push(box.height / SCALE);
+      boxesDepthFirst.push(box.length / SCALE);
     });
 
     const boxesIdFirst = [];
 
-    data.FirstPackages.forEach(function(box) {
-      boxesIdFirst.push(box.Id);
+    data.firstPackages.forEach(function(box) {
+      boxesIdFirst.push(box.id);
     })
 
     const boxesOrderFirst = [];
 
-    data.FirstPackages.forEach(function(box) {
-      boxesOrderFirst.push(box.Order);
+    data.firstPackages.forEach(function(box) {
+      boxesOrderFirst.push(box.order);
     })
 
     const xPositionsFirst = [];
@@ -86,22 +95,22 @@ const Visualization = () => {
     const yPositionsFirstOriginal = [];
     const zPositionsFirstOriginal = [];
 
-    data.FirstPackages.forEach(function(box) {
-      zPositionsFirstOriginal.push(box.X);
-      xPositionsFirstOriginal.push(box.Y);
-      yPositionsFirstOriginal.push(box.Z);
-      if (box.X !== 0) {
-        box.X /= SCALE;
+    data.firstPackages.forEach(function(box) {
+      zPositionsFirstOriginal.push(box.x);
+      xPositionsFirstOriginal.push(box.y);
+      yPositionsFirstOriginal.push(box.z);
+      if (box.x !== 0) {
+        box.x /= SCALE;
       }
-      zPositionsFirst.push(box.X);
-      if (box.Y !== 0) {
-        box.Y /= SCALE;
+      zPositionsFirst.push(box.x);
+      if (box.y !== 0) {
+        box.y /= SCALE;
       }
-      xPositionsFirst.push(box.Y);
-      if (box.Z !== 0) {
-        box.Z /= SCALE;
+      xPositionsFirst.push(box.y);
+      if (box.z !== 0) {
+        box.z /= SCALE;
       }
-      yPositionsFirst.push(box.Z);
+      yPositionsFirst.push(box.z);
     });
 
     // second solution:
@@ -110,22 +119,22 @@ const Visualization = () => {
     const boxesHeightSecond = [];
     const boxesDepthSecond = [];
 
-    data.SecondPackages.forEach(function(box) {
-      boxesWidthSecond.push(box.Width / SCALE);
-      boxesHeightSecond.push(box.Height / SCALE);
-      boxesDepthSecond.push(box.Length / SCALE);
+    data.secondPackages.forEach(function(box) {
+      boxesWidthSecond.push(box.width / SCALE);
+      boxesHeightSecond.push(box.height / SCALE);
+      boxesDepthSecond.push(box.length / SCALE);
     });
 
     const boxesIdSecond = [];
 
-    data.SecondPackages.forEach(function(box) {
-      boxesIdSecond.push(box.Id);
+    data.secondPackages.forEach(function(box) {
+      boxesIdSecond.push(box.id);
     })
 
     const boxesOrderSecond = [];
 
-    data.SecondPackages.forEach(function(box) {
-      boxesOrderSecond.push(box.Order);
+    data.secondPackages.forEach(function(box) {
+      boxesOrderSecond.push(box.order);
     })
 
     const xPositionsSecond = [];
@@ -137,39 +146,39 @@ const Visualization = () => {
     const yPositionsSecondOriginal = [];
     const zPositionsSecondOriginal = [];
 
-    data.SecondPackages.forEach(function(box) {
-      zPositionsSecondOriginal.push(box.X);
-      xPositionsSecondOriginal.push(box.Y);
-      yPositionsSecondOriginal.push(box.Z);
-      if (box.X !== 0) {
-        box.X /= SCALE;
+    data.secondPackages.forEach(function(box) {
+      zPositionsSecondOriginal.push(box.x);
+      xPositionsSecondOriginal.push(box.y);
+      yPositionsSecondOriginal.push(box.z);
+      if (box.x !== 0) {
+        box.x /= SCALE;
       }
-      zPositionsSecond.push(box.X);
-      if (box.Y !== 0) {
-        box.Y /= SCALE;
+      zPositionsSecond.push(box.x);
+      if (box.y !== 0) {
+        box.y /= SCALE;
       }
-      xPositionsSecond.push(box.Y);
-      if (box.Z !== 0) {
-        box.Z /= SCALE;
+      xPositionsSecond.push(box.y);
+      if (box.z !== 0) {
+        box.z /= SCALE;
       }
-      yPositionsSecond.push(box.Z);
+      yPositionsSecond.push(box.z);
     });
     
     var numOfBoxes1 = xPositionsFirst.length;
     var numOfBoxes2 = xPositionsSecond.length;
-    const containerHeight = data.Container.Height / SCALE;
+    const containerHeight = data.container.height / SCALE;
       
-    var selectedBox = null;
     var boxes = [];
+    var isGround = false;
 
     var boxWidth = 0;
     var boxHeight = 0;
     var boxDepth = 0;
 
     var ground = null;
-    const groundWidth = data.Container.Width / SCALE;
+    const groundWidth = data.container.width / SCALE;
     const groundHeight = 0;
-    const groundDepth = data.Container.Length / SCALE;
+    const groundDepth = data.container.length / SCALE;
   
     var scene = new THREE.Scene();
     scene.background = new THREE.Color(0xa1930); 
@@ -187,12 +196,15 @@ const Visualization = () => {
     controls.enabledPan = false;
     controls.maxPolarAngle = Math.PI / 2;
 
+    const color = getRandomColor();
+    var originalBoxMaterial = new THREE.MeshStandardMaterial({ color: color });
+
     class Box extends THREE.Mesh {
       constructor({ Id, width, height, depth, position, originalPosition, order }) {
         const color = getRandomColor();
-        const material = new THREE.MeshStandardMaterial({ color: color });
+        originalBoxMaterial = new THREE.MeshStandardMaterial({ color: color });
 
-        super(new THREE.BoxGeometry(width, height, depth), material);
+        super(new THREE.BoxGeometry(width, height, depth), originalBoxMaterial);
         
         this.Id = Id;
         this.order = order;
@@ -234,7 +246,7 @@ const Visualization = () => {
 
     const handleExportSolution = () => {
       // Combine the data from firstPackages and secondPackages
-      const combinedData = [...data.FirstPackages, ...data.SecondPackages];
+      const combinedData = [...data.firstPackages, ...data.secondPackages];
 
       // Extract the keys to include in the CSV
       const keysToInclude = Object.keys(combinedData[0]).filter(
@@ -247,7 +259,7 @@ const Visualization = () => {
       [
         "Plan 1",
         keysToInclude.join(","),
-        ...data.FirstPackages.map(row =>
+        ...data.firstPackages.map(row =>
           keysToInclude.map(key => {
             if (["X", "Y", "Z"].includes(key)) {
               return String(row[key] * 100);
@@ -258,7 +270,7 @@ const Visualization = () => {
         "",
         "Plan 2",
         keysToInclude.join(","),
-        ...data.SecondPackages.map(row =>
+        ...data.secondPackages.map(row =>
           keysToInclude.map(key => {
             if (["X", "Y", "Z"].includes(key)) {
               return String(row[key] * 100);
@@ -282,7 +294,9 @@ const Visualization = () => {
         if (solution2Visible) {
           hideSolution2();
         }
-        createGround()
+        isGround = true;
+        createGround();
+        isGround = false;
         for (let i = 0; i < numOfBoxes1; i++) {
           boxWidth = boxesWidthFirst[i];
           boxHeight = boxesHeightFirst[i];
@@ -340,7 +354,9 @@ const Visualization = () => {
         if (solution1Visible) {
           hideSolution1();
         }
-        createGround()
+        isGround = true;
+        createGround();
+        isGround = false;
         for (let i = 0; i < numOfBoxes2; i++) {
           boxWidth = boxesWidthSecond[i];
           boxHeight = boxesHeightSecond[i];
@@ -392,14 +408,6 @@ const Visualization = () => {
       solution2Visible = false;
     };
 
-    // // Creating the boxes of the first solution
-    // createFirstSolution();
-    
-    // // Creating the ground
-    // createGround();
-    
-    
-
     // const light = new THREE.DirectionalLight(0xffffffff, 1);
     // light.position.set(3, 3, 3);
     // light.castShadow = true;
@@ -433,12 +441,16 @@ const Visualization = () => {
     }
 
     function getRandomColor() {
-      const letters = '0123456789ABCDEF';
-      let color = '#';
-      for (let i = 0; i < 3; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
+      if (!isGround) {
+        const baseHue = 200; // Adjust the base hue value to control the shade
+        const saturation = Math.floor(Math.random() * 50) + 50; // Random saturation between 50 and 100
+        const lightness = Math.floor(Math.random() * 30) + 35; // Random lightness between 35 and 65
+        const color = `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
+        return color;
+      } else {
+        // white
+        return '#FFFFFF';
       }
-      return color;
     }
 
     // Check if there is a collision between box1 and box2
@@ -453,27 +465,27 @@ const Visualization = () => {
     function hoverBoxes() {
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(scene.children);
-
-      // Reset transparency for all boxes
       for (let i = 0; i < boxes.length; i++) {
         const box = boxes[i];
-        if (box.material) {
-          box.material.transparent = false;
-          box.material.opacity = box === selectedBox ? 0.6 : 1.0;
-        }
-      }
-      // Set transparency for intersected boxes
-      for (let i = 0; i < intersects.length; i++) {
-        const object = intersects[i].object;
-        if (boxes.includes(object) && object.material) {
-          if (!selectedBox) { // if there is a selected box already - don't change opacity
-            object.material.transparent = true;
-            object.material.opacity = 0.5;
+        if (box.material && box.material.color) {
+          // if there is a selected box already - don't change color
+          if (!selectedBox.current || box !== selectedBox.current) { 
+            if (!box.originalColor) {
+              box.originalColor = box.material.color.clone(); // Store the original color
+            }
+            if (intersects.some((intersect) => intersect.object === box)) {
+              // Calculate a darker shade of the original color
+              const originalColor = box.originalColor;
+              const darkerColor = originalColor.clone().multiplyScalar(0.8); 
+              box.material.color.copy(darkerColor);
+            } else {
+              box.material.color.copy(box.originalColor); // Reset to the original color
+            }
           }
         }
       }
     }
-
+    
     function animate() {
       controls.update();
 
@@ -489,6 +501,8 @@ const Visualization = () => {
     }
 
     function onMouseMove(event) {
+      const canPlaceMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+      const cannotPlaceMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
       event.preventDefault();
       // calculate mouse position in normalized device coordinates
       // (-1 to +1) for both components
@@ -497,19 +511,19 @@ const Visualization = () => {
       raycaster.setFromCamera(mouse, camera);
       
       // Move the selected box with the mouse
-      if (selectedBox) {
+      if (selectedBox.current) {
         const intersects = raycaster.intersectObjects(scene.children);
     
         if (intersects.length > 0) {
           const intersectionPoint = intersects[0].point;
     
           // Calculate the allowed boundary for moving the box
-          const minX = ground.left + selectedBox.width / 2;
-          const maxX = ground.right - selectedBox.width / 2;
-          const minY = ground.top + selectedBox.height / 2;
-          const maxY = ground.top + containerHeight - selectedBox.height / 2;
-          const minZ = ground.front + selectedBox.depth / 2;
-          const maxZ = ground.back - selectedBox.depth / 2;
+          const minX = ground.left + selectedBox.current.width / 2;
+          const maxX = ground.right - selectedBox.current.width / 2;
+          const minY = ground.top + selectedBox.current.height / 2;
+          const maxY = ground.top + containerHeight - selectedBox.current.height / 2;
+          const minZ = ground.front + selectedBox.current.depth / 2;
+          const maxZ = ground.back - selectedBox.current.depth / 2;
     
           intersectionPoint.x = Math.max(Math.min(intersectionPoint.x, maxX), minX);
           intersectionPoint.y = Math.max(Math.min(intersectionPoint.y, maxY), minY);
@@ -526,58 +540,106 @@ const Visualization = () => {
           ) {
             // Check if there is a collision between the selected box and other boxes
             const hasCollision = boxes.some((box) => {
-              return box !== selectedBox && boxCollision({ box1: selectedBox, box2: box });
+              return box !== selectedBox.current && boxCollision({ box1: selectedBox.current, box2: box });
             });
-    
-            // Move the selected box only if there is no collision or after a collision to a neighboring free place
-            if (!hasCollision || !boxCollision({ box1: selectedBox, box2: intersects[0].object })) {
-              selectedBox.position.copy(intersectionPoint);
+            if (hasCollision) {
+              selectedBox.current.material = cannotPlaceMaterial; // Set the cannot-place material
+            } else {
+              selectedBox.current.material = canPlaceMaterial; // Set the can-place material
             }
-          }
+            selectedBox.current.position.copy(intersectionPoint);
+          } 
+        } else {
+          selectedBox.current.material = cannotPlaceMaterial; // Set the cannot-place material
         }
       }
     }
+
+    function checkBoxBelow(box) {
+      for (let i = 0; i < boxes.length; i++) {
+        const otherBox = boxes[i];
+        if (otherBox !== box) {
+          // Check if the other box is below the given box
+          if (otherBox.top <= box.bottom &&
+            otherBox.right > box.left &&
+            otherBox.left < box.right &&
+            otherBox.back > box.front &&
+            otherBox.front < box.back) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
     
+    
+
     function onClick() {
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(scene.children);
-
       if (intersects.length > 0) {
-        if (selectedBox) {
-          const intersectSelectedBox = raycaster.intersectObject(selectedBox);
-
+        if (selectedBox.current) {
+          const intersectSelectedBox = raycaster.intersectObject(selectedBox.current);
           if (intersectSelectedBox.length > 0) {
             const intersectionPoint = intersectSelectedBox[0].point;
-
             // Calculate the allowed boundary for placing the box
-            const minX = ground.left + selectedBox.width / 2;
-            const maxX = ground.right - selectedBox.width / 2;
-            const minY = ground.top + selectedBox.height / 2;
-            const maxY = ground.top + containerHeight - selectedBox.height / 2;
-            const minZ = ground.front + selectedBox.depth / 2;
-            const maxZ = ground.back - selectedBox.depth / 2;
+            const minX = ground.left + selectedBox.current.width / 2;
+            const maxX = ground.right - selectedBox.current.width / 2;
+            const minY = ground.top + selectedBox.current.height / 2;
+            const maxY = ground.top + containerHeight - selectedBox.current.height / 2;
+            const minZ = ground.front + selectedBox.current.depth / 2;
+            const maxZ = ground.back - selectedBox.current.depth / 2;
 
             intersectionPoint.x = Math.max(Math.min(intersectionPoint.x, maxX), minX);
             intersectionPoint.y = Math.max(Math.min(intersectionPoint.y, maxY), minY);
             intersectionPoint.z = Math.max(Math.min(intersectionPoint.z, maxZ), minZ);
 
             // Check if the intersection point is within the container's boundaries
-            if (intersectionPoint.x >= minX && intersectionPoint.x <= maxX &&
-            intersectionPoint.y >= minY && intersectionPoint.y <= maxY &&
-            intersectionPoint.z >= minZ &&intersectionPoint.z <= maxZ) {
+            if (
+              intersectionPoint.x >= minX &&
+              intersectionPoint.x <= maxX &&
+              intersectionPoint.y >= minY && 
+              intersectionPoint.y <= maxY &&
+              intersectionPoint.z >= minZ &&
+              intersectionPoint.z <= maxZ) 
+            {
               // Check if there is a collision between the selected box and other boxes
               const hasCollision = boxes.some((box) => {
-                return box !== selectedBox && boxCollision({ box1: selectedBox, box2: box });
+                return box !== selectedBox.current && boxCollision({ box1: selectedBox.current, box2: box });
               });
               
               if (!hasCollision) {
-                selectedBox.position.copy(intersectionPoint);
-                selectedBox = null; // Deselect the box after placing it
+                selectedBox.current.material = originalBoxMaterial; // Reset the material
+                selectedBox.current.position.copy(intersectionPoint);
+    
+                // Check if the box is floating in the air
+                if (checkBoxBelow(selectedBox.current)) {
+                  // Find the box below the selected box
+                  const boxBelow = boxes.find((otherBox) => 
+                    otherBox.top <= selectedBox.current.bottom &&
+                    otherBox.right > selectedBox.current.left &&
+                    otherBox.left < selectedBox.current.right &&
+                    otherBox.back > selectedBox.current.front &&
+                    otherBox.front < selectedBox.current.back
+                  );
+                  selectedBox.current.position.y = boxBelow.top + selectedBox.current.height / 2; // Place the box on top of the box below it
+                } else {
+                  selectedBox.current.position.y = ground.top + selectedBox.current.height / 2; // Place the box on the ground
+                }
+                selectedBox.current = null; // Deselect the box
+                const cancelButton = document.getElementById("cancel-button");
+                if (cancelButton) {
+                  cancelButton.remove(); // Remove the cancel button from the DOM
+                }
               }
             }
           }
         } else if (intersects[0].object !== ground) {
-          selectedBox = intersects[0].object;
+          selectedBox.current = intersects[0].object;
+          // Store the original position of the box
+          originalPos.current = selectedBox.current.position.clone();
+          // Call the function to show the cancel button
+          renderCancelButton();
         }
       }
     }
@@ -640,21 +702,27 @@ const Visualization = () => {
       boxInfoDiv.style.fontSize = "20px";
       boxInfoDiv.style.borderRadius = "5px 5px 5px 5px";
 
-      // Create a paragraph for each box property
-      const properties = ["Order", "Width", "Depth", "Height", "X", "Y", "Z"];
+      // Create a line for each box property
+      const properties = ["order", "width", "depth", "height", "x", "y", "z"];
       properties.forEach((property) => {
         const p = document.createElement("p");
-        if(["Order"].includes(property)) {
-          p.innerHTML = `${property}: ${box[property]}`;
-        } else if (["Width", "Depth", "Height"].includes(property)) {
-          // Multiply width, depth, and height by 100
-          p.innerHTML = `${property}: ${box[property] * 100}`;
+        if(["order"].includes(property)) {
+          p.innerHTML = `Order: ${box[property]}`;
+        } else if (["width"].includes(property)) {
+          // Multiply width by 100
+          p.innerHTML = `Width: ${box[property] * 100}`;
+        } else if (["depth"].includes(property)) {
+          // Multiply depth by 100
+          p.innerHTML = `Depth: ${box[property] * 100}`;
+        } else if (["height"].includes(property)) {
+          // Multiply height by 100
+          p.innerHTML = `Height: ${box[property] * 100}`;
         } else if(["x"].includes(property)) {
-          p.innerHTML = `${property}: ${box.originalPosition.x}`;
+          p.innerHTML = `X: ${box.originalPosition.x}`;
         } else if(["y"].includes(property)) {
-          p.innerHTML = `${property}: ${box.originalPosition.y}`;
+          p.innerHTML = `Y: ${box.originalPosition.y}`;
         } else {
-          p.innerHTML = `${property}: ${box.originalPosition.z}`;
+          p.innerHTML = `Z: ${box.originalPosition.z}`;
         }
         boxInfoDiv.appendChild(p);
       });
@@ -741,14 +809,15 @@ const Visualization = () => {
     solution2Container.appendChild(solution2Button);
   
     return () => {
-      // Clean up Three.js scene here
+      
     };
     
-  }, []);
+  });
 
   return (
     <div className="visualization-container">
       <div className="visualization" ref={ref}></div>
+      {renderCancelButton()}
     </div>
   );
 };

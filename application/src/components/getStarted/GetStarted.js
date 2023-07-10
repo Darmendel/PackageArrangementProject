@@ -25,6 +25,7 @@ const GetStarted = ({ handleLoginSuccess }) => {
         console.log('response:', response);
   
         if (response.ok) {
+          console.log('LoginData sent to the server successfully!');
           setUserId(userId);
           navigate('/uploading');
           handleLoginSuccess(userId);

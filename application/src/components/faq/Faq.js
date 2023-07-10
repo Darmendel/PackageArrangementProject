@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { questions } from "./data.js";
 import Question from "./Question";
 import { MdOutlineLibraryBooks } from "react-icons/md";

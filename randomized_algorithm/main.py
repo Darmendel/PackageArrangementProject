@@ -505,6 +505,13 @@ def start(boxes_json):
     cont.pkgs_improve = copy.deepcopy(improved_solution)
 
     final_json = cont.convert_to_json()
+    global STOP_CONSTRUCTION, STOP_IMPROVEMENT, FINAL_CONSTRUCTION_PACKAGING, FINAL_IMPROVEMENT_PACKAGING
+
+    STOP_CONSTRUCTION, STOP_IMPROVEMENT = False, False
+
+    FINAL_CONSTRUCTION_PACKAGING = []
+    FINAL_IMPROVEMENT_PACKAGING = []
+
     # only when connecting to server:
     alg_send.send_to_server(json_file=final_json)
 

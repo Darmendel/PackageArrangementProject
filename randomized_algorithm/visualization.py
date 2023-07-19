@@ -4,7 +4,7 @@ import random
 
 colors = [(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)) for i in range(100)]
 
-with open("outputmdclpf.txt", 'r') as f:
+with open("outputmdclp.txt", 'r') as f:
     data = f.readlines()
 
 rx, ry, rz = 1600, 1000, 300

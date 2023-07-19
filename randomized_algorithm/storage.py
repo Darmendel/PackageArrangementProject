@@ -89,3 +89,4 @@ class EfficientStorage(Generic[T]):
                 return inner(start_idx, mid_idx)
 
         return inner(start_idx=0, end_idx=self.counter - 1)
+

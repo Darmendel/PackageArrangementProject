@@ -1,0 +1,59 @@
+Input:
+- container_dims: tuple (w, h, d) representing container dimensions
+- box_dims: list of tuples [(w1, h1, d1), (w2, h2, d2), ..., (wn, hn, dn)] representing box dimensions
+
+Output:
+- box_positions: list of tuples [(x1, y1, z1), (x2, y2, z2), ..., (xn, yn, zn)] representing box positions
+
+1. Initialize empty_spaces list with a single space representing the entire container:
+   empty_spaces = [(0, 0, 0, w, h, d)]
+
+2. For each box:
+   - Set found_space to False
+   - For each empty space:
+     - If the box can fit inside the space, choose the smallest such space:
+       - Add the box position to box_positions
+       - Split the space into three smaller spaces based on the dimensions of the box
+         - One space above the box: (x, y, z+d, w, h-hn, d)
+         - One space to the right of the box: (x+w, y, z, w-wn, h, d)
+         - One space in front of the box: (x, y+h, z, wn, h-hn, d)
+       - Set found_space to True
+       - Exit the loop
+   - If no suitable space is found, return None to indicate no solution exists
+
+3. Return box_positions
+
+
+
+def bottom_left(container_dims, box_dims):
+    # Step 1: Initialize empty_spaces list with a single space representing the entire container
+    empty_spaces = [(0, 0, 0, *container_dims)]
+    box_positions = []
+
+    # Step 2: For each box
+    for box in box_dims:
+        found_space = False
+
+        # For each empty space
+        for i, space in enumerate(empty_spaces):
+            space_x, space_y, space_z, space_w, space_h, space_d = space
+
+            # If the box can fit inside the space, choose the smallest such space
+            if box[0] <= space_w and box[1] <= space_h and box[2] <= space_d:
+                box_positions.append((space_x, space_y, space_z))
+                # Split the space into three smaller spaces based on the dimensions of the box
+                empty_spaces[i:i+1] = [(space_x, space_y, space_z+box[2], space_w, space_h-box[1], space_d),
+                                       (space_x+box[0], space_y, space_z, space_w-box[0], space_h, space_d),
+                                       (space_x, space_y+box[1], space_z, box[0], space_h-box[1], space_d)]
+                found_space = True
+                break
+
+        # If no suitable space is found, return None to indicate no solution exists
+        if not found_space:
+            return None
+
+    # Step 3: Return box_positions
+    return box_positions
+
+
+

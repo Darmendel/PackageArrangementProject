@@ -4,10 +4,10 @@ import random
 
 colors = [(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)) for i in range(100)]
 
-with open("output.txt", 'r') as f:
+with open("outputmdclp.txt", 'r') as f:
     data = f.readlines()
 
-rx, ry, rz = 1600, 800, 600
+rx, ry, rz = 1600, 1000, 300
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 
@@ -52,3 +52,12 @@ for val, line in enumerate(data):
             print(f"e2_x: {y2}, y2: {e2_y} ")
             print(f"e2_x: {z2}, z2: {e2_z} ")
             print(val, index)
+
+# input[1,2,3,4,5]
+# [1] - 1
+# [2], [1,2,3] -2
+# [3], [2,3,4]- 3
+# [4], [3,4,5] -1
+# [5] - 1
+# output[1,2,2,1,1]
+

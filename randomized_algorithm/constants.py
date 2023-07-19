@@ -1,16 +1,17 @@
 from enum import Enum
-
 from enum import unique
 
 Location = tuple[int, int, int]
 Size = tuple[int, int, int]
 
 
+@unique
 class Above(Enum):
     NOT_ALLOWED = 0
     ALLOWED = 1
 
 
+@unique
 class Penaltylevel(Enum):
     LOW = 2.5 * 10 ** -3, 5.0 * 10 ** -3
     MEDIUM = 7.5 * 10 ** -3, 15.0 * 10 ** -3
@@ -30,8 +31,14 @@ class Point(Enum):
     START = 1
     END = 0
 
+
 @unique
 class Exist(Enum):
     TRUE = -2
     FALSE = -10
 
+
+@unique
+class Used(Enum):
+    YES = 1
+    NO = 0

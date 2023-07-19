@@ -5,8 +5,11 @@ from itertools import permutations
 # subject to a change
 class Package:
 
-    def __init__(self, customer: int, height: int, width: int, length: int, weight: float,
-                 priority: int, above: Above, positions: list[Location] = None, location: Location = None):
+    def __init__(self, customer: int, height: int, width: int, length: int, weight: float = 0,
+                 unique_idx: int = 0,
+                 priority: int = -1, above: Above = Above.ALLOWED, positions: list[Location] = None,
+                 location: Location = None,
+                 index: int = -1):
         self.customer = customer  # represents customer code.
         self.height = height
         self.width = width
@@ -22,3 +25,5 @@ class Package:
         self.cur_pos = None
         self.location = location
         self.size = self.length, self.width, self.height
+        self.index = index
+        self.unique_idx = unique_idx

@@ -3,11 +3,13 @@ import numpy as np
 from itertools import permutations
 import package
 from constants import *
+import json
+from package import Package
 
 
 class Input:
 
-    def __init__(self, file_name, file_path=None):  # file path might not be used.
+    def __init__(self, file_name: str, file_path=None):  # file path might not be used.
         self.container = []  # format: Height, Width, Length.
         self.boxes = []
         self.categories = []
@@ -18,19 +20,12 @@ class Input:
         self.convert_to_float()
         self.contdim = np.array(
             [self.df_container1["Height"][0], self.df_container1["Width"][0], self.df_container1["Length"][0]])
-
+        self.shipment_number = 1
         self.create_boxes()
-
-
-
-
-
 
     def convert_to_float(self):
         self.boxes = [[int(i[0]), int(i[1]), int(i[2]), int(i[3])] if idx else i for idx, i in
                       enumerate(self.boxes)]
-
-
 
     # box format: 'Customer ,Height', 'Width', 'Length', 'Value', 'Volume', 'Priority', 'Above', 'Position'
     def create_boxes(self):
@@ -39,8 +34,6 @@ class Input:
         self.add_priority()
         self.add_above()
         self.add_position()
-
-
 
     '''if no value defined then it is set to equal value 1 for all'''
     '''volume is defined as  Height * Width * Length'''
@@ -80,3 +73,26 @@ class Input:
             all_pos = [pos for pos in permutations(["Height", "Width", "Length"])]
             for i in self.boxes[1:]:
                 i.append(all_pos)
+
+
+class InputJson:
+    def __init__(self, file_name):
+        #    with open(file_name, 'r') as json_file:
+        contents = file_name
+        container_dict = contents["Container"]
+        self.contdim = np.array([int(container_dict["Height"]),
+                                 int(container_dict["Width"]),
+                                 int(container_dict["Length"])
+                                 ])
+        self.shipment_number = contents["Id"]
+        self.cost = int(container_dict["Cost"])
+        self.userId = contents["UserId"]
+        self.pkgs = []
+        for index_, pkg in enumerate(contents["Packages"]):
+            self.pkgs.append(Package(customer=int(pkg["Order"]),
+                                     length=int(pkg["Length"]),
+                                     width=int(pkg["Width"]),
+                                     height=int(pkg["Height"]),
+                                     unique_idx=pkg["Id"],
+                                     index=index_
+                                     ))

@@ -2,7 +2,10 @@ from constants import *
 from itertools import permutations
 
 
-# subject to a change
+'''
+defines a Package(box)
+customer - represents customer code.
+'''
 class Package:
 
     def __init__(self, customer: int, height: int, width: int, length: int, weight: float = 0,
@@ -10,7 +13,7 @@ class Package:
                  priority: int = -1, above: Above = Above.ALLOWED, positions: list[Location] = None,
                  location: Location = None,
                  index: int = -1):
-        self.customer = customer  # represents customer code.
+        self.customer = customer
         self.height = height
         self.width = width
         self.length = length

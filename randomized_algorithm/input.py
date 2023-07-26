@@ -6,10 +6,15 @@ from constants import *
 import json
 from package import Package
 
+''' 
+   parsing input,
+   Container format: Height, Width, Length
+    '''
+
 
 class Input:
 
-    def __init__(self, file_name: str, file_path=None):  # file path might not be used.
+    def __init__(self, file_name: str, file_path=None):
         self.container = []  # format: Height, Width, Length.
         self.boxes = []
         self.categories = []
@@ -27,7 +32,10 @@ class Input:
         self.boxes = [[int(i[0]), int(i[1]), int(i[2]), int(i[3])] if idx else i for idx, i in
                       enumerate(self.boxes)]
 
-    # box format: 'Customer ,Height', 'Width', 'Length', 'Value', 'Volume', 'Priority', 'Above', 'Position'
+    ''' box format: 
+    'Customer ,Height', 'Width', 'Length', 'Value', 'Volume', 'Priority', 'Above', 'Position'
+    for csv.
+    '''
     def create_boxes(self):
         self.boxes[0][0] = "Customer_rank"
         self.val_volume("Value")
@@ -77,7 +85,6 @@ class Input:
 
 class InputJson:
     def __init__(self, file_name):
-        #    with open(file_name, 'r') as json_file:
         contents = file_name
         container_dict = contents["Container"]
         self.contdim = np.array([int(container_dict["Height"]),

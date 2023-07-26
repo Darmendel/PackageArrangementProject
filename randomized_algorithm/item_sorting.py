@@ -11,10 +11,11 @@ class ItemSorting:
         self.sort_option = None
         self.sorting()
 
-    # Taxability, Priority, Customer_rank
+    '''
+    Sorting the boxes according to certain properties.
+    '''
     def sorting(self):
         option = random.choice(["volume", "height", "area", "customer_volume", "customer_height", "customer_area"])
-        #  notice we want to sort only the list(first is the label).
         self.items = self.sort_way.sort_algo[option].sort(self.items, option)
         self.sort_option = option
-        # print(f"We are sorting by the following option: {option}, found at ItemSorting")
+

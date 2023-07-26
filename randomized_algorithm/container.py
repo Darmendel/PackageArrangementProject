@@ -36,17 +36,16 @@ class Container:
         self.length = length
         self.weight_limit = weight_limit
         self.volume = self.height * self.width * self.length
-        # self.pkgs_num = pkgs_num
         self.shipment_number = shipment_number
         self.pkgs_construct = None
         self.pkgs_improve = None
         self.taken_space = np.zeros(shape=(self.length, self.width, self.height), dtype=float)
-        # self.taken_space[0: self.length, 0: self.width, 0:1] = Used.YES.value  # basis
         self.cost = cost
         self.size = size
         self.userid = userid
 
-    # update weight & occupied space.
+    '''update weight & occupied space.'''
+
     def update_taken_space(self, pkg: Package) -> None:
         self.taken_space[pkg.location[0]: pkg.location[0] + pkg.length, pkg.location[1]: pkg.location[1] + pkg.width,
         pkg.location[2]: pkg.location[2] + pkg.height] = Used.YES.value
@@ -54,13 +53,6 @@ class Container:
     def erase_taken_space(self, pkg: Package) -> None:
         self.taken_space[pkg.location[0]: pkg.location[0] + pkg.length, pkg.location[1]: pkg.location[1] + pkg.width,
         pkg.location[2]: pkg.location[2] + pkg.height] = Used.NO.value
-
-    # def check_base(self, pkg: Package, pos: Location) -> bool:
-    #     used_base = np.count_nonzero(self.taken_space[pos[0]: pos[0] + pkg.length + 1,
-    #                                  pos[1]: pos[1] + pkg.width + 1,
-    #                                  pos[2]: pos[2] + 1] == Used.YES.value)
-    #
-    #     return True if used_base / (pkg.length * pkg.width) > BASE_RATIO else False
 
     def move_along_x_axis(self, pkg: Package) -> None:
         i = 0
@@ -70,13 +62,11 @@ class Container:
                                                                                                 pkg.width,
                 pkg.location[2]: pkg.location[2] + pkg.height] == Used.NO.value)):
             i += 1
-        if i > 0:
-            print(f"check x axis {i}")
 
         t = list(pkg.location)
         t[0] -= i
         pkg.location = tuple(t)
-        self.update_taken_space(pkg=pkg)  # new space occupied
+        self.update_taken_space(pkg=pkg)
 
     def move_along_y_axis(self, pkg: Package) -> None:
         i = 0
@@ -86,13 +76,11 @@ class Container:
                 pkg.location[1] - i - 1: pkg.location[1] - i,
                 pkg.location[2]: pkg.location[2] + pkg.height] == Used.NO.value)):
             i += 1
-        if i > 0:
-            print(f"check y axis {i}")
 
         t = list(pkg.location)
         t[1] -= i
         pkg.location = tuple(t)
-        self.update_taken_space(pkg=pkg)  # new space occupied
+        self.update_taken_space(pkg=pkg)
 
     def move_along_z_axis(self, pkg: Package) -> None:
         i = 0
@@ -102,13 +90,11 @@ class Container:
                 pkg.location[1]: pkg.location[1] + pkg.width,
                 pkg.location[2] - i - 1: pkg.location[2] - i] == Used.NO.value)):
             i += 1
-        if i > 0:
-            print(f"check z axis {i}")
 
         t = list(pkg.location)
         t[2] -= i
         pkg.location = tuple(t)
-        self.update_taken_space(pkg=pkg)  # new space occupied
+        self.update_taken_space(pkg=pkg)
 
     def check_base(self, pkg: Package, pos: Location) -> bool:
         return True if np.all(np.count_nonzero(self.taken_space[pos[0]: pos[0] + pkg.length + 1,

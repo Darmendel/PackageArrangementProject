@@ -2,15 +2,12 @@ import random
 from package import Package
 
 
-# fix priority to be an average.
-
 class BaseSort:
 
     def sort(self, items: list[Package], comparator: str) -> list[Package]:
         raise NotImplementedError()
 
 
-# TODO fix to decreasing order and not increasing order.
 class MergeSort(BaseSort):
 
     @staticmethod
@@ -20,7 +17,6 @@ class MergeSort(BaseSort):
         merged = []
         while i < len(fis) and j < len(sec):
 
-            # second if checks taxability in case the value of the comparator is equal.
             if fis[i].__getattribute__(fis1) > sec[j].__getattribute__(fis1) or \
                     (fis[i].__getattribute__(fis1) == sec[j].__getattribute__(fis1) and
                      fis[i].__getattribute__(sec2) > sec[j].__getattribute__(sec2)):
@@ -72,7 +68,9 @@ class MergeSort(BaseSort):
         return MergeSort.merge(left, right, comparator)
 
 
-# volume, height, area.
+'''# volume, height, area '''
+
+
 class SimpleSort(BaseSort):
     def sort(self, items: list[Package], comparator: str) -> list[Package]:
         copy_items = list(items)

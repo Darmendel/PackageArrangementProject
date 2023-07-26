@@ -2,16 +2,20 @@ import React, { useEffect, useRef } from 'react';
 import './Visualization.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { useLocation } from 'react-router-dom';
 
 const SCALE = 100;
 
 const Visualization = ({ deliveryData }) => {
-  // console.log('deliveryData in beginning:', deliveryData);
+  const {state} = useLocation();
+  // console.log('deliveryData in beginning:', state);
   const ref = useRef(null);
   const selectedBox = useRef(null);
   const originalPos = useRef(null);
 
-  const data = deliveryData;
+  const data = JSON.parse(state);
+  console.log('deliveryData in beginning:', data);
+  console.log(typeof(data));
 
   // Sort the packages by ID
   data.firstPackages.sort((a, b) => a.id - b.id);

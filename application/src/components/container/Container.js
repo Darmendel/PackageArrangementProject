@@ -14,7 +14,7 @@ const Container = ({ handleGetData }) => {
   const useDeliveryDataToServer = () => {
     const navigate = useNavigate();
   
-    const sendDeliveryDataToServer = async (type, date, container, packages, userId) => {
+    const sendDeliveryDataToServer = async (type, date, containerSize, packages, userId) => {
       try {
         setUserId(userId);
         let url = null;
@@ -23,14 +23,14 @@ const Container = ({ handleGetData }) => {
         } else {
           url = 'https://localhost:7165/api/User/' + userId + '/deliveries/custompackage';
         }
-        console.log('body:', JSON.stringify({ date, packages, container }));
+        console.log('body:', JSON.stringify({ date, packages, containerSize }));
         const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           mode: "cors",
-          body: JSON.stringify({ date, packages, container }),
+          body: JSON.stringify({ date, packages, containerSize }),
         });
   
         console.log('response:', response);
@@ -134,7 +134,7 @@ const Container = ({ handleGetData }) => {
         if (response.ok) {
           console.log('DeliveryData accepted from the server successfully!');
           setDeliveryData(deliveryData);
-          navigate('/visualization');
+          navigate('/visualization', {"state": deliveryData});
           handleGetData(deliveryData);
         } else {
           console.error('Failed to accept DeliveryData from the server.');

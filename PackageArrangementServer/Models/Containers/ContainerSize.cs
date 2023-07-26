@@ -1,5 +1,6 @@
 ﻿namespace PackageArrangementServer.Models
 {
+
     public enum ContainerSize
     {
         Small = 1,

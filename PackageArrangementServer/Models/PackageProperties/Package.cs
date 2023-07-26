@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 
-using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace PackageArrangementServer.Models

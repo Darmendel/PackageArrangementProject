@@ -10,23 +10,24 @@ namespace PackageArrangementServer.Services
         private IDeliveryService deliveryService;
         private IRabbitMqProducerService producerService;
         private static FirebaseClient client = new FirebaseClient("https://packagearrangementprojectbiu-default-rtdb.europe-west1.firebasedatabase.app/");
-        private static UserList userList = FetchFromDB().Result;
+        private UserList userList;
 
         public UserService(IDeliveryService ds, IRabbitMqProducerService ps)
         {
             deliveryService = ds;
             producerService = ps;
+            userList = FetchFromDB().Result;
             //userList = new UserList();
             //userList = StaticData.GetUsers();
         }
         
-        private static async Task<UserList> FetchFromDB()
+        private async Task<UserList> FetchFromDB()
         {
             var users = await client.Child("Users/").OnceAsync<RegisterRequest>();
             List<User> usersList = new List<User>();
 
             foreach (var us in users) 
-                usersList.Add(new User(us.Key, us.Object, DeliveryService.GetAllDeliveries(us.Key)));
+                usersList.Add(new User(us.Key, us.Object, deliveryService.GetAllDeliveries(us.Key)));
          
             return new UserList(usersList);
 
@@ -40,7 +41,7 @@ namespace PackageArrangementServer.Services
 
         public void SetUserList(UserList userList)
         {
-            UserService.userList = userList;
+            this.userList = userList;
         }
 
 
@@ -77,14 +78,14 @@ namespace PackageArrangementServer.Services
         public List<User> GetAllUsers()
         {
             //if (userList.Count == 0) return null;
-            return UserService.userList.Users; // Returns empty lists as well
+            return userList.Users; // Returns empty lists as well
         }
 
         public bool Exists(string val, string type)
         {
             if (string.IsNullOrEmpty(val)) return false;
 
-            foreach (User user in UserService.userList.Users)
+            foreach (User user in userList.Users)
             {
                 if (type == "email")
                     if (user.Email == val) return true;
@@ -125,21 +126,21 @@ namespace PackageArrangementServer.Services
             List<Delivery> deliveries = null)
         {
             if (!Exists(id, "id")) return 0;
-            UserService.userList.Edit(Get(id, "id"), name, email, password, deliveries);
+            userList.Edit(Get(id, "id"), name, email, password, deliveries);
             return 1;
         }
 
         public int Delete(string id)
         {
             if (!Exists(id, "id")) return 0;
-            UserService.userList.Remove(Get(id, "id"));
+            userList.Remove(Get(id, "id"));
             return 1;
         }
 
         public List<Delivery> GetAllDeliveries(string id)
         {
             if (!Exists(id, "id")) return null;
-            return DeliveryService.GetAllDeliveries(id);
+            return deliveryService.GetAllDeliveries(id);
         }
 
         public Delivery GetDelivery(string userId, string deliveryId)
@@ -147,22 +148,6 @@ namespace PackageArrangementServer.Services
             return deliveryService.Get(deliveryId, userId);
         }
 
-        /*private int Update(string userId, Delivery delivery, string op)
-        {
-            User user = Get(userId);
-            if (user == null) return 0;
-            
-            List<Delivery> dList = GetAllDeliveries(userId);
-            if (dList == null) return 0;
-
-            if (op.Equals("add")) dList.Add(delivery);
-            else if (op.Equals("edit")) dList = deliveryService.EditDeliveryList(dList, delivery);
-            else if (op.Equals("delete")) dList.Remove(delivery);
-            else return 0;
-
-            UserService.userList.Edit(user, deliveries: dList);
-            return 1;
-        }*/
 
         private string CreateDeliveryGeneral(string userId, DateTime? deliveryDate, List<RequestCreationOfNewPackageInNewDelivery>? packages,
             IContainer container)
@@ -175,8 +160,8 @@ namespace PackageArrangementServer.Services
 
             DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, delivery.FirstPackages, userId);
 
-            //int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
-            //if (res == 0) return null;
+            int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
+            if (res == 0) return null;
 
             //return Update(userId, delivery, "add");
             userList.AddDelivery(user, delivery);

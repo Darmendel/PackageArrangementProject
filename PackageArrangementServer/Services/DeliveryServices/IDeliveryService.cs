@@ -9,7 +9,7 @@ namespace PackageArrangementServer.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>List<Delivery></returns>
-        public static List<Delivery> GetAllDeliveries(string userId) { return null; }
+        public List<Delivery> GetAllDeliveries(string userId) { return null; }
 
         /// <summary>
         /// Checks if a certain delivery exists.

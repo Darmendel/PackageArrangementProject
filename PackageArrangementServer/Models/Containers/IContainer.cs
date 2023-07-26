@@ -3,6 +3,7 @@
 namespace PackageArrangementServer.Models
 {
     [BsonDiscriminator("IContainer")]
+    [BsonKnownTypes(typeof(GeneralContainer), typeof(SmallContainer), typeof(MediumContainer), typeof(BigContainer))]
     public class IContainer
     {
 

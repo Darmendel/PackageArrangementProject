@@ -7,6 +7,5 @@
         Ready,
         Shipped,
         Delivered
-        //Canceled
     }
 }

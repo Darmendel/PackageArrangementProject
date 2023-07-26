@@ -1,6 +1,4 @@
-﻿using PackageArrangementServer.Services;
-using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace PackageArrangementServer.Models
@@ -12,7 +10,6 @@ namespace PackageArrangementServer.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        //[BsonElement("UserId")]
         public string UserId { get; set; } // define as second key
         public DateTime CreatedDate { get; set; }
         public DateTime DeliveryDate { get; set; }
@@ -33,22 +30,12 @@ namespace PackageArrangementServer.Models
             this.FirstPackages = fpackages;
             this.SecondPackages = spackages;
 
-            /*int cost = CalculateCost(packages, container);
-            if (cost > 0) this.Cost = cost.ToString();
-            else this.Cost = 0.ToString();*/
-
             this.Cost = 0.ToString();
 
             this.Container = (container != null) ? container : new MediumContainer();
 
             this.Status = DeliveryStatus.Pending;
         }
-
-        /*private int CalculateCost(List<Package> packages = null, IContainer? container = null)
-        {
-            IDeliveryServiceHelper helper = new DeliveryServiceHelper();
-            return helper.Cost(packages, container);
-        }*/
 
     }
 }

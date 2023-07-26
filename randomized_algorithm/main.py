@@ -5,11 +5,9 @@ from itertools import permutations
 from input import Input, InputJson
 from package import Package
 from container import Container
-from Preprocess import Preprocess as Pre
 from item_sorting import ItemSorting as Its
 from Itemperturbation import ItemPerturbation as Itp
 from auxiliary_methods import *
-from legacy_code import Algorithm as Alg
 import copy
 from improvement_alg_methods import *
 import numpy as np
@@ -73,7 +71,7 @@ def construction(pkgs: list[Package], cont: Container) -> (list[Package], Contai
                 init_point.remove((0, 0, 0))
                 init_point.extend([(0 + pkg.length, 0, 0), (0, 0 + pkg.width, 0), (0, 0, 0 + pkg.height)])
                 constructed_sol.append(pkg)
-                # cont.update_taken_space(pkg=pkg)
+
             else:
                 retry_list.append(pkg)
         else:
@@ -90,16 +88,15 @@ def construction(pkgs: list[Package], cont: Container) -> (list[Package], Contai
                                           new_pkg=pkg,
                                           cont_dims=cont)
                 constructed_sol.append(copy.deepcopy(pkg))
-                # cont.update_taken_space(pkg=pkg)
+
             else:
                 retry_list.append(pkg)
-                # break
 
     for pkg in retry_list:
         found = False
         for shape in [i for i in permutations((pkg.length, pkg.width, pkg.height))]:
             valid_points = []
-            pkg.length, pkg.width, pkg.height = shape  # fix should be length, width, height.
+            pkg.length, pkg.width, pkg.height = shape
             for pos_point in init_point:
                 if check_feasibility(pos_point, pkg, constructed_sol, cont):
                     valid_points.append(pos_point)
@@ -112,7 +109,7 @@ def construction(pkgs: list[Package], cont: Container) -> (list[Package], Contai
                                           new_pkg=pkg,
                                           cont_dims=cont)
                 constructed_sol.append(copy.deepcopy(pkg))
-                # cont.update_taken_space(pkg=pkg)
+
                 found = True
             else:
                 break
@@ -130,11 +127,10 @@ def construction_phase(pkgs: list[Package], cont: Container) -> list[Package]:
     sec_size = 0
     best_sol = None
     cur_num, count_v = 0, 0
-    for i in range(CONSTRUCTION_ITERATIONS):  # 3000
+    for i in range(CONSTRUCTION_ITERATIONS):
         if STOP_CONSTRUCTION:
             break
 
-        print(f"The number of iteration {i}")
         sorted_items = Its(pkgs)
         if len(sorted_items.items) > 5:
             items_perturbed = Itp(sorted_items).perturbed_items
@@ -167,11 +163,11 @@ def construction_phase(pkgs: list[Package], cont: Container) -> list[Package]:
         for pkg in items_perturbed:
             pkg.location = None
 
-    print(f"Max volume: {volume}, {siz}, {sec_size}, amount of max: {count_v}")
-    with open("output.txt", "w") as f:
-        for box in best_sol:
-            a, b, c = box.location
-            f.write(f"{box.length} {box.width} {box.height} {a} {b} {c}\n")
+    # print(f"Max volume: {volume}, {siz}, {sec_size}, amount of max: {count_v}")
+    # with open("output.txt", "w") as f:
+    #     for box in best_sol:
+    #         a, b, c = box.location
+    #         f.write(f"{box.length} {box.width} {box.height} {a} {b} {c}\n")
 
     return FINAL_CONSTRUCTION_PACKAGING
 
@@ -254,21 +250,17 @@ def step_3(pkgs: list[Package], improve_alg: ImprovedAlg, box_to_remove: tuple[i
             cuboid_ = cuboid
             break
     x = [item.index for item in boxes_to_remove]
-    # print(f"before: {len(pkgs)}, the amount to remove: {len(boxes_to_remove)}")
-    # erase 192 - 197
     vol = 0
     for i in boxes_to_remove:
         vol += i.volume
     try:
         if cuboid_.volume * 2 > vol:
-            print("step_3")
+            pass
     except AttributeError:
-        print("The chosen boxes create cuboid the size of at least half of the container")
         return [], []
     return boxes_to_remove, [i for i in pkgs if i.index not in [item.index for item in boxes_to_remove]]
 
 
-#  length, width, height
 def start_pos_4(pkgs: list[Package]) -> list[Location]:
     pkg_x, pkg_min_x = pkgs[0], pkgs[0].location[0]
     pkg_y, pkg_min_y = pkgs[0], pkgs[0].location[1]
@@ -309,7 +301,6 @@ def step_4_reconstruction(pkgs: list[Package], cont: Container, init_point: list
             constructed_sol.append(copy.deepcopy(pkg))
         else:
             retry_list.append(pkg)
-            # break
 
     for pkg in retry_list:
         found = False
@@ -361,40 +352,24 @@ def step_4(items_left: list[Package], alg: ImprovedAlg, original_list: list[Pack
     multi_drop_sol = step_4_reconstruction(pkgs=pkgs_reconstruct, cont=container_dim,
                                            init_point=potential_points, constructed_sol=items_left)
 
-    print("check step 4")
     return multi_drop_sol
 
 
-# def decrease_size_gcd(pkgs_packed: list[Package], container_dims: Container) -> (list[Package], int):
-#     gcd = math.gcd(math.gcd(container_dims.length, container_dims.width), container_dims.height)
-#     for pkg in pkgs_packed:
-#         gcd = math.gcd(math.gcd(math.gcd(pkg.location[0], pkg.location[1]), pkg.location[2]), gcd)
-#     container_dims.size = container_dims.length / gcd, container_dims.width / gcd, container_dims.height / gcd
-#     for pkg in pkgs_packed:
-#         pkg.size = pkg.size[0] / gcd, pkg.size[1] / gcd, pkg.size[2] / gcd
-#         pkg.location = pkg.location[0] / gcd, pkg.location[1] / gcd, pkg.location[2] / gcd
-#     return container_dims, pkgs_packed, gcd
-#
-#
-# def increase_size_gcd(gcd: int, pkgs_packed: list[Package], container_dims: Container) -> (list[Package],
-# int): container_dims.size = container_dims.length[0] * gcd, container_dims.width[1] * gcd, container_dims.height[2]
-# * gcd for pkg in pkgs_packed: pkg.size = pkg.size[0] * gcd, pkg.size[1] * gcd, pkg.size[2] * gcd pkg.location =
-# pkg.location[0] * gcd, pkg.location[1] * gcd, pkg.location[2] * gcd return pkgs_packed
+''' full implementation of the algorithm from 2007.'''
 
 
-# full implementation of the algorithm from 2007.
 def step_5(pkgs_not_packed: list[Package], pkgs_packed: list[Package], container_dims: Container) -> list[Package]:
     y = len(pkgs_packed)
     for pkg in pkgs_packed:
         container_dims.update_taken_space(pkg=pkg)
     pkgs_packed.sort(key=lambda s_pkg: s_pkg.location[0])  # sort via x.
-    for pkg in pkgs_packed:  # change location
+    for pkg in pkgs_packed:
         container_dims.move_along_x_axis(pkg=pkg)
     pkgs_packed.sort(key=lambda s_pkg: s_pkg.location[1])  # sort via y.
-    for pkg in pkgs_packed:  # change location
+    for pkg in pkgs_packed:
         container_dims.move_along_y_axis(pkg=pkg)
     pkgs_packed.sort(key=lambda s_pkg: s_pkg.location[2])  # sort via z.
-    for pkg in pkgs_packed:  # change location
+    for pkg in pkgs_packed:
         container_dims.move_along_z_axis(pkg=pkg)
 
     for pkg in pkgs_packed:  # for future iterations.
@@ -407,15 +382,7 @@ def step_5(pkgs_not_packed: list[Package], pkgs_packed: list[Package], container
     final_points.append(step_5_initialize_points(pkgs=pkgs_packed))
     pkgs_packed.sort(key=lambda s_pkg: s_pkg.location[2], reverse=True)
     final_points.append(step_5_initialize_points(pkgs=pkgs_packed))
-    z = len(pkgs_packed)
-    if y != z:
-        pass
 
-    # final_pkgs = step_4_reconstruction(pkgs=pkgs_not_packed, cont=container_dims, init_point=final_points,
-    #                                    constructed_sol=pkgs_packed)
-
-    print("step 5")
-    # return final_pkgs + pkgs_packed
     return pkgs_packed
 
 
@@ -458,18 +425,18 @@ def improvement_alg(pkgs: list[Package], cont_info: Container, real_pkgs: list[P
             volume = 0
             pkgs_added, pkgs_copied = [], []
 
-    print(f"max volume mdclp: {max_vol}")
-    with open("outputmdclp.txt", "w") as f:
-        for box in best_multi_drop_sol:
-            a, b, c = box.location
-            f.write(f"{box.length} {box.width} {box.height} {a} {b} {c}\n")
-
-    # temp erase - created to check
-    print(f"max volume mdclp: {max_vol}")
-    with open("outputmdclpf.txt", "w") as f:
-        for box in temp_sol:
-            a, b, c = box.location
-            f.write(f"{box.length} {box.width} {box.height} {a} {b} {c}\n")
+    # print(f"max volume mdclp: {max_vol}")
+    # with open("outputmdclp.txt", "w") as f:
+    #     for box in best_multi_drop_sol:
+    #         a, b, c = box.location
+    #         f.write(f"{box.length} {box.width} {box.height} {a} {b} {c}\n")
+    #
+    # # temp erase - created to check
+    # # print(f"max volume mdclp: {max_vol}")
+    # with open("outputmdclpf.txt", "w") as f:
+    #     for box in temp_sol:
+    #         a, b, c = box.location
+    #         f.write(f"{box.length} {box.width} {box.height} {a} {b} {c}\n")
 
     return FINAL_IMPROVEMENT_PACKAGING
 
@@ -488,12 +455,15 @@ def start(boxes_json):
     copy_list = copy.deepcopy(pkgs)
     # construction algorithm
     # solution = construction_phase(pkgs=pkgs, cont=cont)
-    s1 = TimeLimit(run_time_alg=0.01, alg_function=construction_phase, pkgs=pkgs, container_dim=cont)
+    s1 = TimeLimit(run_time_alg=70,
+                   alg_function=construction_phase,
+                   pkgs=pkgs,
+                   container_dim=cont)
     solution = s1.run_algorithm()
     cont.pkgs_construct = copy.deepcopy(solution)
     # improvement algorithm:
     # improved_solution = improvement_alg(pkgs=solution, cont_info=cont, real_pkgs=copy_list)
-    s2 = TimeLimit(run_time_alg=20,
+    s2 = TimeLimit(run_time_alg=50,
                    alg_function=improvement_alg,
                    pkgs=solution,
                    container_dim=cont,
@@ -512,7 +482,7 @@ def start(boxes_json):
     FINAL_CONSTRUCTION_PACKAGING = []
     FINAL_IMPROVEMENT_PACKAGING = []
 
-    # only when connecting to server:
+    print('finished!')
     alg_send.send_to_server(json_file=final_json)
 
-# start(boxes_json='input.json')
+

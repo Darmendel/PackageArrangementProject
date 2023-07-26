@@ -14,9 +14,6 @@ from container import Container
 from addtional_types import *
 
 
-# fv (q j , vj , z j ) + fa (q j , vj , z j ) + fr (q j , vj , z j , δi j )
-
-
 class ImprovedAlg:
     def __init__(self, cont: Container, pkgs: list[Package]):
         self.cont = cont
@@ -27,17 +24,20 @@ class ImprovedAlg:
         self.cuboid_list = []
         self.real_index = np.empty((len(self.pkgs), len(self.pkgs)), dtype=object)
 
-    # visibility
+    '''visibility'''
+
     def value_fv(self, qj: float, vj: int, zj: int):
         (a, b), c = Penaltylevel.MEDIUM.value, 1 / self.cont.height
         return (1 + c * zj) * (a * qj + b * vj)
 
-    # above
+    '''above'''
+
     def value_fa(self, qj: float, vj: int, zj: int):
         (a, b), c = Penaltylevel.MEDIUM.value, 1 / self.cont.height
         return (1 + c * zj) * (a * qj + b * vj)
 
-    # reachability
+    '''reachability'''
+
     def value_fr(self, qj: float, vj: float, zj: int, reachability: int):
         (a, b), c = Penaltylevel.MEDIUM.value, 1 / self.cont.height
         return (1 + c * reachability) * (a * qj + b * vj)
@@ -66,9 +66,6 @@ class ImprovedAlg:
         else:
             f_r = 0
 
-        # if f_r < 0:
-        #     print("problem")
-
         return f_v + f_a + f_r
 
     @staticmethod
@@ -82,7 +79,6 @@ class ImprovedAlg:
         j_loc, j_len = location_long_j[attr]
         return i_loc < j_loc < i_loc + i_len or j_loc < i_loc < j_loc + j_len
 
-    # no conflict  - False, conflict = True:
     @staticmethod
     def conflict(pkg_i: Package, pkg_j: Package):
         if pkg_i.customer > pkg_j.customer:
@@ -113,13 +109,12 @@ class ImprovedAlg:
                             c_matrix[i, j] = self.general(pkg_i=item_i, pkg_j=item_j)
 
         self.conf_matrix = c_matrix
-        # print(c_matrix)
 
         return c_matrix
 
-    # check if a point between the start and the end of all the axis(x, y, z)
-    # find the list of cuboids that overlap either fully if all x, y,z are inside, or
-    # partially, at least 2 dimension need to be the same.
+    ''' check if a point between the start and the end of all the axis(x, y, z)
+     find the list of cuboids that overlap either fully if all x, y,z are inside, or
+     partially, at least 2 dimension need to be the same.'''
 
     def density_empty_matrices(self) -> (ndarray, ndarray):
         matrix = np.asarray(self.pkgs)
@@ -131,7 +126,7 @@ class ImprovedAlg:
             for j in range(i + 1, len(self.pkgs)):
                 cuboid = SmallCuboid(box_i=self.pkgs[i], box_j=self.pkgs[j], all_pkgs=self.pkgs,
                                      index_i=i, index_j=j)
-                self.cuboid_list.append(cuboid)  # maybe deep copy.
+                self.cuboid_list.append(cuboid)
                 cuboid.smallest_cuboid(pkg_i=self.pkgs[i], pkg_j=self.pkgs[j])
                 d_matrix[i, j], e_matrix[i, j] = cuboid.cuboid_overlaps_empty(matrix_conflict=self.conf_matrix,
                                                                               contdim=self.cont)

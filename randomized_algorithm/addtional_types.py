@@ -23,7 +23,7 @@ class SmallCuboid:
         self.index_i = self.box_i.index
         self.index_j = self.box_j.index
 
-    #  min x, max x, min y, max y, min z, max z.
+    '''min x, max x, min y, max y, min z, max z.'''
 
     def smallest_cuboid(self, pkg_i: Package, pkg_j: Package):
         self.location = min(pkg_i.location[0], pkg_j.location[0]), min(pkg_i.location[1],
@@ -32,13 +32,11 @@ class SmallCuboid:
         for_i = tuple(map(lambda x, y: x + y, pkg_i.location, pkg_i.size))
         for_j = tuple(map(lambda x, y: x + y, pkg_j.location, pkg_j.size))
         self.end_points = max(for_i[0], for_j[0]), max(for_i[1], for_j[1]), max(for_i[2], for_j[2])
-        # self.size = max(pkg_i.size[0], pkg_j.size[0]), max(pkg_i.size[1], pkg_j.size[1]), max(pkg_i.size[2],
-        #                                                                                       pkg_j.size[2])
+
         self.size = tuple([abs(i) for i in list(map(sub, self.location, self.end_points))])
         if 0 in self.size:
             print("add types small cuboid")
         self.volume = self.size[0] * self.size[1] * self.size[2]
-        # self.end_points = tuple(map(lambda x, y: x + y, self.location, self.size))
 
     def x_axis(self, cur_pacakge: Package) -> tuple[int, int]:
         if cur_pacakge.location[0] + cur_pacakge.length > self.location[0] or cur_pacakge.location[0] \
@@ -88,9 +86,8 @@ class SmallCuboid:
             else:
                 # erase
                 if (self.index_i == pkg.index or self.index_j == pkg.index) and self.overlapping_percentage(pkg) == 0:
-                    print("a")
                     if self.overlapping_percentage(pkg) == 0:
-                        print("check add")
+                        pass
 
                 if self.overlapping_percentage(pkg) != 0:
                     penalty_sum += np.sum(matrix_conflict, axis=0)[col] * self.overlapping_percentage(pkg)

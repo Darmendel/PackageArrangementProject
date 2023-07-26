@@ -8,8 +8,7 @@ namespace PackageArrangementServer.Services
 
         public PackageService()
         {
-            //packageList = new PackageList();
-            packageList = StaticData.GetPackages();
+            packageList = new PackageList();
         }
 
         public List<Package> GetAllPackages(string deliveryId)

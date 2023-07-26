@@ -50,12 +50,12 @@ namespace PackageArrangementServer.Services
         public async Task RemoveAsync(string id) =>
             await _deliveriesCollection.DeleteOneAsync(x => x.Id == id);
 
-        public static List<Delivery> GetAllDeliveries(string userId)
+        public  List<Delivery> GetAllDeliveries(string userId)
         {
             if (string.IsNullOrEmpty(userId)) return null;
             List<Delivery> lst = new List<Delivery>();
 
-            foreach (Delivery delivery in DeliveryServiceDB.deliveryList.Deliveries)
+            foreach (Delivery delivery in deliveryList.Deliveries)
             {
                 if (delivery.UserId == userId) lst.Add(delivery);
             }

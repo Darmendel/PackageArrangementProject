@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using PackageArrangementServer.Data;
-using PackageArrangementServer.Models;
 using PackageArrangementServer.Models.DeliveryProperties;
 using PackageArrangementServer.Services;
 using PackageArrangementServer.Services.ResultServices;
@@ -13,11 +10,8 @@ ServicePointManager
     .ServerCertificateValidationCallback +=
     (sender, cert, chain, sslPolicyErrors) => true;
 
-builder.Services.AddDbContext<APIContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("APIContext") ?? throw new InvalidOperationException("Connection string 'APIContext' not found.")));
-
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryServiceDB>();
 builder.Services.AddScoped<IDeliveryServiceHelper, DeliveryServiceHelper>();
 builder.Services.AddScoped<IContainerService, ContainerService>();
 builder.Services.AddScoped<IPackageService, PackageService>();

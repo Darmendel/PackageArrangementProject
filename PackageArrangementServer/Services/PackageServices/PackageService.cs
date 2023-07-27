@@ -4,11 +4,16 @@ namespace PackageArrangementServer.Services
 {
     public class PackageService : IPackageService
     {
-        private static PackageList packageList;
+        private PackageList packageList;
 
         public PackageService()
         {
             packageList = new PackageList();
+        }
+
+        public void setPackagesList(List<Package> packages)
+        {
+            packageList = new PackageList(packages);
         }
 
         public List<Package> GetAllPackages(string deliveryId)
@@ -16,7 +21,7 @@ namespace PackageArrangementServer.Services
             if (string.IsNullOrEmpty(deliveryId)) return null;
             List<Package> lst = new List<Package>();
 
-            foreach (Package package in PackageService.packageList.Packages)
+            foreach (Package package in packageList.Packages)
             {
                 if (package.DeliveryId == deliveryId) lst.Add(package);
             }
@@ -123,7 +128,7 @@ namespace PackageArrangementServer.Services
 
             Package package = new Package(packageId, deliveryId, width, height, Length, order);
 
-            PackageService.packageList.Add(package);
+            packageList.Add(package);
             return package;
         }
 
@@ -133,7 +138,7 @@ namespace PackageArrangementServer.Services
             Package package = Get(packageId, deliveryId);
             if (package == null) return null;
 
-            PackageService.packageList.Edit(package, width, height, Length);
+            packageList.Edit(package, width, height, Length);
             return Get(packageId, deliveryId);
         }
 
@@ -153,7 +158,7 @@ namespace PackageArrangementServer.Services
         {
             Package package = Get(packageId, deliveryId);
             if (package == null) return null;
-            PackageService.packageList.Remove(package);
+            packageList.Remove(package);
             return package;
         }
     }

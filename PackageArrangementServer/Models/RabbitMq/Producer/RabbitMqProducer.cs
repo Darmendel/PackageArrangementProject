@@ -3,10 +3,15 @@ using System.Text;
 
 namespace PackageArrangementServer.Models
 {
-    public class RabbitMqProducer // : IDisposable
+    public class RabbitMqProducer
     {
-        protected const string LocalHost = "localhost";
-        protected readonly string ExchangeName = $"{LocalHost}.Exchange";
+        const int PORT = 5672;
+        const string USER = "user";
+        const string PASSWORD = "pass";
+        const string LOCALHOST = "localhost";
+        const string VH = "/";
+
+        protected readonly string ExchangeName = $"{LOCALHOST}.Exchange";
         private IConnection _connection = null;
 
         public RabbitMqProducer()
@@ -18,11 +23,11 @@ namespace PackageArrangementServer.Models
         {
             ConnectionFactory factory = new ConnectionFactory();
 
-            factory.UserName = "user";
-            factory.Password = "pass";
-            factory.Port = 5672;
-            factory.HostName = LocalHost;
-            factory.VirtualHost = "/";
+            factory.UserName = USER;
+            factory.Password = PASSWORD;
+            factory.Port = PORT;
+            factory.HostName = LOCALHOST;
+            factory.VirtualHost = VH;
 
             return factory.CreateConnection();
         }
@@ -36,7 +41,6 @@ namespace PackageArrangementServer.Models
 
         public bool Send(IConnection connection, string message, string friendqueue)
         {
-            // if (connection == null || connection.IsOpen == false) connection = GetConnection(); // or maybe just return false
             if (connection == null || message == null || friendqueue == null) return false;
 
             try
@@ -77,23 +81,5 @@ namespace PackageArrangementServer.Models
             Console.WriteLine($" [x] Sent {message}");
             return true;
         }
-
-        /*public void Dispose(IModel channel, IConnection connection)
-        {
-            try
-            {
-                channel?.Close();
-                channel?.Dispose();
-                channel = null;
-
-                connection?.Close();
-                connection?.Dispose();
-                connection = null;
-            }
-            catch (Exception ex)
-            {
-                //_logger.LogCritical(ex, "Cannot dispose RabbitMq channel or connection.");
-            }
-        }*/
     }
 }

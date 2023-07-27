@@ -10,12 +10,9 @@ namespace PackageArrangementServer.Controllers
     [ApiController]
     public class ResultController : ControllerBase
     {
-        private IRabbitMqConsumerService consumerService;
         private IResultService resultService;
 
         public ResultController(IResultService rs) { resultService = rs; }
-
-        //public ResultController(IRabbitMqConsumerService cs) { consumerService = cs; }
 
         /// <summary>
         /// Handle delivery arrangement.
@@ -24,11 +21,20 @@ namespace PackageArrangementServer.Controllers
         [HttpPost("DeliveryArrangement")]
         public string Post([FromBody] DeliveryTwoResults req)
         {
-            string result = resultService.DeliveryArrangement(req);
+            try
+            {
+                string result = resultService.DeliveryArrangement(req);
+
+                Response.StatusCode = result == null ? 200 : 400;
+                Console.WriteLine(req);
+                return result;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
+                return null;
+            }
             
-            Response.StatusCode = result == null ? 200 : 400;
-            Console.WriteLine(req);
-            return result;
         }
     }
 }

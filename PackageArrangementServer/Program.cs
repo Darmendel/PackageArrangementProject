@@ -13,10 +13,8 @@ ServicePointManager
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryServiceDB>();
 builder.Services.AddScoped<IDeliveryServiceHelper, DeliveryServiceHelper>();
-builder.Services.AddScoped<IContainerService, ContainerService>();
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<IRabbitMqProducerService, RabbitMqProducerService>();
-builder.Services.AddScoped<IRabbitMqConsumerService, RabbitMqConsumerService>();
 builder.Services.AddScoped<IResultService, ResultService>();
 builder.Services.Configure<DeliveriesDatabase>(
     builder.Configuration.GetSection("DeliveriesDatabase"));

@@ -9,7 +9,7 @@ namespace PackageArrangementServer.Models
     public class Package
     {
         public string Id { get; set; }
-        public string DeliveryId { get; set; } // define as second key
+        public string DeliveryId { get; set; }
         public string Width { get; set; }
         public string Height { get; set; }
         public string Length { get; set; }

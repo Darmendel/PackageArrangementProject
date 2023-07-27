@@ -25,9 +25,8 @@ namespace PackageArrangementServer.Services
             {
                 if (package.DeliveryId == deliveryId) lst.Add(package);
             }
-            
-            //if (lst.Count > 0) return lst;
-            return lst; // Returns empty lists as well
+
+            return lst;
         }
 
         public bool Exists(string packageId, string deliveryId)
@@ -46,7 +45,7 @@ namespace PackageArrangementServer.Services
 
         public int Count(string deliveryId)
         {
-            if (string.IsNullOrEmpty(deliveryId)) return -1; // or 0
+            if (string.IsNullOrEmpty(deliveryId)) return -1;
 
             List<Package> packages = GetAllPackages(deliveryId);
             if (packages == null) return 0; // (empty)
@@ -70,22 +69,6 @@ namespace PackageArrangementServer.Services
             while (Exists(packageId, deliveryId)) packageId = random.Next(0, 999).ToString() + packageId;
             return packageId;
         }
-
-        /*public Package ConvertToPackage(RequestCreationOfNewPackage request)
-        {
-            RequestCreationOfNewPackageInNewDelivery req = new RequestCreationOfNewPackageInNewDelivery()
-            {
-                Type = request.Type,
-                Amount = request.Amount,
-                Width = request.Width,
-                Height = request.Height,
-                Length = request.Length,
-                Weight = request.Weight,
-                Cost = request.Cost,
-                Address = request.Address
-            };
-            return ConvertToPackage(request.DeliveryId, req);
-        }*/
 
         public Package ConvertToPackage(string deliveryId, RequestCreationOfNewPackageInNewDelivery request)
         {

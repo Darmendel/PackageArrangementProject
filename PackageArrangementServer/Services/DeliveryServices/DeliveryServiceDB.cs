@@ -8,14 +8,13 @@ namespace PackageArrangementServer.Services
 {
     public class DeliveryServiceDB : IDeliveryService
     {
-        private IContainerService containerService;
         private IPackageService packageService;
         private IDeliveryServiceHelper helper;
 
         private static DeliveryList deliveryList;
         private readonly IMongoCollection<Delivery> _deliveriesCollection;
 
-        public DeliveryServiceDB(IContainerService cs, IPackageService ps, IDeliveryServiceHelper dsh,
+        public DeliveryServiceDB(IPackageService ps, IDeliveryServiceHelper dsh,
             IOptions<DeliveriesDatabase> deliveriesDatabaseSettings)
         {
             var mongoClient = new MongoClient(
@@ -27,13 +26,12 @@ namespace PackageArrangementServer.Services
             _deliveriesCollection = mongoDatabase.GetCollection<Delivery>(
                 deliveriesDatabaseSettings.Value.DeliveriesCollectionName);
 
-            this.containerService = cs;
             this.packageService = ps;
             this.helper = dsh;
 
-            //deliveryList = new DeliveryList();
             deliveryList = new DeliveryList(GetAsync().Result);
             List<Package> packages = new List<Package>();
+
             foreach (Delivery delivery in deliveryList.Deliveries)
             {
                 foreach (Package package in delivery.FirstPackages)
@@ -45,7 +43,7 @@ namespace PackageArrangementServer.Services
         }
 
         public async Task<List<Delivery>> GetAsync() =>
-        await _deliveriesCollection.Find(_ => true).ToListAsync();
+            await _deliveriesCollection.Find(_ => true).ToListAsync();
 
         public async Task<Delivery?> GetAsync(string id) =>
             await _deliveriesCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
@@ -69,8 +67,7 @@ namespace PackageArrangementServer.Services
                 if (delivery.UserId == userId) lst.Add(delivery);
             }
 
-            //if (lst.Count > 0) return lst;
-            return lst; // Returns empty lists as well
+            return lst;
         }
 
         public bool Exists(string deliveryId, string userId)
@@ -121,11 +118,6 @@ namespace PackageArrangementServer.Services
             Delivery delivery = Get(deliveryId, userId);
             return Status(delivery);
         }
-
-        /*private Package ConvertToPackage(RequestCreationOfNewPackage request)
-        {
-            return packageService.ConvertToPackage(request);
-        }*/
 
         private string CreateDeliveryId(string userId)
         {
@@ -202,20 +194,6 @@ namespace PackageArrangementServer.Services
             return Get(deliveryId, userId);
         }
 
-        /*public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery)
-        {
-            int index = list.IndexOf(delivery);
-            if (index == -1) return null;
-
-            list[index].DeliveryDate = delivery.DeliveryDate;
-            list[index].Packages = delivery.Packages;
-            list[index].Container = delivery.Container;
-            list[index].Cost = delivery.Cost;
-            list[index].Status = delivery.Status;
-
-            return list;
-        }*/
-
         public Delivery Delete(string deliveryId, string userId)
         {
             Delivery delivery = Get(deliveryId, userId);
@@ -224,21 +202,12 @@ namespace PackageArrangementServer.Services
             return delivery;
         }
 
-        public IContainer GetContainer(ContainerSize size)
-        {
-            return containerService.Get(size);
-        }
 
         public IContainer GetContainer(string deliveryId, string userId)
         {
             Delivery delivery = Get(deliveryId, userId);
             if (delivery == null) return null;
             return delivery.Container;
-        }
-
-        public IContainer CreateContainer(string height, string width, string Length)
-        {
-            return containerService.Create(height, width, Length);
         }
 
         public List<Package> GetAllPackages(string deliveryId, string userId)

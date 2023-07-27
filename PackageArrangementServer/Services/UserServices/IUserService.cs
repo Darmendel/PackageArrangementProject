@@ -42,17 +42,6 @@ namespace PackageArrangementServer.Services
         /// <returns>User</returns>
         public User Get(string val, string type);
 
-        /*/// <summary>
-        /// Creates a new user.
-        /// Returns 1 if succeeded, and 0 otherwise.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
-        /// <returns>int</returns>
-        public int Add(string id, string name, string email, string password);*/
-
         /// <summary>
         /// Creates a new user.
         /// </summary>
@@ -103,32 +92,12 @@ namespace PackageArrangementServer.Services
         public List<Delivery> GetAllDeliveries(string id);
 
         /// <summary>
-        /// Checks if a user have made a certain delivery before.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="deliveryId"></param>
-        /// <returns>bool</returns>
-        //public bool DeliveryExists(string userId, string deliveryId);
-
-        /// <summary>
         /// Returns a user's delivery by id.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="deliveryId"></param>
         /// <returns>Delivery</returns>
         public Delivery GetDelivery(string userId, string deliveryId);
-
-        /*/// <summary>
-        /// Creates a new delivery for a user.
-        /// Returns 1 if succeeded, and 0 otherwise.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="deliveryDate"></param>
-        /// <param name="packages"></param>
-        /// <param name="container"></param>
-        /// <returns>int</returns>
-        public int AddDelivery(string userId, DateTime? deliveryDate = null, List<RequestCreationOfNewPackage>? packages = null,
-            IContainer container = null);*/
 
         /// <summary>
         /// Creates a new delivery for a user.
@@ -168,8 +137,6 @@ namespace PackageArrangementServer.Services
         /// <param name="deliveryId"></param>
         /// <returns>DeliveryStatus</returns>
         public DeliveryStatus GetDeliveryStatus(string userId, string deliveryId);
-
-        //public DeliveryStatus UpdateDeliveryStatus(string userId, string deliveryId, DeliveryStatus deliveryStatus);
 
         /// <summary>
         /// Updates a user's delivery's package list.
@@ -221,20 +188,6 @@ namespace PackageArrangementServer.Services
         /// <returns>int</returns>
         public int DeleteDelivery(string userId, string deliveryId);
 
-        /// <summary>
-        /// Given a size of the container, returns the selected container.
-        /// </summary>
-        /// <param name="size">IContainer</param>
-        public IContainer GetContainer(ContainerSize size);
-
-        /// <summary>
-        /// Given dimentions of a container, returns a new container.
-        /// </summary>
-        /// <param name="height"></param>
-        /// <param name="width"></param>
-        /// <param name="Length"></param>
-        /// <returns>IContainer</returns>
-        public IContainer CreateContainer(string height, string width, string Length);
 
         /// <summary>
         /// Returns a list of all packages in a user's delivery.

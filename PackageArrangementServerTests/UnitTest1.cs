@@ -12,7 +12,6 @@ namespace PackageArrangementServerTests
     [TestClass]
     public class UnitTest1
     {
-        private ContainerService cs;
         private PackageService ps;
         private DeliveryServiceHelper dsh;
         private DeliveryService ds;
@@ -21,10 +20,9 @@ namespace PackageArrangementServerTests
 
         public UnitTest1()
         {
-            cs = new ContainerService();
             ps = new PackageService();
             dsh = new DeliveryServiceHelper();
-            ds = new DeliveryService(cs, ps, dsh);
+            ds = new DeliveryService(ps, dsh);
             rs = new RabbitMqProducerServiceMock();
         }
 

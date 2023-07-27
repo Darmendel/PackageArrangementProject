@@ -12,13 +12,13 @@ namespace PackageArrangementServer.Services
         private static FirebaseClient client = new FirebaseClient("https://packagearrangementprojectbiu-default-rtdb.europe-west1.firebasedatabase.app/");
         private UserList userList;
 
+        const string ORDER_REPORT = "order_report";
+
         public UserService(IDeliveryService ds, IRabbitMqProducerService ps)
         {
             deliveryService = ds;
             producerService = ps;
             userList = FetchFromDB().Result;
-            //userList = new UserList();
-            //userList = StaticData.GetUsers();
         }
         
         private async Task<UserList> FetchFromDB()
@@ -77,8 +77,7 @@ namespace PackageArrangementServer.Services
 
         public List<User> GetAllUsers()
         {
-            //if (userList.Count == 0) return null;
-            return userList.Users; // Returns empty lists as well
+            return userList.Users;
         }
 
         public bool Exists(string val, string type)
@@ -148,7 +147,6 @@ namespace PackageArrangementServer.Services
             return deliveryService.Get(deliveryId, userId);
         }
 
-
         private string CreateDeliveryGeneral(string userId, DateTime? deliveryDate, List<RequestCreationOfNewPackageInNewDelivery>? packages,
             IContainer container)
         {
@@ -160,10 +158,9 @@ namespace PackageArrangementServer.Services
 
             DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, delivery.FirstPackages, userId);
 
-            int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
+            int res = producerService.Send(deliveryRequest, ORDER_REPORT);
             if (res == 0) return null;
 
-            //return Update(userId, delivery, "add");
             userList.AddDelivery(user, delivery);
             return delivery.Id;
         }
@@ -221,7 +218,7 @@ namespace PackageArrangementServer.Services
 
             DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, packages, userId);
 
-            int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
+            int res = producerService.Send(deliveryRequest, ORDER_REPORT);
             if (res == 0) return 0;
 
             return 1;
@@ -248,13 +245,12 @@ namespace PackageArrangementServer.Services
 
             DeliveryRequest deliveryRequest = new DeliveryRequest(delivery.Id, container, packages, userId);
 
-            int res = producerService.Send(deliveryRequest, "order_report"); // change null to name of queue
+            int res = producerService.Send(deliveryRequest, ORDER_REPORT);
             if (res == 0) return 0;
 
             return 1;
         }
 
-        // cost and deliveryStatus might be needed to reavluate and changed.
         public int EditDelivery(string userId, string deliveryId, DateTime? deliveryDate = null,
             List<Package>? packages = null, IContainer container = null)
         {
@@ -263,7 +259,6 @@ namespace PackageArrangementServer.Services
             Delivery delivery = deliveryService.Edit(deliveryId, userId, deliveryDate, packages, container);
             if (delivery == null) return 0;
 
-            //return Update(userId, delivery, "edit");
             return 1;
         }
 
@@ -274,18 +269,7 @@ namespace PackageArrangementServer.Services
             Delivery delivery = deliveryService.Delete(deliveryId, userId);
             if (delivery == null) return 0;
 
-            //return Update(userId, delivery, "delete");
             return 1;
-        }
-
-        public IContainer GetContainer(ContainerSize size)
-        {
-            return deliveryService.GetContainer(size);
-        }
-
-        public IContainer CreateContainer(string height, string width, string Length)
-        {
-            return deliveryService.CreateContainer(height, width, Length);
         }
 
         public List<Package> GetAllPackages(string userId, string deliveryId)

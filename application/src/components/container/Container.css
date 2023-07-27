@@ -57,6 +57,10 @@ label #radio-img-large {
     width: 65%;
     display: flex;
     margin: auto;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    text-align: center;
 }
 
 label h1 {

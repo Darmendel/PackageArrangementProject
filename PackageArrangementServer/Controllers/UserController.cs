@@ -70,8 +70,17 @@ namespace PackageArrangementServer.Controllers
         [HttpGet]
         public List<User> Get()
         {
-            Response.StatusCode = 200;
-            return userService.GetAllUsers();
+            try
+            {
+                Response.StatusCode = 200;
+                return userService.GetAllUsers();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
+                return null;
+            }
         }
 
 
@@ -83,14 +92,23 @@ namespace PackageArrangementServer.Controllers
         [HttpGet("userId")]
         public User? Get(string userId)
         {
-            User user = userService.Get(userId, "id");
-            if (user == null)
+            try
             {
-                Response.StatusCode = 404;
+
+                User user = userService.Get(userId, "id");
+                if (user == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                Response.StatusCode = 200;
+                return user;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
                 return null;
             }
-            Response.StatusCode = 200;
-            return user;
         }
 
 
@@ -104,14 +122,22 @@ namespace PackageArrangementServer.Controllers
         [HttpGet("{userId}/deliveries/{deliveryId}/packages/{packageId}")]
         public Package GetPackage(string userId, string deliveryId, string packageId)
         {
-            Package package = userService.GetPackage(userId, deliveryId, packageId);
-            if (package == null)
+            try
             {
-                Response.StatusCode = 404;
+                Package package = userService.GetPackage(userId, deliveryId, packageId);
+                if (package == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                Response.StatusCode = 200;
+                return package;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
                 return null;
             }
-            Response.StatusCode = 200;
-            return package;
         }
 
         /// <summary>
@@ -121,45 +147,22 @@ namespace PackageArrangementServer.Controllers
         [HttpPost("{userId}/deliveries/{deliveryId}/packages")]
         public void Post(string userId, [FromBody] RequestCreationOfNewPackage req)
         {
-            if (userService.CreatePackage(userId, req.DeliveryId, req.Width, req.Height,
-                req.Length) > 0)
-                Response.StatusCode = 204;
-            else Response.StatusCode = 400;
-            return;
+            try
+            {
+                if (userService.CreatePackage(userId, req.DeliveryId, req.Width, req.Height,
+                    req.Length) > 0)
+                    Response.StatusCode = 204;
+                else Response.StatusCode = 400;
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
+                return;
+            }
         }
 
-        /*/// <summary>
-        /// Updates a user.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="req"></param>
-        [HttpPut("{userId}")]
-        public void Put(string userId, [FromBody] RequestEditUser req)
-        {
-            if (userService.Edit(userId, req.Name, req.Email, req.Password, req.Deliveries) > 0)
-                Response.StatusCode = 204;
-            else Response.StatusCode = 400;
-            return;
-        }*/
-
-        /*/// <summary>
-        /// Updates a user's delivery's container.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="deliveryId"></param>
-        /// <param name="size"></param>
-        [HttpPut("{userId}/deliveries/{deliveryId}/container")]
-        public void PutCotainer(string userId, string deliveryId, ContainerSize size)
-        {
-            IContainer container = userService.GetContainer(size);
-            if (container == null) Response.StatusCode = 400;
-            else
-            {
-                if (userService.UpdateDelivery(userId, deliveryId, container) > 0) Response.StatusCode = 204;
-                else Response.StatusCode = 400;
-            }
-            return;
-        }*/
 
         /// <summary>
         /// Returns a list of all deliveries.
@@ -216,6 +219,7 @@ namespace PackageArrangementServer.Controllers
             
         }
 
+
         /// <summary>
         /// Returns the cost of a user's delivery.
         /// </summary>
@@ -225,16 +229,26 @@ namespace PackageArrangementServer.Controllers
         [HttpGet("{userId}/deliveries/{deliveryId}/cost")]
         public string GetDeliveryCost(string userId, string deliveryId)
         {
-            int cost = userService.GetDeliveryCost(userId, deliveryId);
-            if (cost == -1)
+            try
             {
-                Response.StatusCode = 404;
+                int cost = userService.GetDeliveryCost(userId, deliveryId);
+                if (cost == -1)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+
+                Response.StatusCode = 200;
+                return cost.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
                 return null;
             }
-
-            Response.StatusCode = 200;
-            return cost.ToString();
         }
+
 
         /// <summary>
         /// Returns a user's delivery status.
@@ -265,6 +279,7 @@ namespace PackageArrangementServer.Controllers
             
         }
 
+
         /// <summary>
         /// Returns a list of all packages in a user's delivery.
         /// </summary>
@@ -274,14 +289,23 @@ namespace PackageArrangementServer.Controllers
         [HttpGet("{userId}/deliveries/{deliveryId}/packages")]
         public List<Package> GetPackages(string userId, string deliveryId)
         {
-            List<Package> packages = userService.GetAllPackages(userId, deliveryId);
-            if (packages == null)
+            try
             {
-                Response.StatusCode = 404;
+                List<Package> packages = userService.GetAllPackages(userId, deliveryId);
+                if (packages == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                Response.StatusCode = 200;
+                return packages;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
                 return null;
             }
-            Response.StatusCode = 200;
-            return packages;
         }
 
         
@@ -308,6 +332,7 @@ namespace PackageArrangementServer.Controllers
             
         }
 
+
         /// <summary>
         /// Creates a new delivery.
         /// </summary>
@@ -332,6 +357,7 @@ namespace PackageArrangementServer.Controllers
             }
         }
 
+
         /// <summary>
         /// Updates a package in a user's delivery.
         /// </summary>
@@ -342,12 +368,22 @@ namespace PackageArrangementServer.Controllers
         [HttpPut("{userId}/deliveries/{deliveryId}/packages/{packageId}")]
         public void Put(string userId, string deliveryId, string packageId, [FromBody] RequestEditPackage req)
         {
-            if (userService.EditPackage(userId, deliveryId, packageId, req.Width, req.Height,
-                req.Length) > 0)
-                Response.StatusCode = 204;
-            else Response.StatusCode = 400;
-            return;
+            try
+            {
+                if (userService.EditPackage(userId, deliveryId, packageId, req.Width, req.Height,
+                    req.Length) > 0)
+                    Response.StatusCode = 204;
+                else Response.StatusCode = 400;
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
+                return;
+            }
         }
+
 
         /// <summary>
         /// Deletes a package in a user's delivery.
@@ -358,9 +394,18 @@ namespace PackageArrangementServer.Controllers
         [HttpDelete("{userId}/deliveries/{deliveryId}/packages/{packageId}")]
         public void Delete(string userId, string deliveryId, string packageId)
         {
-            if (userService.DeletePackage(userId, deliveryId, packageId) > 0) Response.StatusCode = 204;
-            else Response.StatusCode = 400;
-            return;
+            try
+            {
+                if (userService.DeletePackage(userId, deliveryId, packageId) > 0) Response.StatusCode = 204;
+                else Response.StatusCode = 400;
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Response.StatusCode = 400;
+                return;
+            }
         }
 
     }

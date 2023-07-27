@@ -5,12 +5,17 @@ namespace PackageArrangementServer.Models
     [BsonDiscriminator("MediumContainer")]
     public class MediumContainer : IContainer
     {
+        const int HEIGHT = 600;
+        const int WIDTH = 800;
+        const int LENGTH = 1600;
+        const int COST = 850;
+
         public MediumContainer()
         {
-            this.Height = 600.ToString();
-            this.Width = 800.ToString();
-            this.Length = 1600.ToString();
-            this.Cost = 850.ToString();
+            this.Height = HEIGHT.ToString();
+            this.Width = WIDTH.ToString();
+            this.Length = LENGTH.ToString();
+            this.Cost = COST.ToString();
         }
     }
 }

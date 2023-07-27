@@ -3,7 +3,6 @@
     public class DeliveryList
     {
         private List<Delivery> _deliveries;
-        //private readonly List<Delivery> deliveries;
 
         public DeliveryList()
         {
@@ -15,9 +14,7 @@
             _deliveries = deliveries;
         }
 
-        public List<Delivery> Deliveries { get { return _deliveries; } } // need to fix - return a copy
-
-        //public bool IsEmpty { get { return _deliveries.Count == 0; } }
+        public List<Delivery> Deliveries { get { return _deliveries; } }
 
         public void Add(Delivery delivery)
         {
@@ -33,14 +30,6 @@
             }
         }
 
-        /*private bool ValidateContainer(ContainerSize size)
-        {
-            if (size == ContainerSize.Small
-                || size == ContainerSize.Medium
-                || size == ContainerSize.Large) return true;
-            return false;
-        }*/
-
         public void Edit(Delivery delivery, DateTime? deliveryDate = null, List<Package> packages = null,
             IContainer container = null, string cost = null, DeliveryStatus? status = null)
         {
@@ -51,14 +40,7 @@
                 int index = _deliveries.IndexOf(delivery);
 
                 if (deliveryDate != null) _deliveries[index].DeliveryDate = (DateTime) deliveryDate;
-                //if (packages != null) _deliveries[index].Packages = packages;
                 if (container != null) _deliveries[index].Container = container;
-
-                /*if (container != null)
-                {
-                    if (ValidateContainer(container.Size)) _deliveries[index].Container = container;
-                }*/
-
                 if (cost != null) _deliveries[index].Cost = cost;
                 if (status != null) _deliveries[index].Status = (DeliveryStatus) status;
             }

@@ -5,10 +5,7 @@ namespace PackageArrangementServer.Models.Requests.RequestCreation
     public class DeliveryTwoResults
     {
         public string Id { get; set; }
-        //[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-
         public string UserId { get; set; }
-
         public IContainer Container { get; set; }
         public List<Package> FirstPackages { get; set; }
         public List<Package> SecondPackages { get; set; }

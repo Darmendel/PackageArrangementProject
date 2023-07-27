@@ -11,7 +11,6 @@ namespace PackageArrangementServer.Services.RabbitMqServices
 
         public int Send(DeliveryRequest deliveryRequest, string friendqueue)
         {
-
             return 1;
         }
     }

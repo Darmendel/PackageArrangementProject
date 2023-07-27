@@ -10,7 +10,7 @@ namespace PackageArrangementServer.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        public string UserId { get; set; } // define as second key
+        public string UserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime DeliveryDate { get; set; }
         public List<Package> FirstPackages { get; set; }
@@ -19,6 +19,7 @@ namespace PackageArrangementServer.Models
         public string Cost { get; set; }
         public DeliveryStatus Status { get; set; }
 
+        const int COST = 0;
 
         public Delivery(string id, string userId, DateTime? deliveryDate = null, List<Package> fpackages = null,
             List<Package> spackages = null, IContainer ? container = null)
@@ -30,10 +31,8 @@ namespace PackageArrangementServer.Models
             this.FirstPackages = fpackages;
             this.SecondPackages = spackages;
 
-            this.Cost = 0.ToString();
-
+            this.Cost = COST.ToString();
             this.Container = (container != null) ? container : new MediumContainer();
-
             this.Status = DeliveryStatus.Pending;
         }
 

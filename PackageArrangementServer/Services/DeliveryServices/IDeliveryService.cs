@@ -120,14 +120,6 @@ namespace PackageArrangementServer.Services
         public Delivery Edit(string deliveryId, string userId, DateTime? deliveryDate = null, List<Package>? packages = null, IContainer container = null);
 
         /// <summary>
-        /// Updates a delivery list.
-        /// </summary>
-        /// <param name="list"></param>
-        /// <param name="delivery"></param>
-        /// <returns>List<Delivery></returns>
-        //public List<Delivery> EditDeliveryList(List<Delivery> list, Delivery delivery);
-
-        /// <summary>
         /// Deletes a delivery.
         /// </summary>
         /// <param name="deliveryId"></param>
@@ -136,27 +128,12 @@ namespace PackageArrangementServer.Services
         public Delivery Delete(string deliveryId, string userId);
 
         /// <summary>
-        /// Given a size of the container, return the selected container.
-        /// </summary>
-        /// <param name="size">IContainer</param>
-        public IContainer GetContainer(ContainerSize size);
-
-        /// <summary>
         /// Returns the container that the user have selected.
         /// </summary>
         /// <param name="deliveryId"></param>
         /// <param name="userId"></param>
         /// <returns>IContainer</returns>
         public IContainer GetContainer(string deliveryId, string userId);
-
-        /// <summary>
-        /// Given dimentions of a container, returns a new container.
-        /// </summary>
-        /// <param name="height"></param>
-        /// <param name="width"></param>
-        /// <param name="Length"></param>
-        /// <returns>IContainer</returns>
-        public IContainer CreateContainer(string height, string width, string Length);
 
         /// <summary>
         /// Given a delivery id and a user id, returns all of the packages of the delivery.

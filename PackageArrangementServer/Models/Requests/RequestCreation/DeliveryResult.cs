@@ -8,16 +8,12 @@ namespace PackageArrangementServer.Models.Requests.RequestCreation
         public string Id { get; set; }
         public GeneralContainer Container { get; set; }
         public List<Package> Packages { get; set; }
-        //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        //public string UserId { get; set; }
-
 
         public DeliveryResult(string id, GeneralContainer container, List<Package> packages)
         {
             Id = id;
             Container = container;
             Packages = packages;
-            //UserId = userId;
         }
     }
 }

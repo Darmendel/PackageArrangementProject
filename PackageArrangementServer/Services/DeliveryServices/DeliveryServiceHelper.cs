@@ -9,22 +9,6 @@ namespace PackageArrangementServer.Services
             if (packages == null && container == null) return -1;
             int cost = 0;
 
-            /*if (packages != null)
-            {
-                foreach (Package package in packages)
-                {
-                    if (package.Cost == null) continue;
-
-                    try
-                    {
-                        int pc = Int32.Parse(package.Cost);
-                        int amount = Int32.Parse(package.Amount);
-                        cost += (pc * amount);
-                    }
-                    catch (FormatException) { return -1; }
-                }
-            }*/
-
             if (container != null)
             {
                 try

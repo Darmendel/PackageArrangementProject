@@ -18,7 +18,7 @@
             _users = new List<User>();
         }
 
-        public List<User> Users { get { return _users; } } // need to fix - return a copy
+        public List<User> Users { get { return _users; } }
 
         public int Count { get { return _users.Count; } }
 
@@ -52,7 +52,6 @@
             if (user == null || delivery == null) return;
             if (user.Deliveries.Contains(delivery)) return;
             user.Deliveries.Add(delivery);
-            //Edit(user, deliveries: user.Deliveries);
         }
 
         public void EditDelivery(User user, Delivery delivery)

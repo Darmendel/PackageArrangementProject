@@ -23,10 +23,6 @@ namespace PackageArrangementServer.Services.ResultServices
         /// <returns>string</returns>
         public string DeliveryArrangement(DeliveryTwoResults request)
         {
-            /// Implement update delivery status
-            /// Implement update delivery in db
-            /// Implement send request to Application
-
             string result = null;
             string deliveryId = request.Id;
             string userId = request.UserId;

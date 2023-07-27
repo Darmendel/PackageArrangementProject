@@ -22,8 +22,6 @@ const GetStarted = ({ handleLoginSuccess }) => {
   
         const userId = await response.text();
   
-        console.log('response:', response);
-  
         if (response.ok) {
           console.log('LoginData sent to the server successfully!');
           setUserId(userId);
@@ -57,7 +55,6 @@ const GetStarted = ({ handleLoginSuccess }) => {
 
   const handleLoginClick = (event) => {
     event.preventDefault();
-    console.log(loginData);
     sendLoginDataToServer(loginData);
   };
   

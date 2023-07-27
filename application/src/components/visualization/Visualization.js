@@ -5,10 +5,14 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { useLocation } from 'react-router-dom';
 
 const SCALE = 100;
+const BASE_HUE = 200;
+const SATURATION = 50;
+const SMALL_LIGHTNESS = 30;
+const BIG_LIGHTNESS = 35;
+
 
 const Visualization = () => {
   const {state} = useLocation();
-  // console.log('deliveryData in beginning:', state);
   const ref = useRef(null);
   const selectedBox = useRef(null);
   const originalPos = useRef(null);
@@ -18,8 +22,6 @@ const Visualization = () => {
   // Sort the packages by ID
   data.firstPackages.sort((a, b) => a.id - b.id);
   data.secondPackages.sort((a, b) => a.id - b.id);
-
-  // var selectedBox = null;
 
   const cancelBoxSelection = () => {
     // Reset the box's position to its original position
@@ -264,7 +266,7 @@ const Visualization = () => {
         ...data.firstPackages.map(row =>
           keysToInclude.map(key => {
             if (["X", "Y", "Z"].includes(key)) {
-              return String(row[key] * 100);
+              return String(row[key] * SCALE);
             }
             return String(row[key]);
           }).join(",")
@@ -275,7 +277,7 @@ const Visualization = () => {
         ...data.secondPackages.map(row =>
           keysToInclude.map(key => {
             if (["X", "Y", "Z"].includes(key)) {
-              return String(row[key] * 100);
+              return String(row[key] * SCALE);
             }
             return String(row[key]);
           }).join(",")
@@ -348,7 +350,6 @@ const Visualization = () => {
       }
       boxes.splice(0, numOfBoxes1);
       solution1Visible = false;
-      // console.log('scene.children:', scene.children);
     };
 
     const showSolution2 = () => {
@@ -410,16 +411,9 @@ const Visualization = () => {
       solution2Visible = false;
     };
 
-    // const light = new THREE.DirectionalLight(0xffffffff, 1);
-    // light.position.set(3, 3, 3);
-    // light.castShadow = true;
-    // scene.add(light);
-
     const ambientLight = new THREE.AmbientLight(0xffffffff, 1);
     scene.add(ambientLight);
 
-    // camera.position.x = -5;
-    // camera.position.y = 5;
     camera.position.z = 20;
     
     window.addEventListener('mousemove', onMouseMove, false);
@@ -444,9 +438,9 @@ const Visualization = () => {
 
     function getRandomColor() {
       if (!isGround) {
-        const baseHue = 200; // Adjust the base hue value to control the shade
-        const saturation = Math.floor(Math.random() * 50) + 50; // Random saturation between 50 and 100
-        const lightness = Math.floor(Math.random() * 30) + 35; // Random lightness between 35 and 65
+        const baseHue = BASE_HUE; // Adjust the base hue value to control the shade
+        const saturation = Math.floor(Math.random() * SATURATION) + SATURATION; // Random saturation between 50 and 100
+        const lightness = Math.floor(Math.random() * SMALL_LIGHTNESS) + BIG_LIGHTNESS; // Random lightness between 35 and 65
         const color = `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
         return color;
       } else {

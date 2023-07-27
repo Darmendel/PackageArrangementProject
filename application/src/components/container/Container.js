@@ -3,6 +3,10 @@ import "./Container.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from '../navbar/Navbar';
 
+const BIG_NUMBER = 1000000;
+const SMALL_NUMBER = 500;
+const SECONDS = 5000;
+
 const Container = () => {
 
   const userIdRef = useRef(null); // Create a ref to store userId
@@ -20,7 +24,6 @@ const Container = () => {
         let url = null;
         let request = null;
         if (type === 'fixed') {
-          console.log('body:', JSON.stringify({ date, packages, containerSize }));
           url = 'https://localhost:7165/api/User/' + userId + '/deliveries';
           request = {
             method: 'POST',
@@ -33,7 +36,6 @@ const Container = () => {
         } else {
           url = 'https://localhost:7165/api/User/' + userId + '/deliveries/custompackage';
           let container = containerSize;
-          console.log('body:', JSON.stringify({ date, packages, container }));
           request = {
             method: 'POST',
             headers: {
@@ -46,10 +48,8 @@ const Container = () => {
         
         const response = await fetch(url, request);
   
-        console.log('response:', response);
         const deliveryId = await response.text();
         setDeliveryId(deliveryId);
-        console.log('deliveryId:', deliveryId);
   
         if (response.ok) {
           console.log('DeliveryData sent to the server successfully!');
@@ -69,12 +69,7 @@ const Container = () => {
 
     const getDeliveryStatusFromServer = async () => {
       try {
-        console.log('userId:', userId);
-        console.log('deliveryId:', deliveryId);
-
         const url = 'https://localhost:7165/api/User/' + userId + '/deliveries/' + deliveryId + '/status';
-        
-        console.log('body:', JSON.stringify({ userId, deliveryId }));
         const response = await fetch(url, {
           method: 'GET',
           headers: {
@@ -85,10 +80,8 @@ const Container = () => {
   
         if (response.ok) {
           console.log('DeliveryStatus accepted from the server successfully!');
-          console.log('response:', response);
           const deliveryStatus = await response.text();
           setDeliveryStatus(deliveryStatus);
-          console.log('deliveryStatus:', deliveryStatus);
           if (deliveryStatus === '2') {
             stopCheckingDeliveryStatus(); // Stop checking delivery status
             getDeliveryDataFromServer();
@@ -105,7 +98,7 @@ const Container = () => {
       // Start checking the delivery status every 5 seconds
       const intervalId = setInterval(() => {
         getDeliveryStatusFromServer();
-      }, 5000);
+      }, SECONDS);
       setIntervalId(intervalId);
     };
   
@@ -127,11 +120,7 @@ const Container = () => {
   
     const getDeliveryDataFromServer = async () => {
       try {
-        console.log('userId:', userId);
-        console.log('deliveryId:', deliveryId);
-
         let url = 'https://localhost:7165/api/User/' + userId + '/deliveries/' + deliveryId;
-      
         const response = await fetch(url, {
           method: 'GET',
           headers: {
@@ -139,13 +128,10 @@ const Container = () => {
           },
           mode: "cors",
         });
-  
-        console.log('response:', response);
+
         const deliveryData = await response.text();
-        console.log('deliveryData:', deliveryData);
   
         if (response.ok) {
-          console.log('DeliveryData accepted from the server successfully!');
           setDeliveryData(deliveryData);
           navigate('/visualization', {"state": deliveryData});
         } else {
@@ -184,7 +170,6 @@ const Container = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const packagesParam = searchParams.get("packages");
-    // console.log('packagesParam:', packagesParam);
     const userId = searchParams.get("userId");
     if (packagesParam) {
       const parsedCsvData = JSON.parse(decodeURIComponent(packagesParam));
@@ -266,7 +251,7 @@ const Container = () => {
     if (selectedContainer === "custom-container") {
       const { height, width, length } = customContainerValues;
       // Calculate the cost based on the values of the container
-      var cost = height * width * length / 1000000 + 500;
+      var cost = height * width * length / BIG_NUMBER + SMALL_NUMBER;
       return (
         <div className="input-container">
           <input 

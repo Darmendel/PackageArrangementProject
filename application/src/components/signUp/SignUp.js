@@ -19,8 +19,6 @@ const SignUp = () => {
           body: JSON.stringify(formData),
         });
   
-        console.log('response:', response);
-  
         if (response.ok) {
           console.log('FormData sent to the server successfully!');
           alert("The registration was successful!");
@@ -54,7 +52,6 @@ const SignUp = () => {
 
   const handleSignClick = (event) => {
     event.preventDefault();
-    console.log(formData);
     sendFormDataToServer(formData);
   };
 

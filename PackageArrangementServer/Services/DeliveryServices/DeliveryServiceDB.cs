@@ -33,6 +33,15 @@ namespace PackageArrangementServer.Services
 
             //deliveryList = new DeliveryList();
             deliveryList = new DeliveryList(GetAsync().Result);
+            List<Package> packages = new List<Package>();
+            foreach (Delivery delivery in deliveryList.Deliveries)
+            {
+                foreach (Package package in delivery.FirstPackages)
+                {
+                    packages.Add(package);
+                }
+            }
+            packageService.setPackagesList(packages);
         }
 
         public async Task<List<Delivery>> GetAsync() =>
@@ -290,6 +299,8 @@ namespace PackageArrangementServer.Services
             Package package = packageService.Edit(packageId, deliveryId, width, height, Length);
 
             deliveryList.EditPackage(delivery, package);
+            Task x = UpdateAsync(deliveryId, delivery);
+            x.Wait();
             return package;
         }
 
@@ -306,6 +317,8 @@ namespace PackageArrangementServer.Services
 
             Package package = packageService.Delete(packageId, deliveryId);
             deliveryList.DeletePackage(delivery, package);
+            Task x = UpdateAsync(deliveryId, delivery);
+            x.Wait();
             return package;
         }
     }

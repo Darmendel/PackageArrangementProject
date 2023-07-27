@@ -5,6 +5,13 @@ namespace PackageArrangementServer.Services
     public interface IPackageService
     {
         /// <summary>
+        /// Given a list of packages, update the PackageList.
+        /// </summary>
+        /// <param name="packages"></param>
+        /// <returns>void</returns>
+        public void setPackagesList(List<Package> packages);
+
+        /// <summary>
         /// Given a delivery's id, returns a list of packages.
         /// </summary>
         /// <param name="deliveryId"></param>

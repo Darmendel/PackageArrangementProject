@@ -81,9 +81,9 @@
         public void EditPackage(Delivery delivery, Package package)
         {
             if (delivery == null || package == null) return;
-            if (!delivery.FirstPackages.Contains(package)) return;
+            int index = containsId(delivery, package.Id);
+            if (index == -1) return;
 
-            int index = delivery.FirstPackages.IndexOf(package);
             delivery.FirstPackages[index] = package;
 
             Edit(delivery, packages: delivery.FirstPackages);
@@ -92,9 +92,19 @@
         public void DeletePackage(Delivery delivery, Package package)
         {
             if (delivery == null || package == null) return;
-            if (!delivery.FirstPackages.Contains(package)) return;
-            delivery.FirstPackages.Remove(package);
+            int index = containsId(delivery, package.Id);
+            if (index == -1) return;
+            delivery.FirstPackages.RemoveAt(index);
             Edit(delivery, packages: delivery.FirstPackages);
+        }
+
+        public int containsId(Delivery delivery, string id)
+        {
+            for (int i = 0; i < delivery.FirstPackages.Count; i++)
+            {
+                if (delivery.FirstPackages[i].Id == id) return i;
+            }
+            return -1;
         }
     }
 }

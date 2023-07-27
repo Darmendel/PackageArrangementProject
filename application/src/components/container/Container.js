@@ -18,20 +18,33 @@ const Container = ({ handleGetData }) => {
       try {
         setUserId(userId);
         let url = null;
+        let request = null;
         if (type === 'fixed') {
+          console.log('body:', JSON.stringify({ date, packages, containerSize }));
           url = 'https://localhost:7165/api/User/' + userId + '/deliveries';
+          request = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: "cors",
+            body: JSON.stringify({ date, packages, containerSize }),
+          }
         } else {
           url = 'https://localhost:7165/api/User/' + userId + '/deliveries/custompackage';
+          let container = containerSize;
+          console.log('body:', JSON.stringify({ date, packages, container }));
+          request = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: "cors",
+            body: JSON.stringify({ date, packages, container }),
+          }
         }
-        console.log('body:', JSON.stringify({ date, packages, containerSize }));
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          mode: "cors",
-          body: JSON.stringify({ date, packages, containerSize }),
-        });
+        
+        const response = await fetch(url, request);
   
         console.log('response:', response);
         const deliveryId = await response.text();

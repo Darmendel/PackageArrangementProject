@@ -17,7 +17,6 @@ const Header = () => {
           </p>
           <div className="header-cta">
               <Link className="getStarted-lnk" to="/getStarted">Get Started</Link>
-              <Link className="howItWorks-lnk" to="/howItWorks">How It Works</Link>
           </div>
         </div>
       </div>

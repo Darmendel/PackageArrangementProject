@@ -3,7 +3,7 @@ import "./Container.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from '../navbar/Navbar';
 
-const Container = ({ handleGetData }) => {
+const Container = () => {
 
   const userIdRef = useRef(null); // Create a ref to store userId
   const [userId, setUserId] = useState(null);
@@ -148,7 +148,6 @@ const Container = ({ handleGetData }) => {
           console.log('DeliveryData accepted from the server successfully!');
           setDeliveryData(deliveryData);
           navigate('/visualization', {"state": deliveryData});
-          handleGetData(deliveryData);
         } else {
           console.error('Failed to accept DeliveryData from the server.');
         }
@@ -220,13 +219,13 @@ const Container = ({ handleGetData }) => {
       return (
         <div>
           <br></br>
-          <h3>Height: 300 cm</h3>
-          <h3>Width: 400 cm</h3>
-          <h3>Length: 800 cm</h3>
+          <h3>Height: 400 cm</h3>
+          <h3>Width: 600 cm</h3>
+          <h3>Length: 1400 cm</h3>
+          <br></br>
+          <h2>Cost: 700 ₪</h2>
         </div>
       );
-      // <br></br>
-      // <h2>Cost: 200 ₪</h2>
     }
     return null;
   };
@@ -239,10 +238,10 @@ const Container = ({ handleGetData }) => {
           <h3>Height: 600 cm</h3>
           <h3>Width: 800 cm</h3>
           <h3>Length: 1600 cm</h3>
+          <br></br>
+          <h2>Cost: 850 ₪</h2>
         </div>
       );
-      // <br></br>
-      // <h2>Cost: 400 ₪</h2>
     }
     return null;
   };
@@ -252,47 +251,50 @@ const Container = ({ handleGetData }) => {
       return (
         <div>
           <br></br>
-          <h3>Height: 1200 cm</h3>
-          <h3>Width: 1600 cm</h3>
-          <h3>Length: 3200 cm</h3>
+          <h3>Height: 800 cm</h3>
+          <h3>Width: 1000 cm</h3>
+          <h3>Length: 1800 cm</h3>
+          <br></br>
+          <h2>Cost: 1000 ₪</h2>
         </div>
       );
-      // <br></br>
-      // <h2>Cost: 800 ₪</h2>
     }
     return null;
   };
 
   const renderCustomContainerDetails = () => {
     if (selectedContainer === "custom-container") {
+      const { height, width, length } = customContainerValues;
+      // Calculate the cost based on the values of the container
+      var cost = height * width * length / 1000000 + 500;
       return (
-        <div>
-          <form className="input-container">
-            <input 
-              type="number" 
-              required="required" 
-              placeholder="Enter height"
-              name="height"
-              value={customContainerValues.height}
-              onChange={handleInputChange}
-            />
-            <input 
-              type="number" 
-              required="required" 
-              placeholder="Enter width"
-              name="width"
-              value={customContainerValues.width}
-              onChange={handleInputChange}
-            />
-            <input 
-              type="number" 
-              required="required" 
-              placeholder="Enter length"
-              name="length"
-              value={customContainerValues.length}
-              onChange={handleInputChange}
-            />
-          </form>
+        <div className="input-container">
+          <input 
+            type="number" 
+            required="required" 
+            placeholder="Enter height"
+            name="height"
+            value={customContainerValues.height}
+            onChange={handleInputChange}
+          />
+          <input 
+            type="number" 
+            required="required" 
+            placeholder="Enter width"
+            name="width"
+            value={customContainerValues.width}
+            onChange={handleInputChange}
+          />
+          <input 
+            type="number" 
+            required="required" 
+            placeholder="Enter length"
+            name="length"
+            value={customContainerValues.length}
+            onChange={handleInputChange}
+          />
+          <br></br>
+          <h2>Cost: <h6>(Depends on your choice)</h6> {cost} ₪</h2>
         </div>
       );
     }

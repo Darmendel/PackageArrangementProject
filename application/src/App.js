@@ -11,15 +11,9 @@ import {React, useState } from 'react';
 
 function App() {
   const [userId, setUserId] = useState(null);
-  const [deliveryData, setDeliveryData] = useState(null);
 
   const handleLoginSuccess = (userId) => {
     setUserId(userId);
-  };
-
-  const handleGetData = (deliveryData) => {
-    setDeliveryData(deliveryData);
-    // console.log('deliveryData from handleGetData:', deliveryData);
   };
 
   return (
@@ -29,8 +23,8 @@ function App() {
         <Route path='/getStarted' element={<GetStarted handleLoginSuccess={handleLoginSuccess} />}></Route>
         <Route path='/signUp' element={<SignUp />}></Route>
         <Route path='/uploading' element={<Uploading userId={userId} />}></Route>
-        <Route path='/container' element={<Container handleGetData={handleGetData} />}></Route>
-        <Route path='/visualization' element={<Visualization deliveryData={deliveryData} />}></Route>
+        <Route path='/container' element={<Container />}></Route>
+        <Route path='/visualization' element={<Visualization />}></Route>
         <Route path='/waiting' element={<Waiting />}></Route>
       </Routes>
     </Router>

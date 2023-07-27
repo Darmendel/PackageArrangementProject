@@ -119,9 +119,9 @@ const Uploading = ({ userId }) => {
                 name='unpackOrder'
                 required='required'
                 placeholder='Enter unpackOrder'
-                value={newPackage.UnpackOrder}
+                value={newPackage.order}
                 onChange={(e) =>
-                  setNewPackage({ ...newPackage, UnpackOrder: e.target.value })
+                  setNewPackage({ ...newPackage, order: e.target.value })
                 }
               />
               <input className='input-add-package'
@@ -129,9 +129,9 @@ const Uploading = ({ userId }) => {
                 name='height'
                 required='required'
                 placeholder='Enter height'
-                value={newPackage.Height}
+                value={newPackage.height}
                 onChange={(e) =>
-                  setNewPackage({ ...newPackage, Height: e.target.value })
+                  setNewPackage({ ...newPackage, height: e.target.value })
                 }
               />
               <input className='input-add-package'
@@ -139,9 +139,9 @@ const Uploading = ({ userId }) => {
                 name='width'
                 required='required'
                 placeholder='Enter width'
-                value={newPackage.Width}
+                value={newPackage.width}
                 onChange={(e) =>
-                  setNewPackage({ ...newPackage, Width: e.target.value })
+                  setNewPackage({ ...newPackage, width: e.target.value })
                 }
               />
               <input className='input-add-package'
@@ -149,9 +149,9 @@ const Uploading = ({ userId }) => {
                 name='length'
                 required='required'
                 placeholder='Enter length'
-                value={newPackage.Length}
+                value={newPackage.length}
                 onChange={(e) =>
-                  setNewPackage({ ...newPackage, Length: e.target.value })
+                  setNewPackage({ ...newPackage, length: e.target.value })
                 }
               />
               <button className='add-button' onClick={handleAddClick}>Add</button>

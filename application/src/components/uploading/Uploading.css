@@ -64,19 +64,6 @@
     border-color: white;
 }
 
-.input-container {
-    padding: 0.5rem;
-    border: 1px solid white;
-    border-radius: 5px 5px 5px 5px;
-    color: #fff;
-    width: 13%;
-    font-size: 1.6rem;
-    margin-left: 1rem;
-    cursor: pointer;
-    top: 40px;
-
-}
-
 .nav-upload {
     background-color: #0a1930;   
 }

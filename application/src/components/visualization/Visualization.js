@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 const SCALE = 100;
 
-const Visualization = ({ deliveryData }) => {
+const Visualization = () => {
   const {state} = useLocation();
   // console.log('deliveryData in beginning:', state);
   const ref = useRef(null);
@@ -14,8 +14,6 @@ const Visualization = ({ deliveryData }) => {
   const originalPos = useRef(null);
 
   const data = JSON.parse(state);
-  console.log('deliveryData in beginning:', data);
-  console.log(typeof(data));
 
   // Sort the packages by ID
   data.firstPackages.sort((a, b) => a.id - b.id);
@@ -642,6 +640,7 @@ const Visualization = ({ deliveryData }) => {
           selectedBox.current = intersects[0].object;
           // Store the original position of the box
           originalPos.current = selectedBox.current.position.clone();
+          displayBoxInfo(intersects[0].object);
           // Call the function to show the cancel button
           renderCancelButton();
         }
